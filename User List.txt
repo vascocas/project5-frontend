@@ -1,0 +1,39 @@
+username: user1
+password: 1234Aa
+role: 300
+
+username: user2
+password: Qq11
+role: 200
+
+username: user3
+password: Zz123
+role: 100
+
+username: user4
+password: Td22
+role: 300
+
+username: user5
+password: 11Ee
+role: 200
+
+username: user6
+password: 123Qp
+role: 200
+
+username: user7
+password: 123As
+role: 100
+
+username: user8
+password: 22Qw
+role: 200
+
+username: user9
+password: 447Pp
+role: 100
+
+username: user10
+password: 12qw3Q
+role: 300

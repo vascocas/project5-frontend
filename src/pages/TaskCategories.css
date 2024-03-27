@@ -1,0 +1,94 @@
+/* TaskCategories.css */
+
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.table-category-tasks {
+  margin: 20px;
+}
+
+.table-header-category-tasks {
+  background-color: #f0f0f0;
+}
+
+.table-header-category {
+  padding: 10px;
+  text-align: center;
+}
+
+.table-row-category,
+.clickable text-center{
+  text-align: center;
+}
+
+.save-category-container,
+.input-category-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.input-category-container input[type="text"],
+.input-category-container button,
+.save-category-container button {
+  height: 40px;
+  margin: 0 10px; /* Adjust margin */
+  padding: 0 10px; /* Adjust padding */
+}
+
+#categoryTableButton{
+  cursor: pointer;
+  padding: 8px 10px;
+  background-color: #007bff;
+  border: none;
+  color: #fff;
+  border-radius: 5px;
+  display: block;
+  margin: auto; 
+}
+
+#categoryTableButton:hover{
+  background-color: #0056b3;
+}
+
+.input-category-container input[type="text"] {
+  width: 400px;
+}
+
+.homeMenu-button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: auto; /* Align to the bottom */
+  margin-bottom: 20px; /* Add space below */
+}
+
+.input-category-container button,
+.homeMenu-button-container button {
+  cursor: pointer;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+}
+
+.input-category-container button:hover,
+.homeMenu-button-container button:hover {
+  background-color: #0056b3;
+}
+
+.content {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}

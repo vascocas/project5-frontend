@@ -1,0 +1,123 @@
+/* CSS for TasksBoard component */
+.task-columns {
+  display: flex;
+  justify-content: space-between;
+  background-color: white;
+}
+
+.tasks-board {
+  overflow-y: auto; 
+}
+
+.task-column {
+  flex: 1;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px; 
+  height: auto;
+  max-height: 80vh;
+  overflow-y: auto; 
+}
+
+.task-column:last-child {
+  margin-right: 0;
+}
+
+.task-column h2 {
+  text-align: center;
+}
+
+.task-column ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.task-card {
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  background-color:#ebebeb;
+  border-radius: 5px;
+  border-radius: 5px;
+  position: relative;
+}
+
+.task-card.low-priority::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 15px; /* Adjust thickness of the strip */
+  height: 100%; /* Make the strip cover the entire height of the card */
+  background-color: green; /* Low priority color */
+}
+
+.task-card.medium-priority::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 15px; /* Adjust thickness of the strip */
+  height: 100%; /* Make the strip cover the entire height of the card */
+  background-color: yellow; /* Medium priority color */
+}
+
+.task-card.high-priority::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 15px; /* Adjust thickness of the strip */
+  height: 100%; /* Make the strip cover the entire height of the card */
+  background-color: red; /* High priority color */
+}
+
+.card-header {
+  font-weight: bold;
+}
+
+.custom-select,
+.tasks-button {
+  background-color: #c6c8ca;
+  border: 1px solid #515355;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.user-filter:hover,
+.category-filter:hover,
+.remove-all:hover,
+.custom-select:hover,
+#clearButton:hover,
+.tasks-button:hover {
+  cursor: pointer;
+  background-color: #8a8a8f;
+  border: 1px solid #dbdbdb;
+  border-radius: 5px;
+}
+
+.remove-all-select,
+.user-filter-select,
+.category-filter-select:hover{
+  cursor: pointer;
+}
+
+#filtersTitle {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+#clearButton {
+  margin-top: 10px;
+}
+.filters {
+  display: flex;
+}
+
+.filters-box,
+.remove-user-tasks {
+  flex: 1;
+  margin-right: 10px;
+}
+

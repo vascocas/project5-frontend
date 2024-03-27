@@ -1,0 +1,80 @@
+/* Common styles for Login and Register pages */
+.page-wrap {
+    width: 400px; /* Adjust width as needed */
+    padding: 20px;
+    background-color: #f5f5f5; /* Light background color */
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+    margin: auto; /* Center the form horizontally */    
+  }
+  
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  label {
+    margin-bottom: 10px;
+  }
+  
+  input[type="text"],
+  input[type="password"],
+  input[type="email"],
+  input[type="tel"] {
+    width: calc(100% - 40px); /* Adjusted width to include margins */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 15px;
+  }
+
+  input#username,
+  input#password {
+    margin-left: 0; /* Remove left margin for the username input */
+  }
+  
+  input[type="submit"] {
+    background-color: #007bff; /* Blue submit button */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    height: 40px;
+    width: 150px;
+    align-self: center;
+    margin-top: 15px;
+  }
+  
+  input[type="submit"]:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
+  
+  .help-tip {
+    display: none;
+    color: #999;
+  }
+  
+  label:hover .help-tip,
+  input:focus + .help-tip {
+    display: inline-block;
+  }
+  
+  /* Login page specific styles */
+  .Login .page-wrap {
+    max-width: 300px; /* Make the form narrower */
+  }
+
+  /* Register page specific styles */
+.Register .page-wrap {
+    max-width: 500px; /* Adjusted width for the Register page */
+  }
+
+  #register-form input {
+    margin: 0;
+  }
+  

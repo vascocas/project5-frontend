@@ -1,0 +1,42 @@
+header {
+    display: flex;
+    justify-content: flex-end; /* Align items to the end of the container (right side) */
+    align-items: center; /* Align items vertically at the center */
+    padding: 10px;
+  }
+  
+  .header-right {
+    display: flex;
+    align-items: center; /* Align items vertically at the center */
+  }
+  
+  .welcome-message {
+    font-size: 20px; /* Adjust font size for the welcome message */
+    font-weight: bold; /* Make the welcome message bold */
+    margin-right: 20px; /* Add some space between the welcome message and logout button */
+    cursor: pointer;
+  }
+  
+  .user-name {
+    color: #013d7c; /* Change the color of the username for better visibility */
+  }
+  
+  .logout-button {
+    font-size: 18px; /* Adjust font size for the logout button */
+    padding: 10px 20px; /* Add padding to make the button bigger */
+    background-color: #007bff; /* Change the background color of the button */
+    color: #ffffff; /* Change the text color of the button */
+    border: none; /* Remove button border */
+    border-radius: 5px; /* Add border radius for a rounded button appearance */
+    cursor: pointer; /* Change cursor to pointer on hover */
+  }
+  
+  .logout-button:hover {
+    background-color: #0056b3; /* Change background color on hover for better visual feedback */
+  }
+  
+  .user-photo {
+    max-width: 100px;
+    max-height: 100px;
+  }
+  

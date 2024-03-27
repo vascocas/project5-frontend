@@ -1,0 +1,43 @@
+/* CSS for Home component */
+.page-title {
+  text-align: center;
+}
+
+.page-wrap {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+#home-page-wrap {
+  max-height: 1000px;
+  background-color: #fcfafa;
+}
+
+.content-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 20px; /* Adjust margin as needed */
+}
+
+.add-task-form,
+.tasks-board {
+  flex: 1;
+  margin-right: 20px; /* Add spacing between AddTaskForm and TasksBoard */
+  border: 1px solid #ccc; /* Add border around the columns */
+  border-radius: 5px; /* Add border radius for rounded corners */
+  padding: 10px; /* Add padding inside the columns */
+  height: 90vh;
+  background-color: #f1efef;
+}
+
+.tasks-board {
+  flex: 3; /* TasksBoard takes up more space */
+  margin-right: 0;
+}
+
+.button:hover {
+  background-color: #515355;
+  cursor: pointer;
+}
