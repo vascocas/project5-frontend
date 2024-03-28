@@ -18,6 +18,7 @@ const UserManagement = () => {
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
+  const [tokenTimer, setTokenTimer] = useState(0);
 
   const deletedMapping = {
     false: "Active",
@@ -169,6 +170,64 @@ const UserManagement = () => {
     }
   };
 
+  const showTokenTimer = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:8080/project4vc/rest/users/tokenTimer",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "*/*",
+            token: token,
+          },
+        }
+      );
+      if (response.ok) {
+        const sessionTimeout = await response.json();
+        setTokenTimer(sessionTimeout);
+      } else {
+        setTokenTimer(0);
+        throw new Error(`Failed to fetch Token Timer: ${response.status}`);
+      }
+    } catch (error) {
+      console.error("Error fetching Token Timer:", error);
+      setTokenTimer(0);
+    }
+  };
+
+    // Function to update token timer value
+    const updateTokenTimer = async (
+      tokenTimer) => {
+      try {
+        const timer = {
+          timer: tokenTimer,
+        };
+        const requestBody = JSON.stringify(timer);
+        const response = await fetch(
+          `http://localhost:8080/project4vc/rest/users/tokenTimer`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "*/*",
+              token: token,
+            },
+            body: requestBody,
+          }
+        );
+        if (response.ok) {
+          // Token Timer updated successfully
+          alert("Token Timer updated successfully!");
+        } else {
+          // Handle error
+          alert("Failed to update Token Timer.");
+        }
+      } catch (error) {
+        console.error("Error updating Token Timer:", error);
+      }
+    };
+
   return (
     <div className="user-managment-page">
       <Header />
@@ -251,6 +310,16 @@ const UserManagement = () => {
                 >
                   Back to Scrum Board
                 </button>
+              </div>
+              <div>
+                <label htmlFor="tokenTimer">Token Timer:</label>
+                <input
+                  type="number"
+                  id="tokenTimer"
+                  value={tokenTimer}
+                  onChange={(e) => setTokenTimer(e.target.value)}
+                />
+                <button onClick={updateTokenTimer}>Update Timer</button>
               </div>
             </div>
           )}
