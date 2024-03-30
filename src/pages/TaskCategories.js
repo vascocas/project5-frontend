@@ -22,7 +22,7 @@ const TaskCategories = () => {
   const fetchCategories = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8080/project4vc/rest/tasks/categories",
+        "http://localhost:8080/project5-backend/rest/tasks/categories",
         {
           method: "GET",
           headers: {
@@ -47,7 +47,7 @@ const TaskCategories = () => {
     setEditedCategoryName(null);
     try {
       const response = await fetch(
-        `http://localhost:8080/project4vc/rest/tasks/category`,
+        `http://localhost:8080/project5-backend/rest/tasks/category`,
         {
           method: "PUT",
           headers: {
@@ -76,7 +76,7 @@ const TaskCategories = () => {
     }
     try {
       const response = await fetch(
-        `http://localhost:8080/project4vc/rest/tasks/category/?categoryId=${categoryId}`,
+        `http://localhost:8080/project5-backend/rest/tasks/category/?categoryId=${categoryId}`,
         {
           method: "DELETE",
           headers: {
@@ -101,7 +101,7 @@ const TaskCategories = () => {
   const handleAddCategory = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8080/project4vc/rest/tasks/category`,
+        `http://localhost:8080/project5-backend/rest/tasks/category`,
         {
           method: "POST",
           headers: {

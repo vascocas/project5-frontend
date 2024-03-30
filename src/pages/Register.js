@@ -67,7 +67,7 @@ function Register() {
 
     try {
       const response = await fetch(
-        "http://localhost:8080/project4vc/rest/users/register",
+        "http://localhost:8080/project5-backend/rest/users/register",
         {
           method: "POST",
           headers: {

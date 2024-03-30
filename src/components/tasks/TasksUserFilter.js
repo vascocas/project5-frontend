@@ -13,7 +13,7 @@ const UsersFilter = ({ onFilter }) => {
           return; // Exit early in the logout
         }
         const response = await fetch(
-          "http://localhost:8080/project4vc/rest/users/usernames",
+          "http://localhost:8080/project5-backend/rest/users/usernames",
           {
             method: "GET",
             headers: {

@@ -20,7 +20,7 @@ function AddTaskForm() {
       const fetchCategories = async () => {
         try {
           const response = await fetch(
-            "http://localhost:8080/project4vc/rest/tasks/categories",
+            "http://localhost:8080/project5-backend/rest/tasks/categories",
             {
               method: "GET",
               headers: {
@@ -74,7 +74,7 @@ function AddTaskForm() {
       });
 
       const response = await fetch(
-        "http://localhost:8080/project4vc/rest/tasks/",
+        "http://localhost:8080/project5-backend/rest/tasks/",
         {
           method: "POST",
           headers: {

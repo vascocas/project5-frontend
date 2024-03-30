@@ -28,7 +28,7 @@ const UserManagement = () => {
   const fetchUsers = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8080/project4vc/rest/users",
+        "http://localhost:8080/project5-backend/rest/users",
         {
           method: "GET",
           headers: {
@@ -63,7 +63,7 @@ const UserManagement = () => {
     }
     try {
       const response = await fetch(
-        `http://localhost:8080/project4vc/rest/users/remove/${userId}`,
+        `http://localhost:8080/project5-backend/rest/users/remove/${userId}`,
         {
           method: "PUT",
           headers: {
@@ -105,7 +105,7 @@ const UserManagement = () => {
       };
       const requestBody = JSON.stringify(userData);
       const response = await fetch(
-        `http://localhost:8080/project4vc/rest/users/role`,
+        `http://localhost:8080/project5-backend/rest/users/role`,
         {
           method: "PUT",
           headers: {
@@ -148,7 +148,7 @@ const UserManagement = () => {
       };
       const requestBody = JSON.stringify(userData);
       const response = await fetch(
-        `http://localhost:8080/project4vc/rest/users/othersPassword`,
+        `http://localhost:8080/project5-backend/rest/users/othersPassword`,
         {
           method: "PUT",
           headers: {
@@ -174,7 +174,7 @@ const UserManagement = () => {
   const showTokenTimer = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8080/project4vc/rest/users/tokenTimer",
+        "http://localhost:8080/project5-backend/rest/users/tokenTimer",
         {
           method: "GET",
           headers: {
@@ -186,7 +186,7 @@ const UserManagement = () => {
       );
       if (response.ok) {
         const sessionTimeout = await response.json();
-        setTokenTimer(sessionTimeout);
+        setTokenTimer(sessionTimeout.timer);
       } else {
         setTokenTimer(0);
         throw new Error(`Failed to fetch Token Timer: ${response.status}`);
@@ -207,11 +207,11 @@ const UserManagement = () => {
     const updateTokenTimer = async () => {
       try {
         const timerData = {
-          tokenTimer: tokenTimer,
+          timer: tokenTimer,
         };
-        const requestBody = JSON.stringify(timerData );
+        const requestBody = JSON.stringify(timerData);
         const response = await fetch(
-          `http://localhost:8080/project4vc/rest/users/tokenTimer`,
+          `http://localhost:8080/project5-backend/rest/users/tokenTimer`,
           {
             method: "PUT",
             headers: {
@@ -318,7 +318,7 @@ const UserManagement = () => {
                 </button>
               </div>
               <div>
-                <label htmlFor="tokenTimer">Token Timer:</label>
+                <label htmlFor="tokenTimer">Token Timer [m]: </label>
                 <input
                   type="number"
                   id="tokenTimer"

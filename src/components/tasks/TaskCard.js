@@ -34,7 +34,7 @@ function TaskCard({ title, priority, taskId, state, creator }) {
     }
     try {
       const response = await fetch(
-        `http://localhost:8080/project4vc/rest/tasks/updateDeleted/${taskId}`,
+        `http://localhost:8080/project5-backend/rest/tasks/updateDeleted/${taskId}`,
         {
           method: "PUT",
           headers: {
@@ -92,7 +92,7 @@ function TaskCard({ title, priority, taskId, state, creator }) {
       });
 
       const response = await fetch(
-        "http://localhost:8080/project4vc/rest/tasks/status",
+        "http://localhost:8080/project5-backend/rest/tasks/status",
         {
           method: "PUT",
           headers: {

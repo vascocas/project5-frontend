@@ -19,7 +19,7 @@ function Task() {
       try {
         if (token && taskId) {
           const response = await fetch(
-            `http://localhost:8080/project4vc/rest/tasks/${taskId}`,
+            `http://localhost:8080/project5-backend/rest/tasks/${taskId}`,
             {
               method: "GET",
               headers: {
@@ -58,7 +58,7 @@ function Task() {
       };
       const requestBody = JSON.stringify(taskData);
       const response = await fetch(
-        "http://localhost:8080/project4vc/rest/tasks/update",
+        "http://localhost:8080/project5-backend/rest/tasks/update",
         {
           method: "PUT",
           headers: {

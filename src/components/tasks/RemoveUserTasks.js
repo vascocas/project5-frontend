@@ -11,7 +11,7 @@ const RemoveUserTasks = ({ fetchTasks }) => {
     if (selectedUser) {
       try {
         const response = await fetch(
-          `http://localhost:8080/project4vc/rest/tasks/updateDeleted/?userId=${selectedUser}`,
+          `http://localhost:8080/project5-backend/rest/tasks/updateDeleted/?userId=${selectedUser}`,
           {
             method: "PUT",
             headers: {

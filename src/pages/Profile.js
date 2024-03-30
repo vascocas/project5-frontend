@@ -17,7 +17,7 @@ function Profile() {
     const fetchUserProfile = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8080/project4vc/rest/users/loggedUser`,
+          `http://localhost:8080/project5-backend/rest/users/loggedUser`,
           {
             method: "GET",
             headers: {
@@ -62,7 +62,7 @@ function Profile() {
       };
       const requestBody = JSON.stringify(userData);
       const response = await fetch(
-        `http://localhost:8080/project4vc/rest/users/profile`,
+        `http://localhost:8080/project5-backend/rest/users/profile`,
         {
           method: "PUT",
           headers: {
@@ -100,7 +100,7 @@ function Profile() {
       };
       const requestBody = JSON.stringify(userData);
       const response = await fetch(
-        `http://localhost:8080/project4vc/rest/users/password`,
+        `http://localhost:8080/project5-backend/rest/users/password`,
         {
           method: "PUT",
           headers: {

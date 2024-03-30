@@ -12,7 +12,7 @@ const TaskRecycle = () => {
     const fetchDeletedTasks = async () => {
       try {
         const response = await fetch(
-          "http://localhost:8080/project4vc/rest/tasks/deletedTasks",
+          "http://localhost:8080/project5-backend/rest/tasks/deletedTasks",
           {
             method: "GET",
             headers: {
@@ -44,7 +44,7 @@ const TaskRecycle = () => {
     }
     try {
       const response = await fetch(
-        `http://localhost:8080/project4vc/rest/tasks/restoreDeleted/${taskId}`,
+        `http://localhost:8080/project5-backend/rest/tasks/restoreDeleted/${taskId}`,
         {
           method: "PUT",
           headers: {
@@ -73,7 +73,7 @@ const TaskRecycle = () => {
     }
     try {
       const response = await fetch(
-        `http://localhost:8080/project4vc/rest/tasks/${taskId}`,
+        `http://localhost:8080/project5-backend/rest/tasks/${taskId}`,
         {
           method: "DELETE",
           headers: {
