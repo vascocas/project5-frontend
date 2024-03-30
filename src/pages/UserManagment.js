@@ -12,7 +12,7 @@ import "./UserManagement.css";
 
 const UserManagement = () => {
   const navigate = useNavigate();
-  const { token, users, setUsers, usernames, setUsernames, updateRole } =
+  const { token, users, setUsers, usernames, setUsernames } =
     userStore();
   const { role } = userStore((state) => state);
   const [selectedUserId, setSelectedUserId] = useState(null);
@@ -53,6 +53,7 @@ const UserManagement = () => {
 
   useEffect(() => {
     fetchUsers(); // Fetch users when the component mounts
+    showTokenTimer(); // Fetch token timer when the component mounts
   }, [token, setUsers]);
 
   const removeUser = async (userId) => {
@@ -196,14 +197,19 @@ const UserManagement = () => {
     }
   };
 
+
+  const handleTokenTimerChange = (event) => {
+    setTokenTimer(event.target.value); // Update token timer value in state
+  };
+
+
     // Function to update token timer value
-    const updateTokenTimer = async (
-      tokenTimer) => {
+    const updateTokenTimer = async () => {
       try {
-        const timer = {
-          timer: tokenTimer,
+        const timerData = {
+          tokenTimer: tokenTimer,
         };
-        const requestBody = JSON.stringify(timer);
+        const requestBody = JSON.stringify(timerData );
         const response = await fetch(
           `http://localhost:8080/project4vc/rest/users/tokenTimer`,
           {
@@ -317,7 +323,7 @@ const UserManagement = () => {
                   type="number"
                   id="tokenTimer"
                   value={tokenTimer}
-                  onChange={(e) => setTokenTimer(e.target.value)}
+                  onChange={handleTokenTimerChange}
                 />
                 <button onClick={updateTokenTimer}>Update Timer</button>
               </div>
