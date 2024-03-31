@@ -20,19 +20,14 @@ const UserManagement = () => {
   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
   const [tokenTimer, setTokenTimer] = useState(0);
   const [filterValue, setFilterValue] = useState('');
+  const [orderValue, setOrderValue] = useState('ASC'); // Default order value
   
-
-  const deletedMapping = {
-    false: "Active",
-    true: "Deleted",
-  };
-
   const columns = React.useMemo(
     () => [
       { Header: "ID", accessor: "id" },
       { Header: "Username", accessor: "username" },
+      { Header: "Email", accessor: "email" },
       { Header: "Role", accessor: "role" },
-      { Header: "State", accessor: "deleted", Cell: ({ value }) => deletedMapping[value] },
       {
         Header: "Actions",
         Cell: ({ row }) => (
@@ -52,6 +47,8 @@ const UserManagement = () => {
     ],
     []
   );
+
+  const roleOptions = ['DEVELOPER', 'SCRUM_MASTER', 'PRODUCT_OWNER']; // Options for select dropdown
 
   const {
     getTableProps,
@@ -74,10 +71,11 @@ const UserManagement = () => {
   );
 
 
-  const fetchUsers = async (keyword = "") => {
+  const fetchUsers = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:8080/project5-backend/rest/users?keyword=${keyword}`,
+      let url = `http://localhost:8080/project5-backend/rest/users?role=${filterValue}&order=${orderValue}`;
+      console.log(url);
+      const response = await fetch( url,
         {
           method: "GET",
           headers: {
@@ -104,6 +102,18 @@ const UserManagement = () => {
     fetchUsers(); // Fetch users when the component mounts
     showTokenTimer(); // Fetch token timer when the component mounts
   }, [token, setUsers]);
+
+  const handleFilterApply = () => {
+    fetchUsers(); // Apply filter when the filter is applied
+  };
+
+  const handleRoleChange = (e) => {
+    setFilterValue(e.target.value); // Update the filter value when role selection changes
+  };
+  
+  const handleOrderChange = (e) => {
+    setOrderValue(e.target.value); // Update the order value when order selection changes
+  };  
 
   const removeUser = async (userId) => {
     const confirmation = window.confirm("Confirm remove user?");
@@ -281,13 +291,6 @@ const UserManagement = () => {
     }
   };
 
-  const handleFilterApply = () => {
-    setFilter([{ id: 'role', value: filterValue }]);
-  };
-  
-  
-
-
   return (
     <div className="user-managment-page">
       <Header />
@@ -308,11 +311,16 @@ const UserManagement = () => {
               <h1 className="page-title">User Management</h1>
               <h3 id="usersTableTitle">Users List</h3>
               <div>
-                <input
-                  value={filterValue}
-                  placeholder="Filter by Role"
-                  onChange={(e) => setFilterValue(e.target.value)}
-                />
+              <select value={filterValue} onChange={handleRoleChange}>
+                  <option value="">Select Role</option>
+                  {roleOptions.map((option, index) => (
+                    <option key={index} value={option}>{option}</option>
+                  ))}
+                </select>
+                <select value={orderValue} onChange={handleOrderChange}>
+                  <option value="ASC">Ascending</option>
+                  <option value="DESC">Descending</option>
+                </select>
                 <button onClick={handleFilterApply}>Search</button>
               </div>
               <table {...getTableProps()}>
