@@ -7,7 +7,7 @@ import UsersProfile from "../components/users/UsersProfile";
 import ChangePasswordModal from "../components/users/ChangePasswordModal";
 import { userStore } from "../stores/UserStore";
 import { useNavigate } from "react-router-dom";
-import { useTable, useFilters, usePagination } from 'react-table';
+import { useTable, useFilters, usePagination } from "react-table";
 import "../index.css";
 import "./UserManagement.css";
 
@@ -19,9 +19,9 @@ const UserManagement = () => {
   const [showModal, setShowModal] = useState(false);
   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
   const [tokenTimer, setTokenTimer] = useState(0);
-  const [filterValue, setFilterValue] = useState('');
-  const [orderValue, setOrderValue] = useState('ASC'); // Default order value
-  
+  const [filterValue, setFilterValue] = useState("");
+  const [orderValue, setOrderValue] = useState("ASC"); // Default order value
+
   const columns = React.useMemo(
     () => [
       { Header: "ID", accessor: "id" },
@@ -32,13 +32,22 @@ const UserManagement = () => {
         Header: "Actions",
         Cell: ({ row }) => (
           <div>
-            <button className="users-table-button" onClick={() => handleUpdateRole(row.original.id)}>
+            <button
+              className="users-table-button"
+              onClick={() => handleUpdateRole(row.original.id)}
+            >
               Update Role
             </button>
-            <button className="users-table-button1" onClick={() => handleChangePassword(row.original.id)}>
+            <button
+              className="users-table-button1"
+              onClick={() => handleChangePassword(row.original.id)}
+            >
               Change Password
             </button>
-            <button className="users-table-button" onClick={() => removeUser(row.original.id)}>
+            <button
+              className="users-table-button"
+              onClick={() => removeUser(row.original.id)}
+            >
               Remove User
             </button>
           </div>
@@ -48,7 +57,7 @@ const UserManagement = () => {
     []
   );
 
-  const roleOptions = ['DEVELOPER', 'SCRUM_MASTER', 'PRODUCT_OWNER']; // Options for select dropdown
+  const roleOptions = ["DEVELOPER", "SCRUM_MASTER", "PRODUCT_OWNER"]; // Options for select dropdown
 
   const {
     getTableProps,
@@ -64,27 +73,27 @@ const UserManagement = () => {
     previousPage,
     setPageSize,
     setFilter,
-  } = useTable(
-    { columns, data: users },
-    useFilters,
-    usePagination
-  );
-
+  } = useTable({ columns, data: users }, useFilters, usePagination);
 
   const fetchUsers = async () => {
     try {
-      let url = `http://localhost:8080/project5-backend/rest/users?role=${filterValue}&order=${orderValue}`;
+      let url;
+      if (filterValue) {
+        // If filter is defined, include the role parameter in the URL
+        url = `http://localhost:8080/project5-backend/rest/users?role=${filterValue}&order=${orderValue}&page=${pageIndex + 1}&pageSize=${pageSize}`;
+      } else {
+        // If filter is not defined, exclude the role parameter from the URL
+        url = `http://localhost:8080/project5-backend/rest/users?order=${orderValue}&page=${pageIndex + 1}&pageSize=${pageSize}`;
+      }
       console.log(url);
-      const response = await fetch( url,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "*/*",
-            token: token,
-          },
-        }
-      );
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "*/*",
+          token: token,
+        },
+      });
       if (response.ok) {
         const usersArray = await response.json();
         setUsers(usersArray);
@@ -103,17 +112,18 @@ const UserManagement = () => {
     showTokenTimer(); // Fetch token timer when the component mounts
   }, [token, setUsers]);
 
-  const handleFilterApply = () => {
-    fetchUsers(); // Apply filter when the filter is applied
-  };
+  // Fetch users when page index changes
+  useEffect(() => {
+    fetchUsers();
+  }, [pageIndex, pageSize, filterValue, orderValue]);
 
-  const handleRoleChange = (e) => {
+  const handleRoleFilter = (e) => {
     setFilterValue(e.target.value); // Update the filter value when role selection changes
   };
-  
+
   const handleOrderChange = (e) => {
     setOrderValue(e.target.value); // Update the order value when order selection changes
-  };  
+  };
 
   const removeUser = async (userId) => {
     const confirmation = window.confirm("Confirm remove user?");
@@ -311,35 +321,40 @@ const UserManagement = () => {
               <h1 className="page-title">User Management</h1>
               <h3 id="usersTableTitle">Users List</h3>
               <div>
-              <select value={filterValue} onChange={handleRoleChange}>
+                <select value={filterValue} onChange={handleRoleFilter}>
                   <option value="">Select Role</option>
                   {roleOptions.map((option, index) => (
-                    <option key={index} value={option}>{option}</option>
+                    <option key={index} value={option}>
+                      {option}
+                    </option>
                   ))}
                 </select>
                 <select value={orderValue} onChange={handleOrderChange}>
                   <option value="ASC">Ascending</option>
                   <option value="DESC">Descending</option>
                 </select>
-                <button onClick={handleFilterApply}>Search</button>
               </div>
               <table {...getTableProps()}>
                 <thead>
-                  {headerGroups.map(headerGroup => (
+                  {headerGroups.map((headerGroup) => (
                     <tr {...headerGroup.getHeaderGroupProps()}>
-                      {headerGroup.headers.map(column => (
-                        <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+                      {headerGroup.headers.map((column) => (
+                        <th {...column.getHeaderProps()}>
+                          {column.render("Header")}
+                        </th>
                       ))}
                     </tr>
                   ))}
                 </thead>
                 <tbody {...getTableBodyProps()}>
-                  {rows.map(row => {
+                  {rows.map((row) => {
                     prepareRow(row);
                     return (
                       <tr {...row.getRowProps()}>
-                        {row.cells.map(cell => (
-                          <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                        {row.cells.map((cell) => (
+                          <td {...cell.getCellProps()}>
+                            {cell.render("Cell")}
+                          </td>
                         ))}
                       </tr>
                     );
@@ -347,25 +362,23 @@ const UserManagement = () => {
                 </tbody>
               </table>
               <div>
-                <button onClick={() => previousPage()} disabled={!canPreviousPage}>
-                  {'<'}
-                </button>{' '}
-                <button onClick={() => nextPage()} disabled={!canNextPage}>
-                  {'>'}
-                </button>{' '}
-               <span>
-                  Page{' '}
-                  <strong>
-                    {pageIndex + 1}</strong> of <strong>{pageCount}
-                  </strong>{' '}
+                <button onClick={previousPage} disabled={!canPreviousPage}>
+                  {"<"}
+                </button>{" "}
+                <button onClick={nextPage} disabled={!canNextPage}>
+                  {">"}
+                </button>{" "}
+                <span>
+                  Page <strong>{pageIndex + 1}</strong> of{" "}
+                  <strong>{pageCount}</strong>{" "}
                 </span>
                 <select
                   value={pageSize}
-                  onChange={e => {
+                  onChange={(e) => {
                     setPageSize(Number(e.target.value));
                   }}
                 >
-                  {[10, 20].map(pageSize => (
+                  {[5, 10, 15].map((pageSize) => (
                     <option key={pageSize} value={pageSize}>
                       Show {pageSize}
                     </option>
