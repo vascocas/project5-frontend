@@ -79,7 +79,7 @@ function AddUserForm() {
       });
 
       const response = await fetch(
-        "http://localhost:8080/project4vc/rest/users/createUser",
+        "http://localhost:8080/project5-backend/rest/users/createUser",
         {
           method: "POST",
           headers: {

@@ -3,21 +3,24 @@ import Header from "../components/Header";
 import Sidebar from "../components/navbar/Sidebar";
 import ChangePasswordModal from "../components/users/ChangePasswordModal";
 import { userStore } from "../stores/UserStore";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "./Profile.css";
 import "../index.css";
 
 function Profile() {
   const { token, username } = userStore();
+  const { usernameParam } = useParams();
   const [user, setUser] = useState(null);
   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
   const navigate = useNavigate();
+  const [isLoggedUser, setIsLoggedUser] = useState(false);
 
   useEffect(() => {
+    
     const fetchUserProfile = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8080/project5-backend/rest/users/loggedUser`,
+          `http://localhost:8080/project5-backend/rest/users/username/?username=${usernameParam}`,
           {
             method: "GET",
             headers: {
@@ -37,9 +40,13 @@ function Profile() {
       }
     };
 
+    // Check if the logged-in user is viewing their own profile
+    setIsLoggedUser(username === usernameParam);
+    console.log(isLoggedUser);
+
     // Call fetchUserProfile once when the component mounts
     fetchUserProfile();
-  }, [token, username]);
+  }, [token, usernameParam, username]);
 
   // Function to handle updating user profile
   const handleUpdateProfile = async () => {
@@ -175,8 +182,7 @@ function Profile() {
           value={user.photo}
           onChange={(e) => setUser({ ...user, photo: e.target.value })}
         />
-        <button onClick={handleUpdateProfile}>Update Profile</button>
-        <button onClick={() => navigate("/Home")}>Back to Home</button>
+        {isLoggedUser &&( <React.Fragment> <button onClick={handleUpdateProfile}>Update Profile</button>
         <ChangePasswordModal
           isOpen={showChangePasswordModal}
           onRequestClose={() => setShowChangePasswordModal(false)}
@@ -185,7 +191,8 @@ function Profile() {
         />
         <button onClick={() => handleOpenChangePasswordModal(user.id)}>
           Change Password
-        </button>
+        </button> </React.Fragment>)}
+        <button onClick={() => navigate("/Home")}>Back to Home</button>
       </div>
       <div className="right-page-wrap"></div>
     </div>

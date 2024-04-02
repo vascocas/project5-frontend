@@ -23,7 +23,7 @@ function UsersProfile() {
       try {
         if (!selectedUsername) return;
         const response = await fetch(
-          `http://localhost:8080/project4vc/rest/users/username/?username=${selectedUsername}`,
+          `http://localhost:8080/project5-backend/rest/users/username/?username=${selectedUsername}`,
           {
             method: "GET",
             headers: {
@@ -70,7 +70,7 @@ function UsersProfile() {
       };
       const requestBody = JSON.stringify(userData);
       const response = await fetch(
-        `http://localhost:8080/project4vc/rest/users/othersProfile`,
+        `http://localhost:8080/project5-backend/rest/users/othersProfile`,
         {
           method: "PUT",
           headers: {

@@ -15,6 +15,8 @@ header {
     font-weight: bold; /* Make the welcome message bold */
     margin-right: 20px; /* Add some space between the welcome message and logout button */
     cursor: pointer;
+    text-decoration: none;
+    color: black;
   }
   
   .user-name {

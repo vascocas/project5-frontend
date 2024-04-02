@@ -1,7 +1,7 @@
 // Header.js
 import React from "react";
 import "./Header.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { userStore } from "../stores/UserStore";
 
 const Header = () => {
@@ -12,7 +12,7 @@ const Header = () => {
   const handleLogout = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8080/project4vc/rest/users/logout",
+        "http://localhost:8080/project5-backend/rest/users/logout",
         {
           method: "PUT",
           headers: {
@@ -37,16 +37,12 @@ const Header = () => {
     }
   };
 
-  const navigateToProfile = () => {
-    navigate("../Profile");
-  };
-
   return (
     <header>
       <div className="header-right">
-      <div className="welcome-message" onClick={navigateToProfile}>
+      <Link className="welcome-message" to={`/profile/${username}`}>
           Welcome, <span className="user-name">{username}</span>
-        </div>
+        </Link>
         {photo && <img className="user-photo" src={photo} alt="Profile" />}
         <button className="logout-button" onClick={handleLogout}>
           Logout

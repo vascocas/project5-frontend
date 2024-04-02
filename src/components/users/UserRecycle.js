@@ -10,7 +10,7 @@ const UserRecycle = () => {
     const fetchDeletedUsers = async () => {
       try {
         const response = await fetch(
-          "http://localhost:8080/project4vc/rest/users/deletedUsers",
+          "http://localhost:8080/project5-backend/rest/users/deletedUsers",
           {
             method: "GET",
             headers: {
@@ -44,7 +44,7 @@ const UserRecycle = () => {
     }
     try {
       const response = await fetch(
-        `http://localhost:8080/project4vc/rest/users/${userId}`,
+        `http://localhost:8080/project5-backend/rest/users/${userId}`,
         {
           method: "DELETE",
           headers: {
