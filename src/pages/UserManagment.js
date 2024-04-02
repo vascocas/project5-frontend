@@ -20,7 +20,8 @@ const UserManagement = () => {
   const [tokenTimer, setTokenTimer] = useState(0);
   const [filterValue, setFilterValue] = useState("");
   const [orderValue, setOrderValue] = useState("ASC"); // Default order value
-  const [currentPage, setCurrentPage] = useState(1); // Define currentPage state variable
+  const [currentPage, setCurrentPage] = useState(0);
+
   const [totalPages, setTotalPages] = useState(1);
 
   const columns = React.useMemo(
@@ -66,9 +67,9 @@ const UserManagement = () => {
     headerGroups,
     rows,
     prepareRow,
-    state: { pageIndex, pageSize },
+    state: { pageSize },
     setPageSize,
-  } = useTable({ columns, data: users }, useFilters, usePagination);
+  } = useTable({ columns, data: users }, usePagination);
 
   const fetchUsers = async () => {
     try {
@@ -97,14 +98,14 @@ const UserManagement = () => {
         const responseData = await response.json();
 
         // Extract data from the response
-        const { currentPage, pageSize, totalPages, users } =
-          responseData;
+        const { currentPage, pageSize, totalPages, users } = responseData;
 
         // Update state with the extracted data
         setUsers(users);
         setTotalPages(totalPages);
-        setCurrentPage(currentPage);
         setPageSize(pageSize);
+        setCurrentPage(currentPage);
+
         console.log("Users: ", users);
         console.log("total Pages: ", totalPages);
         console.log("current Page: ", currentPage);
@@ -122,13 +123,14 @@ const UserManagement = () => {
   useEffect(() => {
     console.log("useEffect triggered");
     console.log("Token:", token);
-    console.log("Page index:", pageIndex);
+    console.log("Page currentPage:", currentPage);
     console.log("Page size:", pageSize);
     console.log("Filter value:", filterValue);
     console.log("Order value:", orderValue);
+  
     fetchUsers();
     showTokenTimer(); // Fetch token timer when the component mounts
-  }, [token, pageIndex, pageSize, filterValue, orderValue]);
+  }, [token, pageSize, currentPage, filterValue, orderValue]); 
 
   const handleRoleFilter = (e) => {
     setFilterValue(e.target.value); // Update the filter value when role selection changes
@@ -138,17 +140,21 @@ const UserManagement = () => {
     setOrderValue(e.target.value); // Update the order value when order selection changes
   };
 
-  const isFirstPage = () => pageIndex === 0;
-  const isLastPage = () => pageIndex === totalPages - 1;
+  const isFirstPage = () => currentPage === 1;
+  const isLastPage = () => currentPage === totalPages;
 
   const previousPage = () => {
-    setPageSize(pageSize); // This line is to ensure the page size remains the same
-    setCurrentPage(pageIndex - 1);
+    if (!isFirstPage()) {
+      setPageSize(pageSize); // This line is to ensure the page size remains the same
+      setCurrentPage(currentPage - 1);
+    }
   };
 
   const nextPage = () => {
-    setPageSize(pageSize); // This line is to ensure the page size remains the same
-    setCurrentPage(pageIndex + 1);
+    if (!isLastPage()) {
+      setPageSize(pageSize); // This line is to ensure the page size remains the same
+      setCurrentPage(currentPage + 1);
+    }
   };
 
   const removeUser = async (userId) => {
