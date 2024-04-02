@@ -12,15 +12,16 @@ import "../index.css";
 import "./UserManagement.css";
 
 const UserManagement = () => {
+  const { token, users, setUsers, usernames, setUsernames, role } = userStore();
   const navigate = useNavigate();
-  const { token, users, setUsers, usernames, setUsernames } = userStore();
-  const { role } = userStore((state) => state);
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
   const [tokenTimer, setTokenTimer] = useState(0);
   const [filterValue, setFilterValue] = useState("");
   const [orderValue, setOrderValue] = useState("ASC"); // Default order value
+  const [currentPage, setCurrentPage] = useState(1); // Define currentPage state variable
+  const [totalPages, setTotalPages] = useState(1);
 
   const columns = React.useMemo(
     () => [
@@ -66,13 +67,7 @@ const UserManagement = () => {
     rows,
     prepareRow,
     state: { pageIndex, pageSize },
-    canPreviousPage,
-    canNextPage,
-    pageCount,
-    nextPage,
-    previousPage,
     setPageSize,
-    setFilter,
   } = useTable({ columns, data: users }, useFilters, usePagination);
 
   const fetchUsers = async () => {
@@ -80,10 +75,14 @@ const UserManagement = () => {
       let url;
       if (filterValue) {
         // If filter is defined, include the role parameter in the URL
-        url = `http://localhost:8080/project5-backend/rest/users?role=${filterValue}&order=${orderValue}&page=${pageIndex + 1}&pageSize=${pageSize}`;
+        url = `http://localhost:8080/project5-backend/rest/users?role=${filterValue}&order=${orderValue}&page=${
+          currentPage
+        }&pageSize=${pageSize}`;
       } else {
         // If filter is not defined, exclude the role parameter from the URL
-        url = `http://localhost:8080/project5-backend/rest/users?order=${orderValue}&page=${pageIndex + 1}&pageSize=${pageSize}`;
+        url = `http://localhost:8080/project5-backend/rest/users?order=${orderValue}&page=${
+          currentPage
+        }&pageSize=${pageSize}`;
       }
       console.log(url);
       const response = await fetch(url, {
@@ -95,8 +94,21 @@ const UserManagement = () => {
         },
       });
       if (response.ok) {
-        const usersArray = await response.json();
-        setUsers(usersArray);
+        const responseData = await response.json();
+
+        // Extract data from the response
+        const { currentPage, pageSize, totalPages, users } =
+          responseData;
+
+        // Update state with the extracted data
+        setUsers(users);
+        setTotalPages(totalPages);
+        setCurrentPage(currentPage);
+        setPageSize(pageSize);
+        console.log("Users: ", users);
+        console.log("total Pages: ", totalPages);
+        console.log("current Page: ", currentPage);
+        console.log("Page size:", pageSize);
       } else {
         setUsers([]);
         throw new Error(`Failed to fetch users: ${response.status}`);
@@ -108,14 +120,15 @@ const UserManagement = () => {
   };
 
   useEffect(() => {
-    fetchUsers(); // Fetch users when the component mounts
-    showTokenTimer(); // Fetch token timer when the component mounts
-  }, [token, setUsers]);
-
-  // Fetch users when page index changes
-  useEffect(() => {
+    console.log("useEffect triggered");
+    console.log("Token:", token);
+    console.log("Page index:", pageIndex);
+    console.log("Page size:", pageSize);
+    console.log("Filter value:", filterValue);
+    console.log("Order value:", orderValue);
     fetchUsers();
-  }, [pageIndex, pageSize, filterValue, orderValue]);
+    showTokenTimer(); // Fetch token timer when the component mounts
+  }, [token, pageIndex, pageSize, filterValue, orderValue]);
 
   const handleRoleFilter = (e) => {
     setFilterValue(e.target.value); // Update the filter value when role selection changes
@@ -123,6 +136,19 @@ const UserManagement = () => {
 
   const handleOrderChange = (e) => {
     setOrderValue(e.target.value); // Update the order value when order selection changes
+  };
+
+  const isFirstPage = () => pageIndex === 0;
+  const isLastPage = () => pageIndex === totalPages - 1;
+
+  const previousPage = () => {
+    setPageSize(pageSize); // This line is to ensure the page size remains the same
+    setCurrentPage(pageIndex - 1);
+  };
+
+  const nextPage = () => {
+    setPageSize(pageSize); // This line is to ensure the page size remains the same
+    setCurrentPage(pageIndex + 1);
   };
 
   const removeUser = async (userId) => {
@@ -362,15 +388,15 @@ const UserManagement = () => {
                 </tbody>
               </table>
               <div>
-                <button onClick={previousPage} disabled={!canPreviousPage}>
+                <button onClick={previousPage} disabled={isFirstPage()}>
                   {"<"}
                 </button>{" "}
-                <button onClick={nextPage} disabled={!canNextPage}>
+                <button onClick={nextPage} disabled={isLastPage()}>
                   {">"}
                 </button>{" "}
                 <span>
-                  Page <strong>{pageIndex + 1}</strong> of{" "}
-                  <strong>{pageCount}</strong>{" "}
+                  Page <strong>{currentPage}</strong> of{" "}
+                  <strong>{totalPages}</strong>{" "}
                 </span>
                 <select
                   value={pageSize}
