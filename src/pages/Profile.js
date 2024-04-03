@@ -14,9 +14,13 @@ function Profile() {
   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
   const navigate = useNavigate();
   const [isLoggedUser, setIsLoggedUser] = useState(false);
+  // Define task statistics variables in state
+  const [totalTasks, setTotalTasks] = useState(0);
+  const [totalToDoTasks, setTotalToDoTasks] = useState(0);
+  const [totalDoingTasks, setTotalDoingTasks] = useState(0);
+  const [totalDoneTasks, setTotalDoneTasks] = useState(0);
 
   useEffect(() => {
-    
     const fetchUserProfile = async () => {
       try {
         const response = await fetch(
@@ -30,8 +34,22 @@ function Profile() {
           }
         );
         if (response.ok) {
-          const data = await response.json();
-          setUser(data);
+          const responseData = await response.json();
+          // Extract data from the response
+          const {
+            user,
+            totalTasks,
+            totalToDoTasks,
+            totalDoingTasks,
+            totalDoneTasks,
+          } = responseData;
+
+          // Update state with the extracted data
+          setUser(user);
+          setTotalTasks(totalTasks);
+          setTotalToDoTasks(totalToDoTasks);
+          setTotalDoingTasks(totalDoingTasks);
+          setTotalDoneTasks(totalDoneTasks);
         } else {
           console.error("Failed to fetch user profile:", response.statusText);
         }
@@ -42,7 +60,6 @@ function Profile() {
 
     // Check if the logged-in user is viewing their own profile
     setIsLoggedUser(username === usernameParam);
-    console.log(isLoggedUser);
 
     // Call fetchUserProfile once when the component mounts
     fetchUserProfile();
@@ -50,12 +67,7 @@ function Profile() {
 
   // Function to handle updating user profile
   const handleUpdateProfile = async () => {
-    if (
-      !user.email ||
-      !user.firstName ||
-      !user.lastName ||
-      !user.phone
-    ) {
+    if (!user.email || !user.firstName || !user.lastName || !user.phone) {
       console.error("All fields are required");
       return;
     }
@@ -142,6 +154,7 @@ function Profile() {
     <div className="userProfile">
       <Header />
       <Sidebar />
+      <div className="contents">
       <div className="left-page-wrap"></div>
       <div className="profile-details">
         <h2>My Profile</h2>
@@ -182,19 +195,45 @@ function Profile() {
           value={user.photo}
           onChange={(e) => setUser({ ...user, photo: e.target.value })}
         />
-        {isLoggedUser &&( <React.Fragment> <button onClick={handleUpdateProfile}>Update Profile</button>
-        <ChangePasswordModal
-          isOpen={showChangePasswordModal}
-          onRequestClose={() => setShowChangePasswordModal(false)}
-          onSubmit={handleConfirmChangePassword}
-          title="Change Password"
-        />
-        <button onClick={() => handleOpenChangePasswordModal(user.id)}>
-          Change Password
-        </button> </React.Fragment>)}
+        {isLoggedUser && (
+          <React.Fragment>
+            {" "}
+            <button onClick={handleUpdateProfile}>Update Profile</button>
+            <ChangePasswordModal
+              isOpen={showChangePasswordModal}
+              onRequestClose={() => setShowChangePasswordModal(false)}
+              onSubmit={handleConfirmChangePassword}
+              title="Change Password"
+            />
+            <button onClick={() => handleOpenChangePasswordModal(user.id)}>
+              Change Password
+            </button>{" "}
+          </React.Fragment>
+        )}
         <button onClick={() => navigate("/Home")}>Back to Home</button>
       </div>
-      <div className="right-page-wrap"></div>
+      <div className="right-page-wrap">
+        <div className="tasks-counter">
+          <h3>Tasks Counter</h3>
+          <div className="task-statistic">
+            <span>Total Tasks:</span>
+            <span>{totalTasks}</span>
+          </div>
+          <div className="task-statistic">
+            <span>Total ToDo Tasks:</span>
+            <span>{totalToDoTasks}</span>
+          </div>
+          <div className="task-statistic">
+            <span>Total Doing Tasks:</span>
+            <span>{totalDoingTasks}</span>
+          </div>
+          <div className="task-statistic">
+            <span>Total Done Tasks:</span>
+            <span>{totalDoneTasks}</span>
+          </div>
+        </div>
+      </div>
+      </div>
     </div>
   );
 }

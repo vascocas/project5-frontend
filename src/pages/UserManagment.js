@@ -99,17 +99,12 @@ const UserManagement = () => {
 
         // Extract data from the response
         const { currentPage, pageSize, totalPages, users } = responseData;
-
         // Update state with the extracted data
         setUsers(users);
         setTotalPages(totalPages);
         setPageSize(pageSize);
         setCurrentPage(currentPage);
 
-        console.log("Users: ", users);
-        console.log("total Pages: ", totalPages);
-        console.log("current Page: ", currentPage);
-        console.log("Page size:", pageSize);
       } else {
         setUsers([]);
         throw new Error(`Failed to fetch users: ${response.status}`);
