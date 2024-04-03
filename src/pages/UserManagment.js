@@ -7,7 +7,7 @@ import UsersProfile from "../components/users/UsersProfile";
 import ChangePasswordModal from "../components/users/ChangePasswordModal";
 import { userStore } from "../stores/UserStore";
 import { useNavigate } from "react-router-dom";
-import { useTable, useFilters, usePagination } from "react-table";
+import { useTable, usePagination } from "react-table";
 import "../index.css";
 import "./UserManagement.css";
 
@@ -21,12 +21,11 @@ const UserManagement = () => {
   const [filterValue, setFilterValue] = useState("");
   const [orderValue, setOrderValue] = useState("ASC"); // Default order value
   const [currentPage, setCurrentPage] = useState(0);
-
   const [totalPages, setTotalPages] = useState(1);
 
   const columns = React.useMemo(
     () => [
-      { Header: "ID", accessor: "id" },
+      { Header: "Id", accessor: "id" },
       { Header: "Username", accessor: "username" },
       { Header: "Email", accessor: "email" },
       { Header: "Role", accessor: "role" },
@@ -76,14 +75,10 @@ const UserManagement = () => {
       let url;
       if (filterValue) {
         // If filter is defined, include the role parameter in the URL
-        url = `http://localhost:8080/project5-backend/rest/users?role=${filterValue}&order=${orderValue}&page=${
-          currentPage
-        }&pageSize=${pageSize}`;
+        url = `http://localhost:8080/project5-backend/rest/users?role=${filterValue}&order=${orderValue}&page=${currentPage}&pageSize=${pageSize}`;
       } else {
         // If filter is not defined, exclude the role parameter from the URL
-        url = `http://localhost:8080/project5-backend/rest/users?order=${orderValue}&page=${
-          currentPage
-        }&pageSize=${pageSize}`;
+        url = `http://localhost:8080/project5-backend/rest/users?order=${orderValue}&page=${currentPage}&pageSize=${pageSize}`;
       }
       console.log(url);
       const response = await fetch(url, {
@@ -104,7 +99,6 @@ const UserManagement = () => {
         setTotalPages(totalPages);
         setPageSize(pageSize);
         setCurrentPage(currentPage);
-
       } else {
         setUsers([]);
         throw new Error(`Failed to fetch users: ${response.status}`);
@@ -122,10 +116,10 @@ const UserManagement = () => {
     console.log("Page size:", pageSize);
     console.log("Filter value:", filterValue);
     console.log("Order value:", orderValue);
-  
+
     fetchUsers();
     showTokenTimer(); // Fetch token timer when the component mounts
-  }, [token, pageSize, currentPage, filterValue, orderValue]); 
+  }, [token, pageSize, currentPage, filterValue, orderValue]);
 
   const handleRoleFilter = (e) => {
     setFilterValue(e.target.value); // Update the filter value when role selection changes
@@ -328,6 +322,11 @@ const UserManagement = () => {
     }
   };
 
+  const handleRowClick = (clickedUsername) => {
+    // Navigate to the user's profile page with a unique URL
+    navigate(`/profile/${clickedUsername}`);
+  };
+
   return (
     <div className="user-managment-page">
       <Header />
@@ -378,8 +377,19 @@ const UserManagement = () => {
                     prepareRow(row);
                     return (
                       <tr {...row.getRowProps()}>
-                        {row.cells.map((cell) => (
-                          <td {...cell.getCellProps()}>
+                        {row.cells.map((cell, index) => (
+                          <td
+                            {...cell.getCellProps()}
+                            onClick={() => {
+                              // Check if the index is less than 4 (Only for columns: Id, Username, Email, and Role)
+                              if (index < 4) {
+                                handleRowClick(row.original.username);
+                              }
+                            }}
+                            style={{
+                              cursor: index < 4 ? "pointer" : "default",
+                            }}
+                          >
                             {cell.render("Cell")}
                           </td>
                         ))}
