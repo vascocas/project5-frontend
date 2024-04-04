@@ -4,15 +4,16 @@ import { useNavigate, useParams } from "react-router-dom";
 import "./PublicProfile.css";
 import "../index.css";
 
-function Profile() {
-  const { token, username } = userStore();
+function PublicProfile() {
+  const { token, username, loggedId } = userStore();
   const { usernameParam } = useParams();
   const [user, setUser] = useState({
+    userId: "",
     username: "",
     email: "",
     firstName: "",
     lastName: "",
-    photo: ""
+    photo: "",
   });
   const navigate = useNavigate();
   // Define task statistics variables in state
@@ -20,6 +21,12 @@ function Profile() {
   const [totalToDoTasks, setTotalToDoTasks] = useState(0);
   const [totalDoingTasks, setTotalDoingTasks] = useState(0);
   const [totalDoneTasks, setTotalDoneTasks] = useState(0);
+
+  // State for messages
+  const [messages, setMessages] = useState([]);
+
+  // State for composing new message
+  const [newMessage, setNewMessage] = useState("");
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -35,32 +42,30 @@ function Profile() {
           }
         );
         if (response.ok) {
-            const responseData = await response.json();
-            // Extract data from the response
-            const {
-              username,
-              email,
-              firstName,
-              lastName,
-              photo,
-              totalTasks,
-              totalToDoTasks,
-              totalDoingTasks,
-              totalDoneTasks,
-            } = responseData;
-
-          // Update state with the extracted data
-          setUser({username,
+          const responseData = await response.json();
+          // Extract data from the response
+          const {
+            userId,
+            username,
             email,
             firstName,
             lastName,
             photo,
-          });
+            totalTasks,
+            totalToDoTasks,
+            totalDoingTasks,
+            totalDoneTasks,
+          } = responseData;
+
+          // Update state with the extracted data
+          setUser({ userId, username, email, firstName, lastName, photo });
           setTotalTasks(totalTasks);
           setTotalToDoTasks(totalToDoTasks);
           setTotalDoingTasks(totalDoingTasks);
           setTotalDoneTasks(totalDoneTasks);
 
+          // Call fetchMessages with userId
+        fetchMessages(userId);
         } else {
           console.error("Failed to fetch user profile:", response.statusText);
         }
@@ -69,60 +74,152 @@ function Profile() {
       }
     };
 
-    // Call fetchUserProfile once when the component mounts
     fetchUserProfile();
-  }, [token, usernameParam, username]);
+  }, [token, usernameParam]);
+
+  const fetchMessages = async (userId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/project5-backend/rest/messages/${userId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            token: token,
+          },
+        }
+      );
+      if (response.ok) {
+        const messagesData = await response.json();
+        setMessages(messagesData);
+      } else {
+        console.error("Failed to fetch messages:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+    }
+  };
+
+  // Function to handle sending a new message
+  const sendMessage = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:8080/project5-backend/rest/messages/send",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            token: token,
+          },
+          body: JSON.stringify({
+            senderId: loggedId,
+            receiverId: username,
+            messageText: newMessage,
+          }),
+        }
+      );
+      if (response.ok) {
+        // Message sent successfully, fetch updated messages
+        fetchMessages();
+        setNewMessage("");
+      } else {
+        console.error("Failed to send message:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
+  };
+
+  // Function to handle marking a message as read
+  const markAsRead = async (messageId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/project5-backend/rest/messages/read/${messageId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            token: token,
+          },
+        }
+      );
+      if (response.ok) {
+        // Message marked as read successfully, fetch updated messages
+        fetchMessages();
+      } else {
+        console.error("Failed to mark message as read:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error marking message as read:", error);
+    }
+  };
 
   return (
     <div className="userProfile">
       <div className="contents">
-      <div className="left-page-wrap"></div>
-      <div className="profile-details">
-        <h2>My Profile</h2>
-        <img className="user-photo" src={user.photo} alt="Profile" />
-        <label htmlFor="username">Username</label>
-        <input type="text" id="username" value={user.username} readOnly />
-        <label htmlFor="email">Email</label>
-        <input
-          type="email"
-          id="email"
-          value={user.email} readOnly />
-        <label htmlFor="firstName">First Name</label>
-        <input
-          type="text"
-          id="firstName"
-          value={user.firstName} readOnly />
-        <label htmlFor="lastName">Last Name</label>
-        <input
-          type="text"
-          id="lastName"
-          value={user.lastName} readOnly />        
-        <button onClick={() => navigate("/Home")}>Back to Home</button>
-      </div>
-      <div className="right-page-wrap">
-        <div className="tasks-counter">
-          <h3>Tasks Counter</h3>
-          <div className="task-statistic">
-            <span>Total Tasks:</span>
-            <span>{totalTasks}</span>
-          </div>
-          <div className="task-statistic">
-            <span>Total ToDo Tasks:</span>
-            <span>{totalToDoTasks}</span>
-          </div>
-          <div className="task-statistic">
-            <span>Total Doing Tasks:</span>
-            <span>{totalDoingTasks}</span>
-          </div>
-          <div className="task-statistic">
-            <span>Total Done Tasks:</span>
-            <span>{totalDoneTasks}</span>
+        <div className="left-page-wrap">
+          <div className="messages-container">
+            <h2>Messages</h2>
+            <div className="messages-list">
+              {messages.map((message) => (
+                <div key={message.id}>
+                  <div className={message.read ? "message" : "message unread"}>
+                    <div className="message-content">{message.content}</div>
+                    {!message.read && (
+                      <button onClick={() => markAsRead(message.id)}>
+                        Mark as Read
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="compose-message">
+              <textarea
+                value={newMessage}
+                onChange={(e) => setNewMessage(e.target.value)}
+              />
+              <button onClick={sendMessage}>Send</button>
+            </div>
           </div>
         </div>
-      </div>
+        <div className="profile-details">
+          <h2>My Profile</h2>
+          <img className="user-photo" src={user.photo} alt="Profile" />
+          <label htmlFor="username">Username</label>
+          <input type="text" id="username" value={user.username} readOnly />
+          <label htmlFor="email">Email</label>
+          <input type="email" id="email" value={user.email} readOnly />
+          <label htmlFor="firstName">First Name</label>
+          <input type="text" id="firstName" value={user.firstName} readOnly />
+          <label htmlFor="lastName">Last Name</label>
+          <input type="text" id="lastName" value={user.lastName} readOnly />
+          <button onClick={() => navigate("/Home")}>Back to Home</button>
+        </div>
+        <div className="right-page-wrap">
+          <div className="tasks-counter">
+            <h3>Tasks Counter</h3>
+            <div className="task-statistic">
+              <span>Total Tasks:</span>
+              <span>{totalTasks}</span>
+            </div>
+            <div className="task-statistic">
+              <span>Total ToDo Tasks:</span>
+              <span>{totalToDoTasks}</span>
+            </div>
+            <div className="task-statistic">
+              <span>Total Doing Tasks:</span>
+              <span>{totalDoingTasks}</span>
+            </div>
+            <div className="task-statistic">
+              <span>Total Done Tasks:</span>
+              <span>{totalDoneTasks}</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
 }
 
-export default Profile;
+export default PublicProfile;

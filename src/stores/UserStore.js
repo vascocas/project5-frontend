@@ -6,6 +6,8 @@ const storage = createJSONStorage(() => sessionStorage);
 export const userStore = create(
   persist(
     (set) => ({
+      loggedId: "",
+      updateLoggedId: (loggedId) => set({ loggedId }),
       username: "",
       updateUsername: (username) => set({ username }),
       token: "",

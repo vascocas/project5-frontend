@@ -13,12 +13,6 @@ function Profile() {
   const [user, setUser] = useState(null);
   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
   const navigate = useNavigate();
-  const [isLoggedUser, setIsLoggedUser] = useState(false);
-  // Define task statistics variables in state
-  const [totalTasks, setTotalTasks] = useState(0);
-  const [totalToDoTasks, setTotalToDoTasks] = useState(0);
-  const [totalDoingTasks, setTotalDoingTasks] = useState(0);
-  const [totalDoneTasks, setTotalDoneTasks] = useState(0);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -45,9 +39,6 @@ function Profile() {
         console.error("Error fetching user profile:", error);
       }
     };
-
-    // Check if the logged-in user is viewing their own profile
-    setIsLoggedUser(username === usernameParam);
 
     // Call fetchUserProfile once when the component mounts
     fetchUserProfile();

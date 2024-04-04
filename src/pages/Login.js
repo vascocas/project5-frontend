@@ -4,7 +4,7 @@ import { userStore } from "../stores/UserStore";
 import "./Login_Register.css";
 
 function Login() {
-  const { updateUsername, updateToken, updateRole, updatePhoto } = userStore();
+  const { updateLoggedId, updateUsername, updateToken, updateRole, updatePhoto } = userStore();
   const [inputs, setInputs] = useState({ username: "", password: "" });
   const navigate = useNavigate();
 
@@ -41,6 +41,7 @@ function Login() {
       if (response.ok) {
         const loginDto = await response.json();
         // Update userStore
+        updateLoggedId(loginDto.id);
         updateUsername(loginDto.username);
         updateToken(loginDto.token);
         updateRole(loginDto.role);

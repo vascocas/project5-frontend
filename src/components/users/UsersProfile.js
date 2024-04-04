@@ -16,14 +16,14 @@ function UsersProfile() {
     phone: "",
     photo: "",
   });
-  const [selectedUsername, setSelectedUsername] = useState("");
+  const [selectedUserId, setSelectedUserId] = useState("");
 
   useEffect(() => {
     const fetchOtherUserProfile = async () => {
       try {
-        if (!selectedUsername) return;
+        if (!selectedUserId) return;
         const response = await fetch(
-          `http://localhost:8080/project5-backend/rest/users/username/?username=${selectedUsername}`,
+          `http://localhost:8080/project5-backend/rest/users/user/?userId=${selectedUserId}`,
           {
             method: "GET",
             headers: {
@@ -45,7 +45,7 @@ function UsersProfile() {
 
     // Call fetchUserProfile once when the component mounts
     fetchOtherUserProfile();
-  }, [token, selectedUsername]);
+  }, [token, selectedUserId]);
 
   // Function to handle updating user profile
   const handleUpdateOthersProfile = async () => {
@@ -94,8 +94,8 @@ function UsersProfile() {
   };
 
   const handleSelect = (e) => {
-    const selectedUsername = e.target.value;
-    setSelectedUsername(selectedUsername);
+    const selectedUserId = e.target.value;
+    setSelectedUserId(selectedUserId);
   };
 
   const handleCancel = () => {
@@ -107,7 +107,7 @@ function UsersProfile() {
       phone: "",
       photo: ""
     });
-    setSelectedUsername("");
+    setSelectedUserId("");
   };
   
 
@@ -121,10 +121,10 @@ function UsersProfile() {
         <div>
           <label htmlFor="user">Choose user:</label>
           <br />
-          <select id="otherUserProfile" onChange={handleSelect} value={selectedUsername}>
+          <select id="otherUserProfile" onChange={handleSelect} value={selectedUserId}>
             <option value="">Select Username</option>
             {usernames.map((username) => (
-              <option key={username.id} value={username.username}>
+              <option key={username.id} value={username.id}>
                 {username.username}
               </option>
             ))}
