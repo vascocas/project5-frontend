@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { userStore } from "../stores/UserStore";
 import { useNavigate, useParams } from "react-router-dom";
+import { FaCheck, FaCheckDouble } from "react-icons/fa";
 import "./PublicProfile.css";
 import "../index.css";
 
 function PublicProfile() {
-  const { token, username, loggedId } = userStore();
+  const { token, loggedId } = userStore();
   const { usernameParam } = useParams();
   const [user, setUser] = useState({
     userId: "",
@@ -23,7 +24,8 @@ function PublicProfile() {
   const [totalDoneTasks, setTotalDoneTasks] = useState(0);
 
   // State for messages
-  const [messages, setMessages] = useState([]);
+  const [receivedMessages, setReceivedMessages] = useState([]);
+  const [sentMessages, setSentMessages] = useState([]);
 
   // State for composing new message
   const [newMessage, setNewMessage] = useState("");
@@ -65,7 +67,8 @@ function PublicProfile() {
           setTotalDoneTasks(totalDoneTasks);
 
           // Call fetchMessages with userId
-        fetchMessages(userId);
+          fetchReceivedMessages(user.userId);
+          fetchSentMessages(user.userId);
         } else {
           console.error("Failed to fetch user profile:", response.statusText);
         }
@@ -77,10 +80,10 @@ function PublicProfile() {
     fetchUserProfile();
   }, [token, usernameParam]);
 
-  const fetchMessages = async (userId) => {
+  const fetchReceivedMessages = async (userId) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/project5-backend/rest/messages/${userId}`,
+        `http://localhost:8080/project5-backend/rest/messages/inboxChat/${userId}/${loggedId}`,
         {
           method: "GET",
           headers: {
@@ -91,7 +94,30 @@ function PublicProfile() {
       );
       if (response.ok) {
         const messagesData = await response.json();
-        setMessages(messagesData);
+        setReceivedMessages(messagesData);
+      } else {
+        console.error("Failed to fetch messages:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+    }
+  };
+
+  const fetchSentMessages = async (userId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/project5-backend/rest/messages/sentChat/${loggedId}/${userId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            token: token,
+          },
+        }
+      );
+      if (response.ok) {
+        const messagesData = await response.json();
+        setSentMessages(messagesData);
       } else {
         console.error("Failed to fetch messages:", response.statusText);
       }
@@ -113,14 +139,15 @@ function PublicProfile() {
           },
           body: JSON.stringify({
             senderId: loggedId,
-            receiverId: username,
+            receiverId: user.userId,
             messageText: newMessage,
           }),
         }
       );
       if (response.ok) {
         // Message sent successfully, fetch updated messages
-        fetchMessages();
+        fetchReceivedMessages(user.userId);
+        fetchSentMessages(user.userId);
         setNewMessage("");
       } else {
         console.error("Failed to send message:", response.statusText);
@@ -145,7 +172,8 @@ function PublicProfile() {
       );
       if (response.ok) {
         // Message marked as read successfully, fetch updated messages
-        fetchMessages();
+        fetchReceivedMessages(user.userId);
+        fetchSentMessages(user.userId);
       } else {
         console.error("Failed to mark message as read:", response.statusText);
       }
@@ -161,14 +189,32 @@ function PublicProfile() {
           <div className="messages-container">
             <h2>Messages</h2>
             <div className="messages-list">
-              {messages.map((message) => (
-                <div key={message.id}>
-                  <div className={message.read ? "message" : "message unread"}>
-                    <div className="message-content">{message.content}</div>
-                    {!message.read && (
+              {/* Render received messages */}
+              {receivedMessages.map((message) => (
+                <div key={message.id} className="message received">
+                  <div className="message-content">
+                    {message.readStatus ? (
                       <button onClick={() => markAsRead(message.id)}>
-                        Mark as Read
+                        <FaCheck />
                       </button>
+                    ) : (
+                      <FaCheckDouble />
+                    )}{" "}
+                    {message.messageText}
+                  </div>
+                </div>
+              ))}
+              {/* Render sent messages */}
+              {sentMessages.map((message) => (
+                <div key={message.id} className="message sent">
+                  <div className="message-content">
+                    {message.messageText}{" "}
+                    {message.readStatus ? (
+                      <button onClick={() => markAsRead(message.id)}>
+                        <FaCheck />
+                      </button>
+                    ) : (
+                      <FaCheckDouble />
                     )}
                   </div>
                 </div>
