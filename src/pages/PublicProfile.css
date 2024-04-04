@@ -1,0 +1,78 @@
+.contents {
+    display: flex;
+  }
+  
+  .left-page-wrap,
+  .right-page-wrap {
+    flex: 1; /* Each section will take equal space */
+  }
+  
+  .profile-details {
+    width: 300px;
+    text-align: center;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 4px;
+    margin: 0 10px;
+  }
+  
+  .profile-details h2 {
+    margin-bottom: 20px;
+  }
+  
+  .profile-details label {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  .profile-details input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .profile-details button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .profile-details button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Add styles for Tasks Counter section */
+  .tasks-counter {
+    width: 300px;
+    text-align: center;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    margin-top: 40px;
+  }
+  
+  .tasks-counter h3 {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+  }
+  
+  
+  .task-statistic {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  
+  .task-statistic span {
+    font-weight: bold;
+  }
+  
+  .task-statistic span:last-child {
+    color: #0056b3;
+  }

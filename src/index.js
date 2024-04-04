@@ -9,6 +9,7 @@ import Register from './pages/Register'
 import Home from './pages/Home'
 import Task from './pages/Task'
 import Profile from './pages/Profile'
+import PublicProfile from './pages/PublicProfile'
 import UserManagment from './pages/UserManagment'
 import TaskCategories from './pages/TaskCategories'
 import RecycleBin from './pages/RecycleBin'
@@ -23,7 +24,8 @@ root.render(
       <Route path="/register" element={<Register />} />
       <Route path="/home" element={<Authorization> <Home /> </Authorization>} />
       <Route path="/task" element={<Authorization> <Task /> </Authorization>} />
-      <Route path="/profile/:usernameParam" element={<Authorization> <Profile /> </Authorization>} />
+      <Route path="/profile" element={<Authorization> <Profile /> </Authorization>} />
+      <Route path="/profile/:usernameParam" element={<Authorization> <PublicProfile /> </Authorization>} />
       <Route path="/user" element={<Authorization> <UserManagment /> </Authorization>} />
       <Route path="/categories" element={<Authorization> <TaskCategories /> </Authorization>} />
       <Route path="/recycle" element={<Authorization> <RecycleBin /> </Authorization>} />

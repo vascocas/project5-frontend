@@ -40,7 +40,7 @@ const Header = () => {
   return (
     <header>
       <div className="header-right">
-      <Link className="welcome-message" to={`/profile/${username}`}>
+      <Link className="welcome-message" to={`/profile`}>
           Welcome, <span className="user-name">{username}</span>
         </Link>
         {photo && <img className="user-photo" src={photo} alt="Profile" />}

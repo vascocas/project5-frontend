@@ -24,7 +24,7 @@ function Profile() {
     const fetchUserProfile = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8080/project5-backend/rest/users/logged`,
+          `http://localhost:8080/project5-backend/rest/users/profile/username/?username=${usernameParam}`,
           {
             method: "GET",
             headers: {
@@ -34,11 +34,22 @@ function Profile() {
           }
         );
         if (response.ok) {
-          const user = await response.json();
+          const responseData = await response.json();
+          // Extract data from the response
+          const {
+            user,
+            totalTasks,
+            totalToDoTasks,
+            totalDoingTasks,
+            totalDoneTasks,
+          } = responseData;
 
           // Update state with the extracted data
           setUser(user);
-      
+          setTotalTasks(totalTasks);
+          setTotalToDoTasks(totalToDoTasks);
+          setTotalDoingTasks(totalDoingTasks);
+          setTotalDoneTasks(totalDoneTasks);
         } else {
           console.error("Failed to fetch user profile:", response.statusText);
         }
