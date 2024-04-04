@@ -80,7 +80,7 @@ const UserManagement = () => {
         // If filter is not defined, exclude the role parameter from the URL
         url = `http://localhost:8080/project5-backend/rest/users?order=${orderValue}&page=${currentPage}&pageSize=${pageSize}`;
       }
-      console.log(url);
+    
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -110,12 +110,6 @@ const UserManagement = () => {
   };
 
   useEffect(() => {
-    console.log("useEffect triggered");
-    console.log("Token:", token);
-    console.log("Page currentPage:", currentPage);
-    console.log("Page size:", pageSize);
-    console.log("Filter value:", filterValue);
-    console.log("Order value:", orderValue);
 
     fetchUsers();
     showTokenTimer(); // Fetch token timer when the component mounts

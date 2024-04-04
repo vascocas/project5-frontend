@@ -35,8 +35,7 @@ function Profile() {
         );
         if (response.ok) {
           const user = await response.json();
-
-          // Update state with the extracted data
+          // Update state with the response data
           setUser(user);
       
         } else {
@@ -184,8 +183,6 @@ function Profile() {
           value={user.photo}
           onChange={(e) => setUser({ ...user, photo: e.target.value })}
         />
-        {isLoggedUser && (
-          <React.Fragment>
             {" "}
             <button onClick={handleUpdateProfile}>Update Profile</button>
             <ChangePasswordModal
@@ -197,30 +194,9 @@ function Profile() {
             <button onClick={() => handleOpenChangePasswordModal(user.id)}>
               Change Password
             </button>{" "}
-          </React.Fragment>
-        )}
         <button onClick={() => navigate("/Home")}>Back to Home</button>
       </div>
       <div className="right-page-wrap">
-        <div className="tasks-counter">
-          <h3>Tasks Counter</h3>
-          <div className="task-statistic">
-            <span>Total Tasks:</span>
-            <span>{totalTasks}</span>
-          </div>
-          <div className="task-statistic">
-            <span>Total ToDo Tasks:</span>
-            <span>{totalToDoTasks}</span>
-          </div>
-          <div className="task-statistic">
-            <span>Total Doing Tasks:</span>
-            <span>{totalDoingTasks}</span>
-          </div>
-          <div className="task-statistic">
-            <span>Total Done Tasks:</span>
-            <span>{totalDoneTasks}</span>
-          </div>
-        </div>
       </div>
       </div>
     </div>
