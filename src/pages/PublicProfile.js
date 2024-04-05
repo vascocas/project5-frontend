@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { userStore } from "../stores/UserStore";
 import { useNavigate, useParams } from "react-router-dom";
 import { FaCheck, FaCheckDouble } from "react-icons/fa";
@@ -28,6 +28,9 @@ function PublicProfile() {
 
   // State for composing new message
   const [newMessage, setNewMessage] = useState("");
+
+  // Ref for the messages container
+  const messagesContainerRef = useRef(null);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -122,7 +125,6 @@ function PublicProfile() {
       if (response.ok) {
         // Message sent successfully, fetch updated messages
         fetchChatMessages(user.userId);
-
         setNewMessage("");
       } else {
         console.error("Failed to send message:", response.statusText);
@@ -134,7 +136,6 @@ function PublicProfile() {
 
   // Function to handle marking a message as read
   const markAsRead = async (messageId) => {
-    
     try {
       const response = await fetch(
         `http://localhost:8080/project5-backend/rest/messages/read/${messageId}`,
@@ -157,35 +158,45 @@ function PublicProfile() {
     }
   };
 
+  useEffect(() => {
+    // Scroll to the bottom of the messages container
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+    }
+  }, [chatMessages]);
+  
   return (
     <div className="userProfile">
       <div className="contents">
         <div className="left-page-wrap">
           <div className="messages-container">
-            <h2>Messages</h2>
-            <div className="messages-list">
+            <h3>Messages Chat</h3>
+            <div className="messages-list" ref={messagesContainerRef}>
               {/* Render chat messages */}
               {chatMessages.map((message) => (
                 <div
                   key={message.id}
                   className={`message ${
                     message.senderId === loggedId ? "sent" : "received"
-                  }`}
-                 >
+                  } ${message.readStatus ? "read" : ""}`}
+                >
                   <div className="message-content">
+                    {message.messageText}{" "}
                     <button onClick={() => markAsRead(message.id)}>
                       {message.readStatus ? <FaCheckDouble /> : <FaCheck />}
                     </button>
                   </div>
-                  <div className="message-content">{message.messageText}</div>
                 </div>
               ))}
             </div>
             <div className="compose-message">
-              <textarea
+              <input
+                type="text"
+                id="send-message"
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
               />
+              <br></br>
               <button onClick={sendMessage}>Send</button>
             </div>
           </div>
