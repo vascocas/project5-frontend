@@ -24,8 +24,7 @@ function PublicProfile() {
   const [totalDoneTasks, setTotalDoneTasks] = useState(0);
 
   // State for messages
-  const [receivedMessages, setReceivedMessages] = useState([]);
-  const [sentMessages, setSentMessages] = useState([]);
+  const [chatMessages, setChatMessages] = useState([]);
 
   // State for composing new message
   const [newMessage, setNewMessage] = useState("");
@@ -67,8 +66,7 @@ function PublicProfile() {
           setTotalDoneTasks(totalDoneTasks);
 
           // Call fetchMessages with userId
-          fetchReceivedMessages(user.userId);
-          fetchSentMessages(user.userId);
+          fetchChatMessages(userId);
         } else {
           console.error("Failed to fetch user profile:", response.statusText);
         }
@@ -80,10 +78,10 @@ function PublicProfile() {
     fetchUserProfile();
   }, [token, usernameParam]);
 
-  const fetchReceivedMessages = async (userId) => {
+  const fetchChatMessages = async (userId) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/project5-backend/rest/messages/inboxChat/${userId}/${loggedId}`,
+        `http://localhost:8080/project5-backend/rest/messages/chat/${userId}/${loggedId}`,
         {
           method: "GET",
           headers: {
@@ -94,30 +92,7 @@ function PublicProfile() {
       );
       if (response.ok) {
         const messagesData = await response.json();
-        setReceivedMessages(messagesData);
-      } else {
-        console.error("Failed to fetch messages:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error fetching messages:", error);
-    }
-  };
-
-  const fetchSentMessages = async (userId) => {
-    try {
-      const response = await fetch(
-        `http://localhost:8080/project5-backend/rest/messages/sentChat/${loggedId}/${userId}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            token: token,
-          },
-        }
-      );
-      if (response.ok) {
-        const messagesData = await response.json();
-        setSentMessages(messagesData);
+        setChatMessages(messagesData);
       } else {
         console.error("Failed to fetch messages:", response.statusText);
       }
@@ -146,8 +121,8 @@ function PublicProfile() {
       );
       if (response.ok) {
         // Message sent successfully, fetch updated messages
-        fetchReceivedMessages(user.userId);
-        fetchSentMessages(user.userId);
+        fetchChatMessages(user.userId);
+
         setNewMessage("");
       } else {
         console.error("Failed to send message:", response.statusText);
@@ -159,6 +134,7 @@ function PublicProfile() {
 
   // Function to handle marking a message as read
   const markAsRead = async (messageId) => {
+    
     try {
       const response = await fetch(
         `http://localhost:8080/project5-backend/rest/messages/read/${messageId}`,
@@ -172,8 +148,7 @@ function PublicProfile() {
       );
       if (response.ok) {
         // Message marked as read successfully, fetch updated messages
-        fetchReceivedMessages(user.userId);
-        fetchSentMessages(user.userId);
+        fetchChatMessages(user.userId);
       } else {
         console.error("Failed to mark message as read:", response.statusText);
       }
@@ -189,34 +164,20 @@ function PublicProfile() {
           <div className="messages-container">
             <h2>Messages</h2>
             <div className="messages-list">
-              {/* Render received messages */}
-              {receivedMessages.map((message) => (
-                <div key={message.id} className="message received">
+              {/* Render chat messages */}
+              {chatMessages.map((message) => (
+                <div
+                  key={message.id}
+                  className={`message ${
+                    message.senderId === loggedId ? "sent" : "received"
+                  }`}
+                 >
                   <div className="message-content">
-                    {message.readStatus ? (
-                      <button onClick={() => markAsRead(message.id)}>
-                        <FaCheck />
-                      </button>
-                    ) : (
-                      <FaCheckDouble />
-                    )}{" "}
-                    {message.messageText}
+                    <button onClick={() => markAsRead(message.id)}>
+                      {message.readStatus ? <FaCheckDouble /> : <FaCheck />}
+                    </button>
                   </div>
-                </div>
-              ))}
-              {/* Render sent messages */}
-              {sentMessages.map((message) => (
-                <div key={message.id} className="message sent">
-                  <div className="message-content">
-                    {message.messageText}{" "}
-                    {message.readStatus ? (
-                      <button onClick={() => markAsRead(message.id)}>
-                        <FaCheck />
-                      </button>
-                    ) : (
-                      <FaCheckDouble />
-                    )}
-                  </div>
+                  <div className="message-content">{message.messageText}</div>
                 </div>
               ))}
             </div>
