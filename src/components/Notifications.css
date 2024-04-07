@@ -1,0 +1,68 @@
+/* Notifications.css */
+
+/* Style for the modal container */
+.modal-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+    z-index: 1000; /* Ensure modal appears on top of other elements */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Style for the modal content */
+  .modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Box shadow for depth */
+  }
+  
+  /* Style for the close button */
+  .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    color: #666;
+    font-size: 20px;
+  }
+  
+  /* Style for the notification list */
+  .notification-list {
+    max-height: 80vh; /* Limit maximum height of the notification list */
+    overflow-y: auto; /* Add scrollbar if content overflows vertically */
+  }
+  
+  /* Style for individual notifications */
+  .notification {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .notification:hover {
+    background-color: #f0f0f0; /* Change background color on hover */
+  }
+  
+  /* Style for read notifications */
+  .notification.read {
+    background-color: #f0f0f0; /* Light gray background for read notifications */
+  }
+  
+  /* Style for notification content */
+  .notification-content {
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Style for check icons */
+  .check-icon {
+    margin-right: 5px;
+  }
+  

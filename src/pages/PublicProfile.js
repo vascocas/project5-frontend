@@ -107,6 +107,17 @@ function PublicProfile() {
   // Function to handle sending a new message
   const sendMessage = async () => {
     try {
+      // Check if newMessage is empty
+      if (!newMessage.trim()) {
+        console.error("Message cannot be empty.");
+        return; // Exit function early if message is empty
+      }
+      // Creates MessageDto
+      const requestBody = JSON.stringify({
+        senderId: loggedId,
+        receiverId: user.userId,
+        messageText: newMessage,
+      });
       const response = await fetch(
         "http://localhost:8080/project5-backend/rest/messages/send",
         {
@@ -115,11 +126,7 @@ function PublicProfile() {
             "Content-Type": "application/json",
             token: token,
           },
-          body: JSON.stringify({
-            senderId: loggedId,
-            receiverId: user.userId,
-            messageText: newMessage,
-          }),
+          body: requestBody,
         }
       );
       if (response.ok) {
@@ -161,10 +168,11 @@ function PublicProfile() {
   useEffect(() => {
     // Scroll to the bottom of the messages container
     if (messagesContainerRef.current) {
-      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+      messagesContainerRef.current.scrollTop =
+        messagesContainerRef.current.scrollHeight;
     }
   }, [chatMessages]);
-  
+
   return (
     <div className="userProfile">
       <div className="contents">

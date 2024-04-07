@@ -41,3 +41,18 @@
   background-color: #515355;
   cursor: pointer;
 }
+
+/* Style for notifications alert */
+.notifications-alert {
+  margin-left: 20px;
+  margin-right: 10px;
+  border: 1px solid #ccc; /* Add border */
+  border-radius: 5px; /* Add border radius */
+  padding: 10px; /* Add padding */
+  background-color: #f1efef; /* Background color */
+}
+
+#notifications-h3 {
+  text-align: center; /* Center-align heading */
+  margin-bottom: 10px; /* Add margin below heading */
+}
