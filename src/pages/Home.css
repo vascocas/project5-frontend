@@ -1,6 +1,15 @@
 /* CSS for Home component */
 .page-title {
   text-align: center;
+
+}
+
+.home-title {
+  flex: 10;
+}
+
+.notifications-alert {
+  flex: 1;
 }
 
 .page-wrap {
@@ -14,21 +23,27 @@
   background-color: #fcfafa;
 }
 
+.top-page {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
 .content-wrapper {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-top: 20px; /* Adjust margin as needed */
+  margin-top: 20px;
 }
 
 .add-task-form,
 .tasks-board {
   flex: 1;
-  margin-right: 20px; /* Add spacing between AddTaskForm and TasksBoard */
+  margin-right: 20px;
   border: 1px solid #ccc; /* Add border around the columns */
   border-radius: 5px; /* Add border radius for rounded corners */
   padding: 10px; /* Add padding inside the columns */
-  height: 90vh;
+  height: 85vh;
   background-color: #f1efef;
 }
 
@@ -44,8 +59,8 @@
 
 /* Style for notifications alert */
 .notifications-alert {
-  margin-left: 20px;
-  margin-right: 10px;
+  flex: 1; /* Ensure it takes up remaining space */
+  margin-left: 20px; /* Add margin */
   border: 1px solid #ccc; /* Add border */
   border-radius: 5px; /* Add border radius */
   padding: 10px; /* Add padding */

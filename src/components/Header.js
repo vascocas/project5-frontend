@@ -1,5 +1,5 @@
 // Header.js
-import React, { useEffect } from "react";
+import React from "react";
 import "./Header.css";
 import { useNavigate, Link } from "react-router-dom";
 import { userStore } from "../stores/UserStore";
