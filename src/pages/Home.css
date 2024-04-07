@@ -67,7 +67,12 @@
   background-color: #f1efef; /* Background color */
 }
 
+.notifications-link{
+  color: black;
+  text-decoration: none; 
+}
+
 #notifications-h3 {
-  text-align: center; /* Center-align heading */
-  margin-bottom: 10px; /* Add margin below heading */
+  text-align: center;
+  margin: 5px;
 }

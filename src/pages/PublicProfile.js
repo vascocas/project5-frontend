@@ -173,6 +173,13 @@ function PublicProfile() {
     }
   }, [chatMessages]);
 
+  // Function to handle sending message when Enter key is pressed
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      sendMessage();
+    }
+  };
+
   return (
     <div className="userProfile">
       <div className="contents">
@@ -203,6 +210,7 @@ function PublicProfile() {
                 id="send-message"
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
+                onKeyDown={handleKeyPress}
               />
               <br></br>
               <button onClick={sendMessage}>Send</button>

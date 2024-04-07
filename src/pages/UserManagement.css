@@ -233,11 +233,11 @@
 }
 
 .profile-details button:hover {
-  background-color: #0056b3; /* Darker color on hover */
+  background-color: #0056b3;
 }
 
 .add-button-warning {
-  text-align: center; /* Center align the contents */
+  text-align: center;
 }
 
 .button-container {

@@ -6,6 +6,7 @@ import TasksBoard from "../components/tasks/TasksBoard";
 import { Link } from "react-router-dom";
 import { userStore } from "../stores/UserStore";
 import { notificationStore } from "../stores/NotificationStore";
+import { IoIosNotifications } from 'react-icons/io';
 import "../index.css";
 import "./Home.css";
 
@@ -58,7 +59,7 @@ fetchNotifications();
           </div>
           <div className="notifications-alert">
             <Link to={`/notifications`} className="notifications-link">
-              <h3 id="notifications-h3">{unreadCount} Notifications</h3>
+              <h3 id="notifications-h3">{unreadCount} <IoIosNotifications /> </h3>
             </Link>
           </div>
         </div>

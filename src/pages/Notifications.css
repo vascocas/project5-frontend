@@ -17,7 +17,7 @@
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-  width: 60%; /* Adjust the width to your preference */
+  width: 60%;
 }
 
 /* Style for individual notifications */
@@ -28,14 +28,19 @@
   cursor: pointer;
 }
 
-.notification:hover {
-  background-color: #f0f0f0; /* Change background color on hover */
-}
-
 /* Style for read notifications */
 .notification.read {
-  background-color: #f0f0f0; /* Light gray background for read notifications */
+  background-color: #f0f0f0;
 }
+
+.notification.unread {
+  background-color: #ffcccb;
+}
+
+.notification.unread:hover {
+  background-color: #f8afad;
+}
+
 
 /* Style for notification content */
 .notification-content {
@@ -50,8 +55,8 @@
 
 /* Style for the notification list */
 .notification-list {
-  width: 70vw;
-  max-height: 60vh; /* Adjust the max height as needed */
+  width: 50vw;
+  max-height: 60vh;
   overflow-y: auto;
   border: 1px solid #ccc; /* Add border */
   padding: 10px; /* Add padding */
@@ -69,11 +74,11 @@
 
 .notification-time,
 .notification-message {
-  margin-right: 10px; /* Adjust as needed */
+  margin-right: 10px;
 }
 
 .notification-icon {
-  margin-left: auto; /* Push the icon to the right */
+  margin-left: auto;
 }
 
 
