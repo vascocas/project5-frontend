@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { userStore } from "../../stores/UserStore";
 import { taskStore } from "../../stores/TaskStore";
+import languages from "../../translations";
+import { IntlProvider, FormattedMessage } from "react-intl";
 import "./AddTaskForm.css";
 
 function AddTaskForm() {
   const { token } = userStore();
+  const locale = userStore((state) => state.locale);
   const { categories, setCategories, addTask } = taskStore();
   const [priority, setPriority] = useState("");
   const [title, setTitle] = useState("");
@@ -108,11 +111,12 @@ function AddTaskForm() {
 
   return (
     <aside className="add-task-sidebar">
+      <IntlProvider locale={locale} messages={languages[locale]}>
       <div className="add-task-container">
         <h3 id="addTask-h3">Add task</h3>
         <div className="input-fields-container">
           <label className="labels-task-name" htmlFor="taskName">
-            Title
+          <FormattedMessage id="title"/>
           </label>
           <input
             type="text"
@@ -123,7 +127,7 @@ function AddTaskForm() {
             onChange={(e) => setTitle(e.target.value)}
           />
           <label className="labels-task-description" htmlFor="taskDescription">
-            Description
+          <FormattedMessage id="description"/>
           </label>
           <textarea
             id="taskDescription"
@@ -132,7 +136,7 @@ function AddTaskForm() {
             onChange={(e) => setDescription(e.target.value)}
           ></textarea>
           <label className="labels-task-dates" htmlFor="startDate">
-            Start date
+          <FormattedMessage id="start-date"/>
           </label>
           <input
             type="date"
@@ -190,6 +194,7 @@ function AddTaskForm() {
           </div>
         </div>
       </div>
+      </IntlProvider>
     </aside>
   );
 }

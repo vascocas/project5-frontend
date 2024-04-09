@@ -28,6 +28,8 @@ export const userStore = create(
       selectedProfileUsername: "", // New state variable for selected profile username
       setSelectedProfileUsername: (username) => set({ selectedProfileUsername: username }), // Function to update selected profile username
       updateMediatype: (mediatype) => set({mediatype}),
+      locale: "en",
+      updateLocale : (locale) => set({locale})
     }),
     {
       name: "myUserStore",

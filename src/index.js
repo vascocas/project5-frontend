@@ -14,6 +14,7 @@ import Notifications from './pages/Notifications'
 import UserManagment from './pages/UserManagment'
 import TaskCategories from './pages/TaskCategories'
 import RecycleBin from './pages/RecycleBin'
+import Dashboard from './pages/Dashboard'
 import Authorization from './Authorization';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -31,6 +32,7 @@ root.render(
       <Route path="/user" element={<Authorization> <UserManagment /> </Authorization>} />
       <Route path="/categories" element={<Authorization> <TaskCategories /> </Authorization>} />
       <Route path="/recycle" element={<Authorization> <RecycleBin /> </Authorization>} />
+      <Route path="/dashboard" element={<Authorization> <Dashboard /> </Authorization>} />
     </Routes>
   </Router>
 );
