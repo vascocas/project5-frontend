@@ -2,12 +2,11 @@ import { useEffect } from "react";
 import { userStore } from "../../stores/UserStore";
 import { notificationStore } from "../../stores/NotificationStore";
 
-function WebSocketClient() {
+function WebSocketMessages() {
   const { token } = userStore();
-  const addNotification = notificationStore((state) => state.addNotification);
+  const addMessage = notificationStore((state) => state.addMessage);
 
-  //necessário colocar /rest?
-  const WS_URL = `ws://localhost:8080/project5-backend/websocket/notification/${token}`;
+  const WS_URL = `ws://localhost:8080/project5-backend/websocket/message/${token}`;
   
   useEffect(() => {
     const websocket = new WebSocket(WS_URL);
@@ -15,10 +14,12 @@ function WebSocketClient() {
       console.log("The websocket connection is open");
     };
     websocket.onmessage = (event) => {
-      const notification = event.data;
-      console.log("a new notification is received!");
-      addNotification(notification);
+      const message = event.data;
+      console.log("a new message is received!");
+      addMessage(message);
     };
   }, []);
+
+
 }
-export default WebSocketClient;
+export default WebSocketMessages;

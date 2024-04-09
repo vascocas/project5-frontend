@@ -1,10 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import "./Dashboard.css";
-import "~react-vis/dist/style";
-import "~react-vis/dist/styles/legends";
-import {XYPlot, XAxis, YAxis, HorizontalGridLines, LineSeries} from 'react-vis';
-
-  
+import {
+  ScatterChart,
+  Scatter,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+} from "recharts";
 
 const Dashboard = () => {
   const [totalUsers, setTotalUsers] = useState(0);
@@ -17,7 +23,6 @@ const Dashboard = () => {
   const [tasksCompletedOverTime, setTasksCompletedOverTime] = useState([]);
 
   useEffect(() => {
-
     // Fetch data from backend API
     /*
     const fetchData = async () => {
@@ -44,21 +49,24 @@ const Dashboard = () => {
     };
 
        fetchData();
+       */
   }, []);
-    */
 
-    const data = [
-        {x: 1, y: 10},
-        {x: 2, y: 5},
-        {x: 3, y: 15}
-      ];
+  const data = [
+    { name: "Page A", uv: 4000, pv: 2400, amt: 2400 },
+    { name: "Page B", uv: 3000, pv: 1398, amt: 2210 },
+    { name: "Page C", uv: 2000, pv: 9800, amt: 2290 },
+    { name: "Page D", uv: 2780, pv: 3908, amt: 2000 },
+    { name: "Page E", uv: 1890, pv: 4800, amt: 2181 },
+    { name: "Page F", uv: 2390, pv: 3800, amt: 2500 },
+    { name: "Page G", uv: 3490, pv: 4300, amt: 2100 },
+  ];
 
-      const data2 = [
-        {x: 1, y: 8},
-        {x: 2, y: 15},
-        {x: 3, y: 18}
-      ];
- 
+  const data2 = [
+    { x: 1, y: 8 },
+    { x: 2, y: 15 },
+    { x: 3, y: 18 },
+  ];
 
   return (
     <div className="dashboard-container">
@@ -71,40 +79,55 @@ const Dashboard = () => {
         <div>
           <h2>Tasks per Status</h2>
           <ul>
-            {Object.keys(tasksPerStatus).map(status => (
-              <li key={status}>{status}: {tasksPerStatus[status]}</li>
+            {Object.keys(tasksPerStatus).map((status) => (
+              <li key={status}>
+                {status}: {tasksPerStatus[status]}
+              </li>
             ))}
           </ul>
         </div>
         <div>
           <h2>Categories</h2>
           <ol>
-            {categories.map(category => (
-              <li key={category}>{category}</li>
+            {categories.map((category, index) => (
+              <li key={index}>{category}</li>
             ))}
           </ol>
         </div>
         <div>
           <h2>User Registrations Over Time</h2>
           <div>
-        <XYPlot width={300} height={300}>
-          <HorizontalGridLines />
-          <LineSeries data={data} />
-          <XAxis />
-          <YAxis />
-        </XYPlot>
-      </div>
+            <LineChart width={600} height={300} data={data}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Line type="monotone" dataKey="pv" stroke="#8884d8" />
+              <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+            </LineChart>
+          </div>
         </div>
         <div>
           <h2>Tasks Completed Over Time</h2>
           <div>
-        <XYPlot width={300} height={300}>
-          <HorizontalGridLines />
-          <LineSeries data={data2} />
-          <XAxis />
-          <YAxis />
-        </XYPlot>
-      </div>
+            <ScatterChart
+              width={400}
+              height={400}
+              margin={{
+                top: 20,
+                right: 20,
+                bottom: 20,
+                left: 20,
+              }}
+            >
+              <CartesianGrid />
+              <XAxis type="number" dataKey="x" name="x" />
+              <YAxis type="number" dataKey="y" name="y" />
+              <Tooltip cursor={{ strokeDasharray: "3 3" }} />
+              <Scatter name="A Scatter Plot" data={data2} fill="#8884d8" />
+            </ScatterChart>
+          </div>
         </div>
       </div>
     </div>
