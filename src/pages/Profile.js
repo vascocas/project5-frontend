@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
 import Sidebar from "../components/navbar/Sidebar";
 import ChangePasswordModal from "../components/users/ChangePasswordModal";
+import { baseURL } from "./Requests";
 import { userStore } from "../stores/UserStore";
 import { useNavigate, useParams } from "react-router-dom";
 import "./Profile.css";
@@ -18,7 +19,7 @@ function Profile() {
     const fetchUserProfile = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8080/project5-backend/rest/users/logged`,
+          `${baseURL}users/logged`,
           {
             method: "GET",
             headers: {
@@ -98,7 +99,7 @@ function Profile() {
       };
       const requestBody = JSON.stringify(userData);
       const response = await fetch(
-        `http://localhost:8080/project5-backend/rest/users/password`,
+        `${baseURL}users/password`,
         {
           method: "PUT",
           headers: {

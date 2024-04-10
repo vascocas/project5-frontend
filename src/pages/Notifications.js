@@ -3,6 +3,7 @@ import { FaCheck, FaCheckDouble } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { userStore } from "../stores/UserStore";
 import { websocketStore } from "../stores/WebSocketStore";
+import { baseURL } from "./Requests";
 import WebSocketClient from "../components/websocket/WebSocketClient";
 import "./Notifications.css";
 
@@ -19,7 +20,7 @@ const Notifications = () => {
     const markAllAsRead = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8080/project5-backend/rest/notifications/read`,
+          `${baseURL}notifications/read`,
           {
             method: "PUT",
             headers: {

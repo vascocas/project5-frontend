@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { userStore } from "../../stores/UserStore";
+import { baseURL } from "../../pages/Requests";
 import { useNavigate } from "react-router-dom";
 import "../../pages/Profile.css";
 import "../../index.css";
@@ -23,7 +24,7 @@ function UsersProfile() {
       try {
         if (!selectedUserId) return;
         const response = await fetch(
-          `http://localhost:8080/project5-backend/rest/users/user/?userId=${selectedUserId}`,
+          `${baseURL}users/user/?userId=${selectedUserId}`,
           {
             method: "GET",
             headers: {
@@ -70,7 +71,7 @@ function UsersProfile() {
       };
       const requestBody = JSON.stringify(userData);
       const response = await fetch(
-        `http://localhost:8080/project5-backend/rest/users/othersProfile`,
+        `${baseURL}users/othersProfile`,
         {
           method: "PUT",
           headers: {

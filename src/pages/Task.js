@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
 import Sidebar from "../components/navbar/Sidebar";
+import { baseURL } from "./Requests";
 import { userStore } from "../stores/UserStore";
 import { taskStore } from "../stores/TaskStore";
 import { useNavigate } from "react-router-dom";
@@ -19,7 +20,7 @@ function Task() {
       try {
         if (token && taskId) {
           const response = await fetch(
-            `http://localhost:8080/project5-backend/rest/tasks/${taskId}`,
+            `${baseURL}tasks/${taskId}`,
             {
               method: "GET",
               headers: {
@@ -58,7 +59,7 @@ function Task() {
       };
       const requestBody = JSON.stringify(taskData);
       const response = await fetch(
-        "http://localhost:8080/project5-backend/rest/tasks/update",
+        `${baseURL}tasks/update`,
         {
           method: "PUT",
           headers: {

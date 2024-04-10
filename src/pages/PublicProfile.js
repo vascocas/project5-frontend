@@ -4,6 +4,7 @@ import { FaCheck, FaCheckDouble } from "react-icons/fa";
 import { userStore } from "../stores/UserStore";
 import { websocketStore } from "../stores/WebSocketStore";
 import WebSocketClient from "../components/websocket/WebSocketClient";
+import { baseURL } from "./Requests";
 import "./PublicProfile.css";
 import "../index.css";
 
@@ -41,7 +42,7 @@ function PublicProfile() {
     const fetchUserProfile = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8080/project5-backend/rest/users/profile/username/?username=${usernameParam}`,
+          `${baseURL}users/profile/username/?username=${usernameParam}`,
           {
             method: "GET",
             headers: {
@@ -89,7 +90,7 @@ function PublicProfile() {
   const fetchChatMessages = async (userId) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/project5-backend/rest/messages/chat/${userId}/${loggedId}`,
+        `${baseURL}messages/chat/${userId}/${loggedId}`,
         {
           method: "GET",
           headers: {
@@ -124,7 +125,7 @@ function PublicProfile() {
         messageText: newMessage,
       });
       const response = await fetch(
-        "http://localhost:8080/project5-backend/rest/messages/send",
+        `${baseURL}messages/send`,
         {
           method: "POST",
           headers: {
@@ -150,7 +151,7 @@ function PublicProfile() {
   const markAsRead = async (messageId) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/project5-backend/rest/messages/read/${messageId}`,
+        `${baseURL}messages/read/${messageId}`,
         {
           method: "PUT",
           headers: {

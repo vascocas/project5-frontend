@@ -3,6 +3,7 @@ import React from "react";
 import "./Header.css";
 import { useNavigate, Link } from "react-router-dom";
 import { userStore } from "../stores/UserStore";
+import { baseURL } from "../pages/Requests";
 
 
 const Header = () => {
@@ -13,7 +14,7 @@ const Header = () => {
   const handleLogout = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8080/project5-backend/rest/users/logout",
+        `${baseURL}users/logout`,
         {
           method: "PUT",
           headers: {

@@ -3,6 +3,7 @@ import { userStore } from "../../stores/UserStore";
 import { taskStore } from "../../stores/TaskStore";
 import languages from "../../translations";
 import { IntlProvider, FormattedMessage } from "react-intl";
+import { baseURL } from "../../pages/Requests";
 import "./AddTaskForm.css";
 
 function AddTaskForm() {
@@ -23,7 +24,7 @@ function AddTaskForm() {
       const fetchCategories = async () => {
         try {
           const response = await fetch(
-            "http://localhost:8080/project5-backend/rest/tasks/categories",
+            `${baseURL}tasks/categories`,
             {
               method: "GET",
               headers: {
@@ -77,7 +78,7 @@ function AddTaskForm() {
       });
 
       const response = await fetch(
-        "http://localhost:8080/project5-backend/rest/tasks/",
+        `${baseURL}tasks/`,
         {
           method: "POST",
           headers: {

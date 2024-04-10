@@ -6,6 +6,7 @@ import TaskColumn from "./TaskColumn";
 import TasksUserFilter from "./TasksUserFilter";
 import TasksCategoryFilter from "./TasksCategoryFilter";
 import RemoveUserTasks from "./RemoveUserTasks";
+import { baseURL } from "../../pages/Requests";
 import "./TasksBoard.css";
 
 function TasksBoard() {
@@ -21,7 +22,7 @@ function TasksBoard() {
       return; // If token is not present, exit the function early
     }
     try {
-      let url = "http://localhost:8080/project5-backend/rest/tasks";
+      `${baseURL}tasks`;
       if (filteredUserId) {
         url += `/user/?userId=${filteredUserId}`;
       } else if (filteredCategoryId) {

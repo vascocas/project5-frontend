@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { userStore } from "../../stores/UserStore";
+import { baseURL } from "../../pages/Requests";
 import "../../pages/RecycleBin.css";
 
 const UserRecycle = () => {
@@ -10,7 +11,7 @@ const UserRecycle = () => {
     const fetchDeletedUsers = async () => {
       try {
         const response = await fetch(
-          "http://localhost:8080/project5-backend/rest/users/deletedUsers",
+          `${baseURL}users/deletedUsers`,
           {
             method: "GET",
             headers: {

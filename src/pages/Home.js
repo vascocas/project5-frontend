@@ -9,6 +9,7 @@ import { websocketStore } from "../stores/WebSocketStore";
 import { IoIosNotifications } from "react-icons/io";
 import "../index.css";
 import "./Home.css";
+import { baseURL } from "./Requests";
 import WebSocketClient from "../components/websocket/WebSocketClient";
 
 function Home() {
@@ -22,8 +23,7 @@ function Home() {
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:8080/project5-backend/rest/notifications",
+        const response = await fetch(`${baseURL}notifications`,
           {
             method: "GET",
             headers: {

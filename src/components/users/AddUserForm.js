@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { userStore } from "../../stores/UserStore";
+import { baseURL } from "../../pages/Requests";
 import "../../pages/UserManagement.css";
 
 function AddUserForm() {
@@ -79,7 +80,7 @@ function AddUserForm() {
       });
 
       const response = await fetch(
-        "http://localhost:8080/project5-backend/rest/users/createUser",
+        `${baseURL}users/createUser`,
         {
           method: "POST",
           headers: {

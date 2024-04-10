@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { taskStore } from "../../stores/TaskStore";
 import { userStore } from "../../stores/UserStore";
+import { baseURL } from "../../pages/Requests";
 import "../../pages/RecycleBin.css";
 
 const TaskRecycle = () => {
@@ -12,7 +13,7 @@ const TaskRecycle = () => {
     const fetchDeletedTasks = async () => {
       try {
         const response = await fetch(
-          "http://localhost:8080/project5-backend/rest/tasks/deletedTasks",
+          `${baseURL}tasks/deletedTasks`,
           {
             method: "GET",
             headers: {
@@ -44,7 +45,7 @@ const TaskRecycle = () => {
     }
     try {
       const response = await fetch(
-        `http://localhost:8080/project5-backend/rest/tasks/restoreDeleted/${taskId}`,
+        `${baseURL}tasks/restoreDeleted/${taskId}`,
         {
           method: "PUT",
           headers: {
@@ -73,7 +74,7 @@ const TaskRecycle = () => {
     }
     try {
       const response = await fetch(
-        `http://localhost:8080/project5-backend/rest/tasks/${taskId}`,
+        `${baseURL}tasks/${taskId}`,
         {
           method: "DELETE",
           headers: {

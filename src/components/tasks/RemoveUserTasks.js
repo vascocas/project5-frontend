@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { userStore } from "../../stores/UserStore";
+import { baseURL } from "../../pages/Requests";
 import "./TasksBoard.css";
 
 const RemoveUserTasks = ({ fetchTasks }) => {
@@ -11,7 +12,7 @@ const RemoveUserTasks = ({ fetchTasks }) => {
     if (selectedUser) {
       try {
         const response = await fetch(
-          `http://localhost:8080/project5-backend/rest/tasks/updateDeleted/?userId=${selectedUser}`,
+          `${baseURL}tasks/updateDeleted/?userId=${selectedUser}`,
           {
             method: "PUT",
             headers: {

@@ -3,6 +3,7 @@ import Header from "../components/Header";
 import Sidebar from "../components/navbar/Sidebar";
 import { userStore } from "../stores/UserStore";
 import { useNavigate } from "react-router-dom";
+import { baseURL } from "./Requests";
 import "../index.css";
 import "./TaskCategories.css";
 
@@ -22,7 +23,7 @@ const TaskCategories = () => {
   const fetchCategories = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8080/project5-backend/rest/tasks/categories",
+        `${baseURL}tasks/categories`,
         {
           method: "GET",
           headers: {
@@ -47,7 +48,7 @@ const TaskCategories = () => {
     setEditedCategoryName(null);
     try {
       const response = await fetch(
-        `http://localhost:8080/project5-backend/rest/tasks/category`,
+        `${baseURL}tasks/category`,
         {
           method: "PUT",
           headers: {
@@ -76,7 +77,7 @@ const TaskCategories = () => {
     }
     try {
       const response = await fetch(
-        `http://localhost:8080/project5-backend/rest/tasks/category/?categoryId=${categoryId}`,
+        `${baseURL}tasks/category/?categoryId=${categoryId}`,
         {
           method: "DELETE",
           headers: {
@@ -101,7 +102,7 @@ const TaskCategories = () => {
   const handleAddCategory = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8080/project5-backend/rest/tasks/category`,
+        `${baseURL}tasks/category`,
         {
           method: "POST",
           headers: {

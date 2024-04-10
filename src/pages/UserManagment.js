@@ -8,6 +8,7 @@ import ChangePasswordModal from "../components/users/ChangePasswordModal";
 import { userStore } from "../stores/UserStore";
 import { useNavigate } from "react-router-dom";
 import { useTable, usePagination } from "react-table";
+import { baseURL } from "./Requests";
 import "../index.css";
 import "./UserManagement.css";
 
@@ -75,10 +76,10 @@ const UserManagement = () => {
       let url;
       if (filterValue) {
         // If filter is defined, include the role parameter in the URL
-        url = `http://localhost:8080/project5-backend/rest/users?role=${filterValue}&order=${orderValue}&page=${currentPage}&pageSize=${pageSize}`;
+        `${baseURL}users?role=${filterValue}&order=${orderValue}&page=${currentPage}&pageSize=${pageSize}`;
       } else {
         // If filter is not defined, exclude the role parameter from the URL
-        url = `http://localhost:8080/project5-backend/rest/users?order=${orderValue}&page=${currentPage}&pageSize=${pageSize}`;
+        `${baseURL}users?order=${orderValue}&page=${currentPage}&pageSize=${pageSize}`;
       }
     
       const response = await fetch(url, {
@@ -147,7 +148,7 @@ const UserManagement = () => {
     }
     try {
       const response = await fetch(
-        `http://localhost:8080/project5-backend/rest/users/remove/${userId}`,
+        `${baseURL}users/remove/${userId}`,
         {
           method: "PUT",
           headers: {
@@ -189,7 +190,7 @@ const UserManagement = () => {
       };
       const requestBody = JSON.stringify(userData);
       const response = await fetch(
-        `http://localhost:8080/project5-backend/rest/users/role`,
+        `${baseURL}users/role`,
         {
           method: "PUT",
           headers: {
@@ -232,7 +233,7 @@ const UserManagement = () => {
       };
       const requestBody = JSON.stringify(userData);
       const response = await fetch(
-        `http://localhost:8080/project5-backend/rest/users/othersPassword`,
+        `${baseURL}users/othersPassword`,
         {
           method: "PUT",
           headers: {
@@ -258,7 +259,7 @@ const UserManagement = () => {
   const showTokenTimer = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8080/project5-backend/rest/users/tokenTimer",
+        `${baseURL}users/tokenTimer`,
         {
           method: "GET",
           headers: {
@@ -293,7 +294,7 @@ const UserManagement = () => {
       };
       const requestBody = JSON.stringify(timerData);
       const response = await fetch(
-        `http://localhost:8080/project5-backend/rest/users/tokenTimer`,
+        `${baseURL}users/tokenTimer`,
         {
           method: "PUT",
           headers: {

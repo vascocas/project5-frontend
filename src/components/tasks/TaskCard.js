@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { userStore } from "../../stores/UserStore";
 import { taskStore } from "../../stores/TaskStore";
 import { useNavigate } from "react-router-dom";
+import { baseURL } from "../../pages/Requests";
 import "./TasksBoard.css";
 
 function TaskCard({ title, priority, taskId, state, creator }) {
@@ -31,7 +32,7 @@ function TaskCard({ title, priority, taskId, state, creator }) {
     }
     try {
       const response = await fetch(
-        `http://localhost:8080/project5-backend/rest/tasks/updateDeleted/${taskId}`,
+        `${baseURL}tasks/updateDeleted/${taskId}`,
         {
           method: "PUT",
           headers: {
@@ -72,7 +73,7 @@ function TaskCard({ title, priority, taskId, state, creator }) {
         state: nextState,
       });
       const response = await fetch(
-        "http://localhost:8080/project5-backend/rest/tasks/status",
+        `${baseURL}tasks/status`,
         {
           method: "PUT",
           headers: {

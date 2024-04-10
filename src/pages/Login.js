@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { userStore } from "../stores/UserStore";
+import { baseURL } from "./Requests";
 import "./Login_Register.css";
 
 function Login() {
@@ -27,7 +28,7 @@ function Login() {
 
     try {
       const response = await fetch(
-        "http://localhost:8080/project5-backend/rest/users/login",
+        `${baseURL}users/login`,
         {
           method: "POST",
           headers: {

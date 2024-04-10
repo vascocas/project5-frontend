@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { userStore } from "../../stores/UserStore";
+import { baseURL } from "../../pages/Requests";
 import "./TasksBoard.css";
 
 const UsersFilter = ({ onFilter }) => {
@@ -13,7 +14,7 @@ const UsersFilter = ({ onFilter }) => {
           return; // Exit early in the logout
         }
         const response = await fetch(
-          "http://localhost:8080/project5-backend/rest/users/usernames",
+          `${baseURL}users/usernames`,
           {
             method: "GET",
             headers: {

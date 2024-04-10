@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { baseURL } from "./Requests";
 import "./Dashboard.css";
 import {
   ScatterChart,
