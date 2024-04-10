@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { FaCheck, FaCheckDouble } from "react-icons/fa";
 import { userStore } from "../stores/UserStore";
@@ -10,29 +10,10 @@ import "../index.css";
 function PublicProfile() {
   const { token, loggedId } = userStore();
   const { usernameParam } = useParams();
-  const [user, setUser] = useState({
-    userId: "",
-    username: "",
-    email: "",
-    firstName: "",
-    lastName: "",
-    photo: "",
-  });
-  const navigate = useNavigate();
-  // Define task statistics variables in state
-  const [totalTasks, setTotalTasks] = useState(0);
-  const [totalToDoTasks, setTotalToDoTasks] = useState(0);
-  const [totalDoingTasks, setTotalDoingTasks] = useState(0);
-  const [totalDoneTasks, setTotalDoneTasks] = useState(0);
-
+  const { user, setUser, totalTasks, setTotalTasks, totalToDoTasks, setTotalToDoTasks, totalDoingTasks, setTotalDoingTasks, totalDoneTasks, setTotalDoneTasks } = websocketStore();
+  
   // State for messages
-  // const { chatMessages, setChatMessages } = websocketStore();
-
-  // State for messages
-  const [chatMessages, setChatMessages] = useState([]);
-
-  // State for composing new message
-  const [newMessage, setNewMessage] = useState("");
+  const { chatMessages } = websocketStore();
 
   // Ref for the messages container
   const messagesContainerRef = useRef(null);
@@ -51,7 +32,9 @@ function PublicProfile() {
           }
         );
         if (response.ok) {
+          console.log("User profile fetch successful!");
           const responseData = await response.json();
+          console.log("Response data:", responseData);
           // Extract data from the response
           const {
             userId,
@@ -100,73 +83,12 @@ function PublicProfile() {
       );
       if (response.ok) {
         const messagesData = await response.json();
-        setChatMessages(messagesData);
+        // setChatMessages(messagesData); // No longer needed
       } else {
         console.error("Failed to fetch messages:", response.statusText);
       }
     } catch (error) {
       console.error("Error fetching messages:", error);
-    }
-  };
-
-  // Function to handle sending a new message
-  const sendMessage = async () => {
-    try {
-      // Check if newMessage is empty
-      if (!newMessage.trim()) {
-        console.error("Message cannot be empty.");
-        return; // Exit function early if message is empty
-      }
-      // Creates MessageDto
-      const requestBody = JSON.stringify({
-        senderId: loggedId,
-        receiverId: user.userId,
-        messageText: newMessage,
-      });
-      const response = await fetch(
-        "http://localhost:8080/project5-backend/rest/messages/send",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            token: token,
-          },
-          body: requestBody,
-        }
-      );
-      if (response.ok) {
-        // Message sent successfully, fetch updated messages
-        fetchChatMessages(user.userId);
-        setNewMessage("");
-      } else {
-        console.error("Failed to send message:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error sending message:", error);
-    }
-  };
-
-  // Function to handle marking a message as read
-  const markAsRead = async (messageId) => {
-    try {
-      const response = await fetch(
-        `http://localhost:8080/project5-backend/rest/messages/read/${messageId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            token: token,
-          },
-        }
-      );
-      if (response.ok) {
-        // Message marked as read successfully, fetch updated messages
-        fetchChatMessages(user.userId);
-      } else {
-        console.error("Failed to mark message as read:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error marking message as read:", error);
     }
   };
 
@@ -177,18 +99,6 @@ function PublicProfile() {
         messagesContainerRef.current.scrollHeight;
     }
   }, [chatMessages]);
-
-  // Function to handle sending message when Enter key is pressed
-  const handleKeyPress = (event) => {
-    if (event.key === "Enter") {
-      sendMessage();
-    }
-  };
-
-  // <WebSocketClient
-  // endpoint={`chat/${user.userId}/${loggedId}`}
-  // onDataReceived={fetchChatMessages}
-  // storeAction="addMessage"/>
 
   return (
     <div className="userProfile">
@@ -207,7 +117,7 @@ function PublicProfile() {
                 >
                   <div className="message-content">
                     {message.messageText}{" "}
-                    <button onClick={() => markAsRead(message.id)}>
+                    <button onClick={() => websocketStore.markMessageAsRead(message.id)}>
                       {message.readStatus ? <FaCheckDouble /> : <FaCheck />}
                     </button>
                   </div>
@@ -218,15 +128,23 @@ function PublicProfile() {
               <input
                 type="text"
                 id="send-message"
-                value={newMessage}
-                onChange={(e) => setNewMessage(e.target.value)}
-                onKeyDown={handleKeyPress}
+                value={websocketStore.newMessage}
+                onChange={(e) => websocketStore.setNewMessage(e.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    websocketStore.sendMessage();
+                  }
+                }}
               />
               <br></br>
-              <button onClick={sendMessage}>Send</button>
+              <button onClick={websocketStore.sendMessage}>Send</button>
             </div>
           </div>
-         
+          <WebSocketClient
+            endpoint={`chat/${user.userId}/${loggedId}`}
+            onDataReceived={fetchChatMessages}
+            storeAction="addMessage"
+          />
         </div>
         <div className="profile-details">
           <h2>My Profile</h2>

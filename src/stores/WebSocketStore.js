@@ -3,11 +3,11 @@ import { persist, createJSONStorage } from "zustand/middleware";
 
 const storage = createJSONStorage(() => sessionStorage);
 
-export const notificationStore = create(
+export const websocketStore = create(
   persist(
     (set) => ({
       notifications: [], // state variable to keep all notifications
-      updateNotifications: (notifications) => set({ notifications }), // Corrected: call set with updated state
+      updateNotifications: (notifications) => set({ notifications }),
       addNotification: (newNotification) =>
         set((state) => ({
           notifications: [...state.notifications, newNotification],
@@ -15,11 +15,21 @@ export const notificationStore = create(
         })), // a function to add a new notification to the list of notifications
       unreadCount: 0,
       setUnreadCount: (count) => set({ unreadCount: count }), // Function to update unread count
+      
+      // New state variables and functions for chat messages
+      chatMessages: [], // state variable to keep all chat messages
+      newMessage: "", // state variable to store new message
+      
+      // Function to add a new message to the list of chat messages
+      addMessage: (message) =>
+        set((state) => ({
+          chatMessages: [...state.chatMessages, message],
+        })),
+      
     }),
     {
-      name: "myNotifStore",
+      name: "myWebSocketStore",
       storage: storage,
     }
   )
 );
-

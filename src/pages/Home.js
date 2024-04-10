@@ -5,18 +5,18 @@ import AddTaskForm from "../components/tasks/AddTaskForm";
 import TasksBoard from "../components/tasks/TasksBoard";
 import { Link } from "react-router-dom";
 import { userStore } from "../stores/UserStore";
-import { notificationStore } from "../stores/NotificationStore";
+import { websocketStore } from "../stores/WebSocketStore";
 import { IoIosNotifications } from "react-icons/io";
 import "../index.css";
 import "./Home.css";
-import WebSocketNotifications from "../components/websocket/WebSocketNotifications";
+import WebSocketClient from "../components/websocket/WebSocketClient";
 
 function Home() {
   const { token } = userStore();
   const locale = userStore((state) => state.locale);
   const updateLocale = userStore((state) => state.updateLocale);
   const { updateNotifications, unreadCount, setUnreadCount } =
-    notificationStore();
+  websocketStore();
 
   // Function to fetch user notifications
   useEffect(() => {
@@ -94,7 +94,11 @@ function Home() {
           </div>
         </div>
       </div>
-      <WebSocketNotifications />
+      <WebSocketClient
+        endpoint="notification"
+        onDataReceived={updateNotifications}
+        storeAction="addNotification"
+      />
     </div>
   );
 }

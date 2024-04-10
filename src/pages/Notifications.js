@@ -2,12 +2,13 @@ import React, { useEffect, useRef } from "react";
 import { FaCheck, FaCheckDouble } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { userStore } from "../stores/UserStore";
-import { notificationStore } from "../stores/NotificationStore";
+import { websocketStore } from "../stores/WebSocketStore";
+import WebSocketClient from "../components/websocket/WebSocketClient";
 import "./Notifications.css";
 
 const Notifications = () => {
   const { token } = userStore();
-  const { notifications, setUnreadCount } = notificationStore();
+  const { notifications, setUnreadCount } = websocketStore();
   const navigate = useNavigate();
 
   // Ref for the notifications container
@@ -102,6 +103,11 @@ const formatDateTime = (timestamp) => {
           </button>
         </div>
       </div>
+      <WebSocketClient
+        endpoint="notification"
+        onDataReceived={setUnreadCount}
+        storeAction="addNotification"
+      />
     </div>
   );
 };
