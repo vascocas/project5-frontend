@@ -9,6 +9,7 @@ import { notificationStore } from "../stores/NotificationStore";
 import { IoIosNotifications } from "react-icons/io";
 import "../index.css";
 import "./Home.css";
+import WebSocketNotifications from "../components/websocket/WebSocketNotifications";
 
 function Home() {
   const { token } = userStore();
@@ -93,6 +94,7 @@ function Home() {
           </div>
         </div>
       </div>
+      <WebSocketNotifications />
     </div>
   );
 }

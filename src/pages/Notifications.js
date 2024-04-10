@@ -60,10 +60,35 @@ const Notifications = () => {
   }, [notifications]);
 
 // Function to format date and time from a Timestamp object
-const formatDateTime = (timestamp) => {
+/*const formatDateTime = (timestamp) => {
   const formattedDateTime = timestamp.replace("T", " ").replace(/\[UTC\]/g, '').substring(0, 19);
   return formattedDateTime;
 };
+*/
+const formatDateTime = (timestamp) => {
+  console.log("Notification creation time:", timestamp);
+
+  if (typeof timestamp !== "number") {
+    return ""; // Return empty string if timestamp is not a number
+  }
+
+  // Create a Date object from the timestamp in milliseconds
+  const date = new Date(timestamp);
+
+  // Format the date and time components
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // Add leading zero if necessary
+  const day = String(date.getDate()).padStart(2, "0"); // Add leading zero if necessary
+  const hours = String(date.getHours()).padStart(2, "0"); // Add leading zero if necessary
+  const minutes = String(date.getMinutes()).padStart(2, "0"); // Add leading zero if necessary
+  const seconds = String(date.getSeconds()).padStart(2, "0"); // Add leading zero if necessary
+
+  // Construct the formatted date and time string
+  const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+
+  return formattedDateTime;
+};
+
 
 
   return (
