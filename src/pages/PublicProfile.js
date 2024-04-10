@@ -46,7 +46,9 @@ function PublicProfile() {
           }
         );
         if (response.ok) {
+          console.log("User profile fetch successful!");
           const responseData = await response.json();
+          console.log("Response data:", responseData);
           // Extract data from the response
           const {
             userId,
