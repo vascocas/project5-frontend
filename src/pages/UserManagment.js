@@ -76,12 +76,12 @@ const UserManagement = () => {
       let url;
       if (filterValue) {
         // If filter is defined, include the role parameter in the URL
-        `${baseURL}users?role=${filterValue}&order=${orderValue}&page=${currentPage}&pageSize=${pageSize}`;
+        url = `${baseURL}users?role=${filterValue}&order=${orderValue}&page=${currentPage}&pageSize=${pageSize}`;
       } else {
         // If filter is not defined, exclude the role parameter from the URL
-        `${baseURL}users?order=${orderValue}&page=${currentPage}&pageSize=${pageSize}`;
+        url = `${baseURL}users?order=${orderValue}&page=${currentPage}&pageSize=${pageSize}`;
       }
-    
+
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -111,7 +111,6 @@ const UserManagement = () => {
   };
 
   useEffect(() => {
-
     fetchUsers();
     showTokenTimer(); // Fetch token timer when the component mounts
   }, [token, pageSize, currentPage, filterValue, orderValue]);
@@ -147,17 +146,14 @@ const UserManagement = () => {
       return; // User cancelled the operation
     }
     try {
-      const response = await fetch(
-        `${baseURL}users/remove/${userId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "*/*",
-            token: token,
-          },
-        }
-      );
+      const response = await fetch(`${baseURL}users/remove/${userId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "*/*",
+          token: token,
+        },
+      });
       if (response.ok) {
         // Update users array
         setUsers(users.filter((user) => user.id !== userId));
@@ -189,18 +185,15 @@ const UserManagement = () => {
         role: newRole,
       };
       const requestBody = JSON.stringify(userData);
-      const response = await fetch(
-        `${baseURL}users/role`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "*/*",
-            token: token,
-          },
-          body: requestBody,
-        }
-      );
+      const response = await fetch(`${baseURL}users/role`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "*/*",
+          token: token,
+        },
+        body: requestBody,
+      });
       if (response.ok) {
         fetchUsers();
         setShowModal(false); // Close the modal
@@ -232,18 +225,15 @@ const UserManagement = () => {
         confirmPass: confirmNewPassword,
       };
       const requestBody = JSON.stringify(userData);
-      const response = await fetch(
-        `${baseURL}users/othersPassword`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "*/*",
-            token: token,
-          },
-          body: requestBody,
-        }
-      );
+      const response = await fetch(`${baseURL}users/othersPassword`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "*/*",
+          token: token,
+        },
+        body: requestBody,
+      });
       if (response.ok) {
         // Password updated successfully
         alert("Password updated successfully!");
@@ -258,17 +248,14 @@ const UserManagement = () => {
 
   const showTokenTimer = async () => {
     try {
-      const response = await fetch(
-        `${baseURL}users/tokenTimer`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "*/*",
-            token: token,
-          },
-        }
-      );
+      const response = await fetch(`${baseURL}users/tokenTimer`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "*/*",
+          token: token,
+        },
+      });
       if (response.ok) {
         const sessionTimeout = await response.json();
         setTokenTimer(sessionTimeout.timer);
@@ -293,18 +280,15 @@ const UserManagement = () => {
         timer: tokenTimer,
       };
       const requestBody = JSON.stringify(timerData);
-      const response = await fetch(
-        `${baseURL}users/tokenTimer`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "*/*",
-            token: token,
-          },
-          body: requestBody,
-        }
-      );
+      const response = await fetch(`${baseURL}users/tokenTimer`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "*/*",
+          token: token,
+        },
+        body: requestBody,
+      });
       if (response.ok) {
         // Token Timer updated successfully
         alert("Token Timer updated successfully!");

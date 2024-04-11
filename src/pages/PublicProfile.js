@@ -4,6 +4,7 @@ import { FaCheck, FaCheckDouble } from "react-icons/fa";
 import { userStore } from "../stores/UserStore";
 import { websocketStore } from "../stores/WebSocketStore";
 import WebSocketClient from "../components/websocket/WebSocketClient";
+import MessageWebSocket from "../components/websocket/MessageWebSocket";
 import { baseURL } from "./Requests";
 import "./PublicProfile.css";
 import "../index.css";
@@ -27,10 +28,12 @@ function PublicProfile() {
   const [totalDoneTasks, setTotalDoneTasks] = useState(0);
 
   // State for messages
-  // const { chatMessages, setChatMessages } = websocketStore();
+  //const { chatMessages, setChatMessages, addMessage } = websocketStore();
+
+  MessageWebSocket();
 
   // State for messages
-  const [chatMessages, setChatMessages] = useState([]);
+ const [chatMessages, setChatMessages] = useState([]);
 
   // State for composing new message
   const [newMessage, setNewMessage] = useState("");

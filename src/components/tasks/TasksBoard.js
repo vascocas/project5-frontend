@@ -22,7 +22,7 @@ function TasksBoard() {
       return; // If token is not present, exit the function early
     }
     try {
-      `${baseURL}tasks`;
+      const url = `${baseURL}tasks`;
       if (filteredUserId) {
         url += `/user/?userId=${filteredUserId}`;
       } else if (filteredCategoryId) {
