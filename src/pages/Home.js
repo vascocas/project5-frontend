@@ -10,7 +10,7 @@ import { IoIosNotifications } from "react-icons/io";
 import "../index.css";
 import "./Home.css";
 import { baseURL } from "./Requests";
-import WebSocketClient from "../components/websocket/WebSocketClient";
+import NotifWebSocket from "../components/websocket/NotifWebSocket";
 
 function Home() {
   const { token } = userStore();
@@ -56,6 +56,9 @@ function Home() {
     updateLocale(event.target.value);
   };
 
+
+  NotifWebSocket();
+
   return (
     <div className="Home" id="home-outer-container">
       <Header />
@@ -94,11 +97,6 @@ function Home() {
           </div>
         </div>
       </div>
-      <WebSocketClient
-        endpoint="notification"
-        onDataReceived={updateNotifications}
-        storeAction="addNotification"
-      />
     </div>
   );
 }

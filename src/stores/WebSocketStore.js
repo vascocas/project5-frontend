@@ -15,17 +15,19 @@ export const websocketStore = create(
         })), // a function to add a new notification to the list of notifications
       unreadCount: 0,
       setUnreadCount: (count) => set({ unreadCount: count }), // Function to update unread count
-      
+
       // New state variables and functions for chat messages
       chatMessages: [], // state variable to keep all chat messages
       newMessage: "", // state variable to store new message
-      
+
       // Function to add a new message to the list of chat messages
       addMessage: (message) =>
         set((state) => ({
           chatMessages: [...state.chatMessages, message],
         })),
-      
+
+      // Function to set chat messages
+      setChatMessages: (messages) => set({ chatMessages: messages }),
     }),
     {
       name: "myWebSocketStore",

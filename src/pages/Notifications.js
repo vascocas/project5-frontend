@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { userStore } from "../stores/UserStore";
 import { websocketStore } from "../stores/WebSocketStore";
 import { baseURL } from "./Requests";
-import WebSocketClient from "../components/websocket/WebSocketClient";
+import NotifWebSocket from "../components/websocket/NotifWebSocket";
 import "./Notifications.css";
 
 const Notifications = () => {
@@ -68,6 +68,8 @@ const formatDateTime = (timestamp) => {
 };
 
 
+NotifWebSocket();
+
   return (
     <div>
       <div className="title">
@@ -104,11 +106,6 @@ const formatDateTime = (timestamp) => {
           </button>
         </div>
       </div>
-      <WebSocketClient
-        endpoint="notification"
-        onDataReceived={setUnreadCount}
-        storeAction="addNotification"
-      />
     </div>
   );
 };

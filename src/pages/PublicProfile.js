@@ -3,15 +3,16 @@ import { useNavigate, useParams } from "react-router-dom";
 import { FaCheck, FaCheckDouble } from "react-icons/fa";
 import { userStore } from "../stores/UserStore";
 import { websocketStore } from "../stores/WebSocketStore";
-import WebSocketClient from "../components/websocket/WebSocketClient";
 import MessageWebSocket from "../components/websocket/MessageWebSocket";
 import { baseURL } from "./Requests";
 import "./PublicProfile.css";
 import "../index.css";
 
 function PublicProfile() {
-  const { token, loggedId } = userStore();
   const { usernameParam } = useParams();
+  const { token, loggedId } = userStore();
+  // State for messages
+  const { chatMessages, setChatMessages } = websocketStore();
   const [user, setUser] = useState({
     userId: "",
     username: "",
@@ -26,20 +27,13 @@ function PublicProfile() {
   const [totalToDoTasks, setTotalToDoTasks] = useState(0);
   const [totalDoingTasks, setTotalDoingTasks] = useState(0);
   const [totalDoneTasks, setTotalDoneTasks] = useState(0);
-
-  // State for messages
-  //const { chatMessages, setChatMessages, addMessage } = websocketStore();
-
-  MessageWebSocket();
-
-  // State for messages
- const [chatMessages, setChatMessages] = useState([]);
-
   // State for composing new message
   const [newMessage, setNewMessage] = useState("");
 
   // Ref for the messages container
   const messagesContainerRef = useRef(null);
+
+  MessageWebSocket();
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -77,8 +71,7 @@ function PublicProfile() {
           setTotalDoingTasks(totalDoingTasks);
           setTotalDoneTasks(totalDoneTasks);
 
-          // Call fetchMessages with userId
-          fetchChatMessages(userId);
+          fetchChatMessages();
         } else {
           console.error("Failed to fetch user profile:", response.statusText);
         }
@@ -88,20 +81,19 @@ function PublicProfile() {
     };
 
     fetchUserProfile();
-  }, [token, usernameParam]);
+  }, []);
 
-  const fetchChatMessages = async (userId) => {
+  const fetchChatMessages = async () => {
     try {
-      const response = await fetch(
-        `${baseURL}messages/chat/${userId}/${loggedId}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            token: token,
-          },
-        }
-      );
+      const url = `${baseURL}messages/chat/${loggedId}`;
+      console.log(url);
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          token: token,
+        },
+      });
       if (response.ok) {
         const messagesData = await response.json();
         setChatMessages(messagesData);
@@ -127,20 +119,22 @@ function PublicProfile() {
         receiverId: user.userId,
         messageText: newMessage,
       });
-      const response = await fetch(
-        `${baseURL}messages/send`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            token: token,
-          },
-          body: requestBody,
-        }
-      );
+      console.log({
+        senderId: loggedId,
+        receiverId: user.userId,
+        messageText: newMessage,
+      });
+      const response = await fetch(`${baseURL}messages/send`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          token: token,
+        },
+        body: requestBody,
+      });
       if (response.ok) {
         // Message sent successfully, fetch updated messages
-        fetchChatMessages(user.userId);
+        fetchChatMessages();
         setNewMessage("");
       } else {
         console.error("Failed to send message:", response.statusText);
@@ -153,19 +147,16 @@ function PublicProfile() {
   // Function to handle marking a message as read
   const markAsRead = async (messageId) => {
     try {
-      const response = await fetch(
-        `${baseURL}messages/read/${messageId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            token: token,
-          },
-        }
-      );
+      const response = await fetch(`${baseURL}messages/read/${messageId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          token: token,
+        },
+      });
       if (response.ok) {
         // Message marked as read successfully, fetch updated messages
-        fetchChatMessages(user.userId);
+        fetchChatMessages();
       } else {
         console.error("Failed to mark message as read:", response.statusText);
       }
@@ -189,11 +180,6 @@ function PublicProfile() {
     }
   };
 
-  // <WebSocketClient
-  // endpoint={`chat/${user.userId}/${loggedId}`}
-  // onDataReceived={fetchChatMessages}
-  // storeAction="addMessage"/>
-
   return (
     <div className="userProfile">
       <div className="contents">
@@ -202,21 +188,27 @@ function PublicProfile() {
             <h3>Messages Chat</h3>
             <div className="messages-list" ref={messagesContainerRef}>
               {/* Render chat messages */}
-              {chatMessages.map((message) => (
-                <div
-                  key={message.id}
-                  className={`message ${
-                    message.senderId === loggedId ? "sent" : "received"
-                  } ${message.readStatus ? "read" : ""}`}
-                >
-                  <div className="message-content">
-                    {message.messageText}{" "}
-                    <button onClick={() => markAsRead(message.id)}>
-                      {message.readStatus ? <FaCheckDouble /> : <FaCheck />}
-                    </button>
-                  </div>
-                </div>
-              ))}
+              {chatMessages.map(
+                (message) => (
+                  console.log("Message ID:", message.id),
+                  console.log("Message Text:", message.messageText),
+                  (
+                    <div
+                      key={message.id}
+                      className={`message ${
+                        message.senderId === loggedId ? "sent" : "received"
+                      } ${message.readStatus ? "read" : ""}`}
+                    >
+                      <div className="message-content">
+                        {message.messageText}{" "}
+                        <button onClick={() => markAsRead(message.id)}>
+                          {message.readStatus ? <FaCheckDouble /> : <FaCheck />}
+                        </button>
+                      </div>
+                    </div>
+                  )
+                )
+              )}
             </div>
             <div className="compose-message">
               <input
@@ -230,7 +222,6 @@ function PublicProfile() {
               <button onClick={sendMessage}>Send</button>
             </div>
           </div>
-         
         </div>
         <div className="profile-details">
           <h2>My Profile</h2>

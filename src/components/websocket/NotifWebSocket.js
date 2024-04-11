@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { userStore } from "../../stores/UserStore";
+import { websocketStore } from "../../stores/WebSocketStore.js";
 import { baseWS } from "../../pages/Requests.js";
 
 function NotifWebSocket() {
   const { token } = userStore();
-
-  const addNotification = userStore((state) => state.addNotification);
+  const addNotification = websocketStore((state) => state.addNotification);
 
   useEffect(() => {
     const websocket = new WebSocket(`${baseWS}notification/${token}`);
