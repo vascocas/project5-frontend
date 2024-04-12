@@ -27,8 +27,9 @@ export const websocketStore = create(
         })),
 
       // Function to set chat messages
-      setChatMessages: (messages) => set({ chatMessages: messages }),
+      setChatMessages: (messages) => set({ chatMessages: messages })
     }),
+
     {
       name: "myWebSocketStore",
       storage: storage,

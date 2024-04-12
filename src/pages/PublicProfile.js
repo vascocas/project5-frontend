@@ -5,6 +5,7 @@ import { userStore } from "../stores/UserStore";
 import { websocketStore } from "../stores/WebSocketStore";
 import MessageWebSocket from "../components/websocket/MessageWebSocket";
 import { baseURL } from "./Requests";
+import { fetchChatMessages } from "../components/messages/ChatMessages.js";
 import "./PublicProfile.css";
 import "../index.css";
 
@@ -12,7 +13,8 @@ function PublicProfile() {
   const { usernameParam } = useParams();
   const { token, loggedId } = userStore();
   // State for messages
-  const { chatMessages, setChatMessages } = websocketStore();
+  const { setChatMessages } = websocketStore();
+  const chatMessages = websocketStore((state) => state.chatMessages);
   const [user, setUser] = useState({
     userId: "",
     username: "",
@@ -71,7 +73,6 @@ function PublicProfile() {
           setTotalDoingTasks(totalDoingTasks);
           setTotalDoneTasks(totalDoneTasks);
 
-          fetchChatMessages();
         } else {
           console.error("Failed to fetch user profile:", response.statusText);
         }
@@ -83,10 +84,12 @@ function PublicProfile() {
     fetchUserProfile();
   }, []);
 
-  const fetchChatMessages = async () => {
+  fetchChatMessages(user.userId, token, loggedId);
+
+  /*const fetchChatMessages = async (userId) => {
     try {
-      const url = `${baseURL}messages/chat/${loggedId}`;
-      console.log(url);
+      const url = `${baseURL}messages/chat/${loggedId}/${userId}`;
+      
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -104,6 +107,7 @@ function PublicProfile() {
       console.error("Error fetching messages:", error);
     }
   };
+  */
 
   // Function to handle sending a new message
   const sendMessage = async () => {
@@ -119,11 +123,7 @@ function PublicProfile() {
         receiverId: user.userId,
         messageText: newMessage,
       });
-      console.log({
-        senderId: loggedId,
-        receiverId: user.userId,
-        messageText: newMessage,
-      });
+
       const response = await fetch(`${baseURL}messages/send`, {
         method: "POST",
         headers: {
@@ -134,7 +134,8 @@ function PublicProfile() {
       });
       if (response.ok) {
         // Message sent successfully, fetch updated messages
-        fetchChatMessages();
+        
+        fetchChatMessages(user.userId, token, loggedId);
         setNewMessage("");
       } else {
         console.error("Failed to send message:", response.statusText);
@@ -146,6 +147,7 @@ function PublicProfile() {
 
   // Function to handle marking a message as read
   const markAsRead = async (messageId) => {
+
     try {
       const response = await fetch(`${baseURL}messages/read/${messageId}`, {
         method: "PUT",
@@ -156,7 +158,7 @@ function PublicProfile() {
       });
       if (response.ok) {
         // Message marked as read successfully, fetch updated messages
-        fetchChatMessages();
+        fetchChatMessages(user.userId, token, loggedId);
       } else {
         console.error("Failed to mark message as read:", response.statusText);
       }
@@ -186,13 +188,11 @@ function PublicProfile() {
         <div className="left-page-wrap">
           <div className="messages-container">
             <h3>Messages Chat</h3>
+            
             <div className="messages-list" ref={messagesContainerRef}>
               {/* Render chat messages */}
               {chatMessages.map(
                 (message) => (
-                  console.log("Message ID:", message.id),
-                  console.log("Message Text:", message.messageText),
-                  (
                     <div
                       key={message.id}
                       className={`message ${
@@ -201,17 +201,17 @@ function PublicProfile() {
                     >
                       <div className="message-content">
                         {message.messageText}{" "}
+                        {message.senderId !== loggedId && (
                         <button onClick={() => markAsRead(message.id)}>
                           {message.readStatus ? <FaCheckDouble /> : <FaCheck />}
-                        </button>
+                        </button>)}
                       </div>
                     </div>
-                  )
                 )
               )}
             </div>
             <div className="compose-message">
-              <input
+            <input
                 type="text"
                 id="send-message"
                 value={newMessage}
