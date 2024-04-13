@@ -4,6 +4,10 @@ import { websocketStore } from "../../stores/WebSocketStore.js";
 export const fetchChatMessages = async (userId, token, loggedId) => {
   const { setChatMessages } = websocketStore();
 
+  console.log("Chat Messages - userId ==> ", userId);
+  console.log("Chat Messages - token ==> ", token);
+  console.log("Chat Messages - loggedId ==> ", loggedId);
+
   try {
     const url = `${baseURL}messages/chat/${loggedId}/${userId}`;
 

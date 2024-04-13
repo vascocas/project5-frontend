@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { FaCheck, FaCheckDouble } from "react-icons/fa";
 import { userStore } from "../stores/UserStore";
 import { websocketStore } from "../stores/WebSocketStore";
 import MessageWebSocket from "../components/websocket/MessageWebSocket";
 import { baseURL } from "./Requests";
-import { fetchChatMessages } from "../components/messages/ChatMessages.js";
 import "./PublicProfile.css";
 import "../index.css";
 
@@ -31,11 +30,109 @@ function PublicProfile() {
   const [totalDoneTasks, setTotalDoneTasks] = useState(0);
   // State for composing new message
   const [newMessage, setNewMessage] = useState("");
-
   // Ref for the messages container
   const messagesContainerRef = useRef(null);
 
   MessageWebSocket();
+
+  const fetchChatMessages = async (userId) => {
+    try {
+      const url = `${baseURL}messages/chat/${loggedId}/${userId}`;
+
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          token: token,
+        },
+      });
+      if (response.ok) {
+        const messagesData = await response.json();
+        setChatMessages(messagesData);
+      } else {
+        console.error("Failed to fetch messages:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+    }
+  };
+
+  useEffect(() => {
+    // Call fetchChatMessages with appropriate userId
+    if (user.userId) {
+      fetchChatMessages(user.userId);
+    }
+  }, [fetchChatMessages, user.userId]);
+
+  const sendMessage = async () => {
+    try {
+      // Check if newMessage is empty
+      if (!newMessage.trim()) {
+        console.error("Message cannot be empty.");
+        return; // Exit function early if message is empty
+      }
+      // Creates MessageDto
+      const requestBody = JSON.stringify({
+        senderId: loggedId,
+        receiverId: user.userId,
+        messageText: newMessage,
+      });
+  
+      const response = await fetch(`${baseURL}messages/send`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          token: token,
+        },
+        body: requestBody,
+      });
+      if (response.ok) {
+        // Message sent successfully, fetch updated messages
+        fetchChatMessages(user.userId);
+        setNewMessage("");
+      } else {
+        console.error("Failed to send message:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
+  };
+  
+  const markAsRead = async (messageId) => {
+    try {
+      const response = await fetch(`${baseURL}messages/read/${messageId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          token: token,
+        },
+      });
+      if (response.ok) {
+        // Message marked as read successfully, fetch updated messages
+        fetchChatMessages(user.userId);
+      } else {
+        console.error("Failed to mark message as read:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error marking message as read:", error);
+    }
+  };
+  
+
+  useEffect(() => {
+    // Scroll to the bottom of the messages container
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop =
+        messagesContainerRef.current.scrollHeight;
+    }
+  }, [chatMessages]);
+
+  // Function to handle sending message when Enter key is pressed
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      sendMessage();
+    }
+  };
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -72,7 +169,6 @@ function PublicProfile() {
           setTotalToDoTasks(totalToDoTasks);
           setTotalDoingTasks(totalDoingTasks);
           setTotalDoneTasks(totalDoneTasks);
-
         } else {
           console.error("Failed to fetch user profile:", response.statusText);
         }
@@ -82,105 +178,8 @@ function PublicProfile() {
     };
 
     fetchUserProfile();
+
   }, []);
-
-  fetchChatMessages(user.userId, token, loggedId);
-
-  /*const fetchChatMessages = async (userId) => {
-    try {
-      const url = `${baseURL}messages/chat/${loggedId}/${userId}`;
-      
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          token: token,
-        },
-      });
-      if (response.ok) {
-        const messagesData = await response.json();
-        setChatMessages(messagesData);
-      } else {
-        console.error("Failed to fetch messages:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error fetching messages:", error);
-    }
-  };
-  */
-
-  // Function to handle sending a new message
-  const sendMessage = async () => {
-    try {
-      // Check if newMessage is empty
-      if (!newMessage.trim()) {
-        console.error("Message cannot be empty.");
-        return; // Exit function early if message is empty
-      }
-      // Creates MessageDto
-      const requestBody = JSON.stringify({
-        senderId: loggedId,
-        receiverId: user.userId,
-        messageText: newMessage,
-      });
-
-      const response = await fetch(`${baseURL}messages/send`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          token: token,
-        },
-        body: requestBody,
-      });
-      if (response.ok) {
-        // Message sent successfully, fetch updated messages
-        
-        fetchChatMessages(user.userId, token, loggedId);
-        setNewMessage("");
-      } else {
-        console.error("Failed to send message:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error sending message:", error);
-    }
-  };
-
-  // Function to handle marking a message as read
-  const markAsRead = async (messageId) => {
-
-    try {
-      const response = await fetch(`${baseURL}messages/read/${messageId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          token: token,
-        },
-      });
-      if (response.ok) {
-        // Message marked as read successfully, fetch updated messages
-        fetchChatMessages(user.userId, token, loggedId);
-      } else {
-        console.error("Failed to mark message as read:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error marking message as read:", error);
-    }
-  };
-
-  useEffect(() => {
-    // Scroll to the bottom of the messages container
-    if (messagesContainerRef.current) {
-      messagesContainerRef.current.scrollTop =
-        messagesContainerRef.current.scrollHeight;
-    }
-  }, [chatMessages]);
-
-  // Function to handle sending message when Enter key is pressed
-  const handleKeyPress = (event) => {
-    if (event.key === "Enter") {
-      sendMessage();
-    }
-  };
 
   return (
     <div className="userProfile">
@@ -188,30 +187,28 @@ function PublicProfile() {
         <div className="left-page-wrap">
           <div className="messages-container">
             <h3>Messages Chat</h3>
-            
             <div className="messages-list" ref={messagesContainerRef}>
               {/* Render chat messages */}
-              {chatMessages.map(
-                (message) => (
-                    <div
-                      key={message.id}
-                      className={`message ${
-                        message.senderId === loggedId ? "sent" : "received"
-                      } ${message.readStatus ? "read" : ""}`}
-                    >
-                      <div className="message-content">
-                        {message.messageText}{" "}
-                        {message.senderId !== loggedId && (
-                        <button onClick={() => markAsRead(message.id)}>
-                          {message.readStatus ? <FaCheckDouble /> : <FaCheck />}
-                        </button>)}
-                      </div>
-                    </div>
-                )
-              )}
+              {chatMessages.map((message) => (
+                <div
+                  key={message.id}
+                  className={`message ${
+                    message.senderId === loggedId ? "sent" : "received"
+                  } ${message.readStatus ? "read" : ""}`}
+                >
+                  <div className="message-content">
+                    {message.messageText}{" "}
+                    {message.senderId !== loggedId && (
+                      <button onClick={() => markAsRead(message.id)}>
+                        {message.readStatus ? <FaCheckDouble /> : <FaCheck />}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))}
             </div>
             <div className="compose-message">
-            <input
+              <input
                 type="text"
                 id="send-message"
                 value={newMessage}
