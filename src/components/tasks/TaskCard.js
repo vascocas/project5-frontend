@@ -3,6 +3,7 @@ import { userStore } from "../../stores/UserStore";
 import { taskStore } from "../../stores/TaskStore";
 import { useNavigate } from "react-router-dom";
 import { baseURL } from "../../pages/Requests";
+import TaskWebSocket from "../websocket/TaskWebSocket";
 import "./TasksBoard.css";
 
 function TaskCard({ title, priority, taskId, state, creator }) {
@@ -23,6 +24,8 @@ function TaskCard({ title, priority, taskId, state, creator }) {
   } else if (priority === "HIGH_PRIORITY") {
     priorityClass = "high-priority";
   }
+
+  TaskWebSocket();
 
   // Handle Remove Task
   const handleRemove = async () => {

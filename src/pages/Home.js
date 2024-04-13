@@ -19,6 +19,8 @@ function Home() {
   const { updateNotifications, unreadCount, setUnreadCount } =
   websocketStore();
 
+  NotifWebSocket();
+  
   // Function to fetch user notifications
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -57,7 +59,6 @@ function Home() {
   };
 
 
-  NotifWebSocket();
 
   return (
     <div className="Home" id="home-outer-container">

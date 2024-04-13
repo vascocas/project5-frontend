@@ -1,5 +1,20 @@
 {
-    "title":"Title",
-    "description":"Description",
-    "start-date":"Start date"
+    "addTask-title" : "Add Task",
+    "title" : "Title",
+    "description" : "Description",
+    "start-date" : "Start date",
+    "end-date" : "End date",
+    "priority" : "Priority",
+    "category-select" : "Category",
+    "addTask-label" : "Add Task",
+    "my-profile" : "My Profile",
+    "label-username" : "Username",
+    "label-email" : "Email",
+    "label-firstName" : "First Name",
+    "label-lastName" : "Last Name",
+    "label-phone" : "Phone",
+    "label-photo" : "Photo",
+    "button-update" : "Update Profile",
+    "modal-password" : "Change Password",
+    "button-home" : "Back to Home"
     }

@@ -1,5 +1,20 @@
 {
+    "addTask-title" : "Adicionar Tarefa",
     "title":"Título",
     "description":"Descrição",
-    "start-date":"Data de início"
+    "start-date":"Data de início",
+    "end-date" : "Data de fim",
+    "priority" : "Prioridade",
+    "category-select" : "Categoria",
+    "addTask-label" : "Adicionar",
+    "my-profile" : "Meu Perfil",
+    "label-username" : "Nome de utilizador",
+    "label-email" : "Email",
+    "label-firstName" : "Primeiro Nome",
+    "label-lastName" : "Último Nome",
+    "label-phone" : "Telemóvel",
+    "label-photo" : "Fotografia",
+    "button-update" : "Atualizar Perfil",
+    "modal-password" : "Mudar Password",
+    "button-home" : "Menu Principal"
     }

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { userStore } from "../../stores/UserStore";
 import { websocketStore } from "../../stores/WebSocketStore.js";
 import { baseWS } from "../../pages/Requests.js";
@@ -7,33 +7,38 @@ function MessageWebSocket() {
   const { token } = userStore();
   const addMessage = websocketStore((state) => state.addMessage);
 
-  useEffect(() => {
-    function connectWebSocket() {
-      console.log("Connecting to WebSocket...");
-      const websocket = new WebSocket(`${baseWS}message/${token}`);
+  // Declare a ref to store the WebSocket instance
+  const websocketRef = useRef(null);
 
-      websocket.onopen = () => {
+  useEffect(() => {
+    // Create the WebSocket instance if it doesn't exist
+    if (!websocketRef.current) {
+      websocketRef.current = new WebSocket(`${baseWS}message/${token}`);
+      websocketRef.current.onopen = () => {
         console.log("The websocket connection is open");
       };
 
-      websocket.onmessage = (event) => {
+      websocketRef.current.onmessage = (event) => {
         const message = event.data;
-        console.log("Received a new message:", message);
+        console.log("a new message is received!");
         addMessage(message);
-      };
-
-      websocket.onerror = (error) => {
-        console.error("WebSocket error:", error);
-      };
-
-      websocket.onclose = () => {
-        console.log("WebSocket connection closed");
-        connectWebSocket();
       };
     }
 
-    connectWebSocket();
-  }, [addMessage]);
+    // Cleanup function to close the WebSocket connection on unmount
+    return () => {
+      if (websocketRef.current) {
+        websocketRef.current.close();
+        websocketRef.current = null;
+      }
+    };
+  }, [token, addMessage]);
+
+  // Empty dependency array to ensure this effect runs only once on mount
+  useEffect(() => {}, []);
+
+  // Return null or any desired UI component
+  return null;
 }
 
 export default MessageWebSocket;

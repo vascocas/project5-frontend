@@ -114,7 +114,9 @@ function AddTaskForm() {
     <aside className="add-task-sidebar">
       <IntlProvider locale={locale} messages={languages[locale]}>
       <div className="add-task-container">
-        <h3 id="addTask-h3">Add task</h3>
+        <h3 id="addTask-h3">
+        <FormattedMessage id="addTask-title"/>
+        </h3>
         <div className="input-fields-container">
           <label className="labels-task-name" htmlFor="taskName">
           <FormattedMessage id="title"/>
@@ -146,7 +148,7 @@ function AddTaskForm() {
             onChange={(e) => setStartDate(e.target.value)}
           />
           <label className="labels-task-dates" htmlFor="endDate">
-            End date
+          <FormattedMessage id="end-date"/>
           </label>
           <input
             type="date"
@@ -154,7 +156,9 @@ function AddTaskForm() {
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
           />
-          <label className="labels-task-priority" htmlFor="priority">Priority</label>
+          <label className="labels-task-priority" htmlFor="priority">
+            <FormattedMessage id="priority"/>
+          </label>
           <div className="dropdown-priority">
             <select
               id="dropdown-task-priority"
@@ -172,7 +176,7 @@ function AddTaskForm() {
               className="labels-task-category"
               htmlFor="dropdown-task-categories"
             >
-              Category
+              <FormattedMessage id="category-select"/>
             </label>
             <select
               name="task-categories"
@@ -189,7 +193,7 @@ function AddTaskForm() {
             </select>
             <div className="add-button"></div>
             <button id="addTask" onClick={handleAddTask}>
-              Add task
+            <FormattedMessage id="addTask-label"/>
             </button>
             <p id="warningMessage">{message}</p>
           </div>

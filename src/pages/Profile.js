@@ -5,11 +5,14 @@ import ChangePasswordModal from "../components/users/ChangePasswordModal";
 import { baseURL } from "./Requests";
 import { userStore } from "../stores/UserStore";
 import { useNavigate, useParams } from "react-router-dom";
+import languages from "../translations";
+import { IntlProvider, FormattedMessage } from "react-intl";
 import "./Profile.css";
 import "../index.css";
 
 function Profile() {
   const { token, username } = userStore();
+  const locale = userStore((state) => state.locale);
   const { usernameParam } = useParams();
   const [user, setUser] = useState(null);
   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
@@ -135,40 +138,53 @@ function Profile() {
       <Header />
       <Sidebar />
       <div className="contents">
+      <IntlProvider locale={locale} messages={languages[locale]}>
       <div className="left-page-wrap"></div>
       <div className="profile-details">
-        <h2>My Profile</h2>
-        <label htmlFor="username">Username</label>
+        <h2><FormattedMessage id="my-profile"/></h2>
+        <label htmlFor="username">
+        <FormattedMessage id="label-username"/>
+        </label>
         <input type="text" id="username" value={user.username} readOnly />
-        <label htmlFor="email">Email</label>
+        <label htmlFor="email">
+        <FormattedMessage id="label-email"/>
+        </label>
         <input
           type="email"
           id="email"
           value={user.email}
           onChange={(e) => setUser({ ...user, email: e.target.value })}
         />
-        <label htmlFor="firstName">First Name</label>
+        <label htmlFor="firstName">
+        <FormattedMessage id="label-firstName"/>
+        </label>
         <input
           type="text"
           id="firstName"
           value={user.firstName}
           onChange={(e) => setUser({ ...user, firstName: e.target.value })}
         />
-        <label htmlFor="lastName">Last Name</label>
+        <label htmlFor="lastName">
+        <FormattedMessage id="label-lastName"/>
+        </label>
         <input
           type="text"
           id="lastName"
           value={user.lastName}
           onChange={(e) => setUser({ ...user, lastName: e.target.value })}
         />
-        <label htmlFor="phone">Phone</label>
+        <label htmlFor="phone">
+        <FormattedMessage id="label-phone"/>
+        </label>
         <input
           type="tel"
           id="phone"
           value={user.phone}
           onChange={(e) => setUser({ ...user, phone: e.target.value })}
         />
-        <label htmlFor="photo">Photo</label>
+        <label htmlFor="photo">
+        <FormattedMessage id="label-photo"/>
+        </label>
         <input
           type="text"
           id="photo"
@@ -176,7 +192,9 @@ function Profile() {
           onChange={(e) => setUser({ ...user, photo: e.target.value })}
         />
             {" "}
-            <button onClick={handleUpdateProfile}>Update Profile</button>
+            <button onClick={handleUpdateProfile}>
+            <FormattedMessage id="button-update"/>
+            </button>
             <ChangePasswordModal
               isOpen={showChangePasswordModal}
               onRequestClose={() => setShowChangePasswordModal(false)}
@@ -184,12 +202,15 @@ function Profile() {
               title="Change Password"
             />
             <button onClick={() => handleOpenChangePasswordModal(user.id)}>
-              Change Password
+            <FormattedMessage id="modal-password"/>
             </button>{" "}
-        <button onClick={() => navigate("/Home")}>Back to Home</button>
+        <button onClick={() => navigate("/Home")}>
+          <FormattedMessage id="button-home"/>
+          </button>
       </div>
       <div className="right-page-wrap">
       </div>
+      </IntlProvider>
       </div>
     </div>
   );

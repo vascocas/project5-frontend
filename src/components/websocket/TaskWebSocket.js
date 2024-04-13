@@ -1,27 +1,28 @@
 import { useEffect, useRef } from "react";
 import { userStore } from "../../stores/UserStore";
-import { websocketStore } from "../../stores/WebSocketStore.js";
+import { taskStore } from "../../stores/TaskStore.js";
 import { baseWS } from "../../pages/Requests.js";
 
-function ChatWebSocket() {
+function TaskWebSocket() {
   const { token } = userStore();
-  const addNotification = websocketStore((state) => state.addNotification);
-  
+  const { deleteTask, updateTask } = taskStore();
+
   // Declare a ref to store the WebSocket instance
   const websocketRef = useRef(null);
 
   useEffect(() => {
     // Create the WebSocket instance if it doesn't exist
     if (!websocketRef.current) {
-      websocketRef.current = new WebSocket(`${baseWS}notification/${token}`);
+      websocketRef.current = new WebSocket(`${baseWS}task/${token}`);
       websocketRef.current.onopen = () => {
         console.log("The websocket connection is open");
       };
 
       websocketRef.current.onmessage = (event) => {
-        const notification = event.data;
-        console.log("a new notification is received!");
-        addNotification(notification);
+        const message = event.data;
+        console.log("a new action is received!");
+        updateTask(message);
+        deleteTask(message);
       };
     }
 
@@ -32,15 +33,13 @@ function ChatWebSocket() {
         websocketRef.current = null;
       }
     };
-  }, [token, addNotification]);
+  }, [token, updateTask, deleteTask]);
 
   // Empty dependency array to ensure this effect runs only once on mount
-  useEffect(() => {
-    // Do nothing here
-  }, []);
+  useEffect(() => {}, []);
 
   // Return null or any desired UI component
   return null;
 }
 
-export default ChatWebSocket;
+export default TaskWebSocket;
