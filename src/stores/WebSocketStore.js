@@ -14,8 +14,7 @@ export const websocketStore = create(
           unreadCount: state.unreadCount + (newNotification.readStatus ? 0 : 1), // Increment unreadCount if the new notification is unread
         })), // a function to add a new notification to the list of notifications
       unreadCount: 0,
-      setUnreadCount: () => set((state) => ({ unreadCount: state.unreadCount + 1 })),
-
+      setUnreadCount: (count) => set({ unreadCount: count }), // Function to update unread count
 
       // New state variables and functions for chat messages
       chatMessages: [], // state variable to keep all chat messages

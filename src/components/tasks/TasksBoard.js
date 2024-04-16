@@ -27,6 +27,7 @@ export const fetchTasks = async (
     } else if (filteredCategoryId) {
       url += `/category/?categoryId=${filteredCategoryId}`;
     }
+    console.log("url: ", url);
     const response = await fetch(url, {
       method: "GET",
       headers: {
@@ -69,7 +70,7 @@ function TasksBoard() {
     if (token) {
       fetchTasks(token, filteredUserId, filteredCategoryId, setTasks);
     }
-  }, [setTasks]);
+  }, [filteredUserId, filteredCategoryId, setTasks]);
 
   const handleUserFilter = (userId) => {
     setFilteredUserId(userId);

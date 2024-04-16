@@ -40,7 +40,7 @@ function PublicProfile() {
   const { usernameParam } = useParams();
   const { token, loggedId } = userStore();
   // State for messages
-  const { setChatMessages, chatId, setChatId } = websocketStore();
+  const { setChatMessages, setChatId } = websocketStore();
   const chatMessages = websocketStore((state) => state.chatMessages);
   const [user, setUser] = useState({
     userId: "",
@@ -122,24 +122,6 @@ function PublicProfile() {
     }
   };
 
-
-  useEffect(() => {
-    // Call fetchChatMessages with appropriate userId
-    if (user.userId) {
-      fetchChatMessages(loggedId, token, user.userId, setChatMessages);
-    }
-  
-    // Scroll to the bottom of the messages container
-    if (messagesContainerRef.current) {
-      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
-    }
-  }, []);
-  
-  
-  
-  
-  
-
   // Function to handle sending message when Enter key is pressed
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
@@ -192,6 +174,16 @@ function PublicProfile() {
 
     fetchUserProfile();
   }, []);
+
+
+   // Scroll to the bottom when chatMessages length changes
+useEffect(() => {
+  if (messagesContainerRef.current) {
+    messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+  }
+}, [chatMessages.length]);
+
+
 
   return (
     <div className="userProfile">

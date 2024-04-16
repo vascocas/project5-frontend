@@ -16,7 +16,7 @@ function TaskWebSocket() {
     if (!websocketRef.current) {
       websocketRef.current = new WebSocket(`${baseWS}task/${token}`);
       websocketRef.current.onopen = () => {
-        console.log("The websocket connection is open");
+        console.log("Task websocket is open");
       };
 
       websocketRef.current.onmessage = (event) => {
@@ -36,6 +36,7 @@ function TaskWebSocket() {
       if (websocketRef.current) {
         websocketRef.current.close();
         websocketRef.current = null;
+        console.log("Closing task websocket");
       }
     };
   }, []);

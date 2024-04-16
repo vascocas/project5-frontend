@@ -12,7 +12,7 @@ import "./Home.css";
 import { baseURL } from "./Requests";
 import NotifWebSocket from "../components/websocket/NotifWebSocket";
 
-export const fetchNotifications = async () => {
+export const fetchNotifications = async (token, updateNotifications, setUnreadCount) => {
   try {
     const response = await fetch(`${baseURL}notifications`,
       {
@@ -50,10 +50,9 @@ function Home() {
   
   // Function to fetch user notifications
   useEffect(() => {
-    
 
-    fetchNotifications();
-  }, [token, updateNotifications, setUnreadCount]);
+    fetchNotifications(token, updateNotifications, setUnreadCount);
+  }, [updateNotifications, setUnreadCount]);
 
   const handleSelect = (event) => {
     console.log(event.target.value);
