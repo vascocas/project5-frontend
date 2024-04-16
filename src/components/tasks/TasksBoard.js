@@ -69,7 +69,7 @@ function TasksBoard() {
     if (token) {
       fetchTasks(token, filteredUserId, filteredCategoryId, setTasks);
     }
-  }, [token, filteredUserId, filteredCategoryId, setTasks]);
+  }, [setTasks]);
 
   const handleUserFilter = (userId) => {
     setFilteredUserId(userId);

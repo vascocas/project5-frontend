@@ -12,6 +12,33 @@ import "./Home.css";
 import { baseURL } from "./Requests";
 import NotifWebSocket from "../components/websocket/NotifWebSocket";
 
+export const fetchNotifications = async () => {
+  try {
+    const response = await fetch(`${baseURL}notifications`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          token: token,
+        },
+      }
+    );
+
+    if (response.ok) {
+      const data = await response.json();
+      updateNotifications(data);
+      const unreadCounter = data.filter(
+        (notification) => !notification.readStatus
+      ).length;
+      setUnreadCount(unreadCounter);
+    } else {
+      console.error("Failed to fetch notifications:", response.statusText);
+    }
+  } catch (error) {
+    console.error("Error fetching notifications:", error);
+  }
+};
+
 function Home() {
   const { token } = userStore();
   const locale = userStore((state) => state.locale);
@@ -23,32 +50,7 @@ function Home() {
   
   // Function to fetch user notifications
   useEffect(() => {
-    const fetchNotifications = async () => {
-      try {
-        const response = await fetch(`${baseURL}notifications`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              token: token,
-            },
-          }
-        );
-
-        if (response.ok) {
-          const data = await response.json();
-          updateNotifications(data);
-          const unreadCounter = data.filter(
-            (notification) => !notification.readStatus
-          ).length;
-          setUnreadCount(unreadCounter);
-        } else {
-          console.error("Failed to fetch notifications:", response.statusText);
-        }
-      } catch (error) {
-        console.error("Error fetching notifications:", error);
-      }
-    };
+    
 
     fetchNotifications();
   }, [token, updateNotifications, setUnreadCount]);

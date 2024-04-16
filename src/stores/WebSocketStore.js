@@ -14,11 +14,13 @@ export const websocketStore = create(
           unreadCount: state.unreadCount + (newNotification.readStatus ? 0 : 1), // Increment unreadCount if the new notification is unread
         })), // a function to add a new notification to the list of notifications
       unreadCount: 0,
-      setUnreadCount: (count) => set({ unreadCount: count }), // Function to update unread count
+      setUnreadCount: () => set((state) => ({ unreadCount: state.unreadCount + 1 })),
+
 
       // New state variables and functions for chat messages
       chatMessages: [], // state variable to keep all chat messages
       newMessage: "", // state variable to store new message
+      chatId: "", // state variable to store chatId
 
       // Function to add a new message to the list of chat messages
       addMessage: (message) =>
@@ -29,11 +31,8 @@ export const websocketStore = create(
       // Function to set chat messages
       setChatMessages: (messages) => set({ chatMessages: messages }),
 
-      // WebSocket connection state
-      isConnected: false,
-      // Function to set the isConnected state
-      setIsConnected: (connected) => set({ isConnected: connected }),
-
+      // Function to set chatId
+      setChatId: (chatId) => set({ chatId }),
     }),
 
     {

@@ -2,10 +2,10 @@ import { useEffect, useRef } from "react";
 import { userStore } from "../../stores/UserStore";
 import { websocketStore } from "../../stores/WebSocketStore.js";
 import { baseWS } from "../../pages/Requests.js";
+import { fetchNotifications } from "../../pages/Home.js";
 
 function NotifWebSocket() {
   const { token } = userStore();
-  const addNotification = websocketStore((state) => state.addNotification);
   
   // Declare a ref to store the WebSocket instance
   const websocketRef = useRef(null);
@@ -19,28 +19,31 @@ function NotifWebSocket() {
       };
 
       websocketRef.current.onmessage = (event) => {
-        const notification = event.data;
+        console.log(event.data);
+        const message = event.data;
+        // Check the type of action received
+        if (message === "NotificationUpdate") {
         console.log("a new notification is received!");
-        addNotification(notification);
-      };
-    }
-
-    // Cleanup function to close the WebSocket connection on unmount
-    return () => {
-      if (websocketRef.current) {
-        websocketRef.current.close();
-        websocketRef.current = null;
+        // Increase the unread count by 1 unit
+        fetchNotifications()
       }
     };
-  }, [token, addNotification]);
+  }
 
-  // Empty dependency array to ensure this effect runs only once on mount
-  useEffect(() => {
-  
-  }, []);
+  // Cleanup function to close the WebSocket connection on unmount
+  return () => {
+    if (websocketRef.current) {
+      websocketRef.current.close();
+      websocketRef.current = null;
+    }
+  };
+}, []);
 
-  // Return null or any desired UI component
-  return null;
+// Empty dependency array to ensure this effect runs only once on mount
+useEffect(() => {}, []);
+
+// Return null or any desired UI component
+return null;
 }
 
 export default NotifWebSocket;

@@ -15,6 +15,9 @@ const Notifications = () => {
   // Ref for the notifications container
   const notificationsContainerRef = useRef(null);
 
+
+  NotifWebSocket();
+
   // Function to handle marking all user notifications as read
   useEffect(() => {
     const markAllAsRead = async () => {
@@ -66,9 +69,6 @@ const formatDateTime = (timestamp) => {
   const formattedDateTime = timestamp.replace("T", " ").replace(/\[UTC\]/g, '').substring(0, 19);
   return formattedDateTime;
 };
-
-
-NotifWebSocket();
 
   return (
     <div>

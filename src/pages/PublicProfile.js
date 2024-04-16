@@ -8,11 +8,39 @@ import { baseURL } from "./Requests";
 import "./PublicProfile.css";
 import "../index.css";
 
+// Define fetchChatMessages function
+export const fetchChatMessages = async (
+  loggedId,
+  token,
+  userId,
+  setChatMessages
+) => {
+  try {
+    const url = `${baseURL}messages/chat/${loggedId}/${userId}`;
+    console.log("fetchChatMessages: ", url);
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        token: token,
+      },
+    });
+    if (response.ok) {
+      const messagesData = await response.json();
+      setChatMessages(messagesData);
+    } else {
+      console.error("Failed to fetch messages:", response.statusText);
+    }
+  } catch (error) {
+    console.error("Error fetching messages:", error);
+  }
+};
+
 function PublicProfile() {
   const { usernameParam } = useParams();
   const { token, loggedId } = userStore();
   // State for messages
-  const { setChatMessages } = websocketStore();
+  const { setChatMessages, chatId, setChatId } = websocketStore();
   const chatMessages = websocketStore((state) => state.chatMessages);
   const [user, setUser] = useState({
     userId: "",
@@ -35,29 +63,10 @@ function PublicProfile() {
 
   MessageWebSocket();
 
-  const fetchChatMessages = async (userId) => {
-    try {
-      const url = `${baseURL}messages/chat/${loggedId}/${userId}`;
-      
-      console.log("fetchChatMessages: ", url);
-
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          token: token,
-        },
-      });
-      if (response.ok) {
-        const messagesData = await response.json();
-        setChatMessages(messagesData);
-      } else {
-        console.error("Failed to fetch messages:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error fetching messages:", error);
-    }
-  };
+  // Update chatId state when user.userId changes
+  useEffect(() => {
+    setChatId(user.userId);
+  }, [user.userId]);
 
   const sendMessage = async () => {
     try {
@@ -72,7 +81,7 @@ function PublicProfile() {
         receiverId: user.userId,
         messageText: newMessage,
       });
-  
+
       const response = await fetch(`${baseURL}messages/send`, {
         method: "POST",
         headers: {
@@ -83,7 +92,7 @@ function PublicProfile() {
       });
       if (response.ok) {
         // Message sent successfully, fetch updated messages
-        fetchChatMessages(user.userId);
+        fetchChatMessages(loggedId, token, user.userId, setChatMessages);
         setNewMessage("");
       } else {
         console.error("Failed to send message:", response.statusText);
@@ -92,7 +101,7 @@ function PublicProfile() {
       console.error("Error sending message:", error);
     }
   };
-  
+
   const markAsRead = async (messageId) => {
     try {
       const response = await fetch(`${baseURL}messages/read/${messageId}`, {
@@ -104,7 +113,7 @@ function PublicProfile() {
       });
       if (response.ok) {
         // Message marked as read successfully, fetch updated messages
-        fetchChatMessages(user.userId);
+        fetchChatMessages(loggedId, token, user.userId, setChatMessages);
       } else {
         console.error("Failed to mark message as read:", response.statusText);
       }
@@ -114,20 +123,22 @@ function PublicProfile() {
   };
 
 
-  
   useEffect(() => {
-
-     // Call fetchChatMessages with appropriate userId
-     if (user.userId) {
-      fetchChatMessages(user.userId);
+    // Call fetchChatMessages with appropriate userId
+    if (user.userId) {
+      fetchChatMessages(loggedId, token, user.userId, setChatMessages);
     }
-    
+  
     // Scroll to the bottom of the messages container
     if (messagesContainerRef.current) {
-      messagesContainerRef.current.scrollTop =
-        messagesContainerRef.current.scrollHeight;
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
     }
   }, []);
+  
+  
+  
+  
+  
 
   // Function to handle sending message when Enter key is pressed
   const handleKeyPress = (event) => {
@@ -180,7 +191,6 @@ function PublicProfile() {
     };
 
     fetchUserProfile();
-
   }, []);
 
   return (
@@ -206,7 +216,7 @@ function PublicProfile() {
                       </button>
                     )}
                   </div>
-                  </div>
+                </div>
               ))}
             </div>
             <div className="compose-message">
