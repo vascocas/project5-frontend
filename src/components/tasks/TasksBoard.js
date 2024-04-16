@@ -7,6 +7,7 @@ import TasksUserFilter from "./TasksUserFilter";
 import TasksCategoryFilter from "./TasksCategoryFilter";
 import RemoveUserTasks from "./RemoveUserTasks";
 import { baseURL } from "../../pages/Requests";
+import TaskWebSocket from "../websocket/TaskWebSocket";
 import "./TasksBoard.css";
 
 function TasksBoard() {
@@ -16,13 +17,15 @@ function TasksBoard() {
   const [filteredUserId, setFilteredUserId] = useState("");
   const [filteredCategoryId, setFilteredCategoryId] = useState("");
 
+  TaskWebSocket();
+
   // Define fetchTasks function
   const fetchTasks = async () => {
     if (!token) {
       return; // If token is not present, exit the function early
     }
     try {
-      const url = `${baseURL}tasks`;
+      let url = `${baseURL}tasks`;
       if (filteredUserId) {
         url += `/user/?userId=${filteredUserId}`;
       } else if (filteredCategoryId) {

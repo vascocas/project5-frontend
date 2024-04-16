@@ -27,7 +27,13 @@ export const websocketStore = create(
         })),
 
       // Function to set chat messages
-      setChatMessages: (messages) => set({ chatMessages: messages })
+      setChatMessages: (messages) => set({ chatMessages: messages }),
+
+      // WebSocket connection state
+      isConnected: false,
+      // Function to set the isConnected state
+      setIsConnected: (connected) => set({ isConnected: connected }),
+
     }),
 
     {

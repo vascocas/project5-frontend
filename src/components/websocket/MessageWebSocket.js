@@ -6,6 +6,9 @@ import { baseWS } from "../../pages/Requests.js";
 function MessageWebSocket() {
   const { token } = userStore();
   const addMessage = websocketStore((state) => state.addMessage);
+  const [setIsConnected] = websocketStore((state) => [state.setIsConnected]);
+
+
 
   // Declare a ref to store the WebSocket instance
   const websocketRef = useRef(null);
@@ -16,10 +19,11 @@ function MessageWebSocket() {
       websocketRef.current = new WebSocket(`${baseWS}message/${token}`);
       websocketRef.current.onopen = () => {
         console.log("The websocket connection is open");
+        setIsConnected(true);
       };
 
       websocketRef.current.onmessage = (event) => {
-        const message = event.data;
+        const message = JSON.parse(event.data);
         console.log("a new message is received!");
         addMessage(message);
       };
@@ -30,9 +34,10 @@ function MessageWebSocket() {
       if (websocketRef.current) {
         websocketRef.current.close();
         websocketRef.current = null;
+        setIsConnected(false);
       }
     };
-  }, [token, addMessage]);
+  }, [token, addMessage, setIsConnected]);
 
   // Empty dependency array to ensure this effect runs only once on mount
   useEffect(() => {}, []);

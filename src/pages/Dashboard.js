@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { baseURL } from "./Requests";
+import { userStore } from "../stores/UserStore";
 import "./Dashboard.css";
 import {
   ScatterChart,
@@ -14,6 +15,7 @@ import {
 } from "recharts";
 
 const Dashboard = () => {
+  const { token } = userStore();
   const [totalUsers, setTotalUsers] = useState(0);
   const [validatedUsers, setValidatedUsers] = useState(0);
   const [nonValidatedUsers, setNonValidatedUsers] = useState(0);
@@ -24,33 +26,38 @@ const Dashboard = () => {
   const [tasksCompletedOverTime, setTasksCompletedOverTime] = useState([]);
 
   useEffect(() => {
-    // Fetch data from backend API
-    /*
-    const fetchData = async () => {
-      try {
-        //http requests
-        let usersResponse;
-        let tasksResponse;
-        let categoriesResponse;
-        let userRegistrationsResponse;
-        let tasksCompletedResponse;
 
-        // Calculate dashboard metrics
-        setTotalUsers(usersResponse.data.totalUsers);
-        setValidatedUsers(usersResponse.data.validatedUsers);
-        setNonValidatedUsers(usersResponse.data.nonValidatedUsers);
-        setAverageTasksPerUser(tasksResponse.data.averageTasksPerUser);
-        setTasksPerStatus(tasksResponse.data.tasksPerStatus);
-        setCategories(categoriesResponse.data.categories);
-        setUserRegistrations(userRegistrationsResponse.data.userRegistrations);
-        setTasksCompletedOverTime(tasksCompletedResponse.data.tasksCompletedOverTime);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
+    const fetchCategoriesData = async () => {
+        try {
+          const response = await fetch(`${baseURL}dashboard/categoriesSum`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              token: token,
+            },
+          });
+          if (response.ok) {
+            const responseData = await response.json();
+            // Extract data from the response
+            const {
+              totalUsers,
+              validatedUsers,
+              nonValidatedUsers,
+            } = responseData;
+  
+            // Update state with the extracted data
+            setTotalUsers(totalUsers);
+            setValidatedUsers(validatedUsers);
+            setNonValidatedUsers(nonValidatedUsers);
 
-       fetchData();
-       */
+          } else {
+            console.error("Failed to fetch users data:", response.statusText);
+          }
+        } catch (error) {
+          console.error("Error fetching users data:", error);
+        }
+
+        fetchCategoriesData();
   }, []);
 
   const data = [
@@ -68,6 +75,26 @@ const Dashboard = () => {
     { x: 2, y: 15 },
     { x: 3, y: 18 },
   ];
+
+  /*const fetchData = async () => {
+    try {
+      
+      let usersResponse;
+      let tasksResponse;
+      let categoriesResponse;
+      let userRegistrationsResponse;
+      let tasksCompletedResponse;
+
+      // Calculate dashboard metrics
+      setTotalUsers(usersResponse.data.totalUsers);
+      setValidatedUsers(usersResponse.data.validatedUsers);
+      setNonValidatedUsers(usersResponse.data.nonValidatedUsers);
+      setAverageTasksPerUser(tasksResponse.data.averageTasksPerUser);
+      setTasksPerStatus(tasksResponse.data.tasksPerStatus);
+      setCategories(categoriesResponse.data.categories);
+      setUserRegistrations(userRegistrationsResponse.data.userRegistrations);
+      setTasksCompletedOverTime(tasksCompletedResponse.data.tasksCompletedOverTime);
+      */
 
   return (
     <div className="dashboard-container">

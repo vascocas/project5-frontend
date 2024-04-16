@@ -5,7 +5,7 @@ import { baseWS } from "../../pages/Requests.js";
 
 function TaskWebSocket() {
   const { token } = userStore();
-  const { deleteTask, updateTask } = taskStore();
+  const { updateTask, deleteTask } = taskStore();
 
   // Declare a ref to store the WebSocket instance
   const websocketRef = useRef(null);
@@ -19,10 +19,19 @@ function TaskWebSocket() {
       };
 
       websocketRef.current.onmessage = (event) => {
-        const message = event.data;
-        console.log("a new action is received!");
-        updateTask(message);
-        deleteTask(message);
+        const message = (event.data);
+        console.log("a new action is received!", message);
+
+        // Check the type of action received
+        if (message.action === "update") {
+          console.log("update");
+          // Update the task
+          updateTask(message.object);
+        } else if (message.action === "delete") {
+          console.log("delete");
+          // Delete the task
+          deleteTask(message.object);
+        }
       };
     }
 

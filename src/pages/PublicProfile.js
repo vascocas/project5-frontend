@@ -38,6 +38,7 @@ function PublicProfile() {
   const fetchChatMessages = async (userId) => {
     try {
       const url = `${baseURL}messages/chat/${loggedId}/${userId}`;
+      console.log("fetchChatMessages: ", url);
 
       const response = await fetch(url, {
         method: "GET",
@@ -56,13 +57,6 @@ function PublicProfile() {
       console.error("Error fetching messages:", error);
     }
   };
-
-  useEffect(() => {
-    // Call fetchChatMessages with appropriate userId
-    if (user.userId) {
-      fetchChatMessages(user.userId);
-    }
-  }, [fetchChatMessages, user.userId]);
 
   const sendMessage = async () => {
     try {
@@ -117,8 +111,14 @@ function PublicProfile() {
       console.error("Error marking message as read:", error);
     }
   };
-  
 
+  useEffect(() => {
+    // Call fetchChatMessages with appropriate userId
+    if (user.userId) {
+      fetchChatMessages(user.userId);
+    }
+  }, []);
+  
   useEffect(() => {
     // Scroll to the bottom of the messages container
     if (messagesContainerRef.current) {
@@ -204,7 +204,7 @@ function PublicProfile() {
                       </button>
                     )}
                   </div>
-                </div>
+                  </div>
               ))}
             </div>
             <div className="compose-message">
