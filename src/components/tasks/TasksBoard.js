@@ -10,61 +10,66 @@ import { baseURL } from "../../pages/Requests";
 import TaskWebSocket from "../websocket/TaskWebSocket";
 import "./TasksBoard.css";
 
+// Define fetchTasks function
+export const fetchTasks = async (
+  token,
+  filteredUserId,
+  filteredCategoryId,
+  setTasks
+) => {
+  if (!token) {
+    return; // If token is not present, exit the function early
+  }
+  try {
+    let url = `${baseURL}tasks`;
+    if (filteredUserId) {
+      url += `/user/?userId=${filteredUserId}`;
+    } else if (filteredCategoryId) {
+      url += `/category/?categoryId=${filteredCategoryId}`;
+    }
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        token: token,
+      },
+    });
+
+    if (response.ok) {
+      let tasks = await response.json();
+      console.log("HTTP request to fetch tasks successful");
+      tasks = sortTasks(tasks); // Sort tasks before setting state
+      setTasks(tasks);
+    } else {
+      const message = await response.text();
+      console.error("Tasks array is empty:", message);
+      setTasks([]);
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    alert("Failed to fetch tasks. Please try again.");
+  }
+};
+
+// Function to sort tasks by priority, start date, and end date
+function sortTasks(tasks) {
+  return tasks.slice().sort(compareTasks); // Use slice() to avoid mutating original tasks array
+}
+
 function TasksBoard() {
   const { token } = userStore();
-  const { role } = userStore(state => state);
+  const { role } = userStore((state) => state);
   const { tasks, setTasks } = taskStore();
   const [filteredUserId, setFilteredUserId] = useState("");
   const [filteredCategoryId, setFilteredCategoryId] = useState("");
 
   TaskWebSocket();
 
-  // Define fetchTasks function
-  const fetchTasks = async () => {
-    if (!token) {
-      return; // If token is not present, exit the function early
-    }
-    try {
-      let url = `${baseURL}tasks`;
-      if (filteredUserId) {
-        url += `/user/?userId=${filteredUserId}`;
-      } else if (filteredCategoryId) {
-        url += `/category/?categoryId=${filteredCategoryId}`;
-      }
-      const response = await fetch(url, 
-        { method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          token: token,
-        },
-      });
-
-      if (response.ok) {
-        let tasks = await response.json();
-        console.log("HTTP request to fetch tasks successful");
-        tasks = sortTasks(tasks); // Sort tasks before setting state
-        setTasks(tasks);
-      } else {
-        const message = await response.text();
-        console.error("Tasks array is empty:", message);
-        setTasks([]);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      alert("Failed to fetch tasks. Please try again.");
-    }
-  };
-
   useEffect(() => {
     if (token) {
-      fetchTasks();
+      fetchTasks(token, filteredUserId, filteredCategoryId, setTasks);
     }
-  }, [token, filteredUserId, filteredCategoryId, ]);
-
-  // Function to sort tasks by priority, start date, and end date
-  function sortTasks(tasks) {
-    return tasks.slice().sort(compareTasks); // Use slice() to avoid mutating original tasks array
-  }
+  }, [token, filteredUserId, filteredCategoryId, setTasks]);
 
   const handleUserFilter = (userId) => {
     setFilteredUserId(userId);
@@ -85,16 +90,21 @@ function TasksBoard() {
   return (
     <div>
       <div className="filters">
-      {(role === "PRODUCT_OWNER" || role === "SCRUM_MASTER") && (<div className="filters-box">
-         <h3 id="filtersTitle">Filters</h3>
-          <TasksUserFilter onFilter={handleUserFilter} />
-          <TasksCategoryFilter onFilter={handleCategoryFilter} />
-          <button id="clearButton" onClick={fetchAllTasks}>
-            Clear </button>
-        </div>)}
+        {(role === "PRODUCT_OWNER" || role === "SCRUM_MASTER") && (
+          <div className="filters-box">
+            <h3 id="filtersTitle">Filters</h3>
+            <TasksUserFilter onFilter={handleUserFilter} />
+            <TasksCategoryFilter onFilter={handleCategoryFilter} />
+            <button id="clearButton" onClick={fetchAllTasks}>
+              Clear{" "}
+            </button>
+          </div>
+        )}
         <div className="remove-user-tasks">
-        {role === "PRODUCT_OWNER" && ( <h3 id="filtersTitle">Remove Tasks</h3>)}
-        {role === "PRODUCT_OWNER" && (<RemoveUserTasks fetchTasks={fetchTasks}/>)}
+          {role === "PRODUCT_OWNER" && <h3 id="filtersTitle">Remove Tasks</h3>}
+          {role === "PRODUCT_OWNER" && (
+            <RemoveUserTasks fetchTasks={fetchTasks} />
+          )}
         </div>
       </div>
       <div className="task-columns">

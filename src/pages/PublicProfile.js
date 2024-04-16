@@ -38,6 +38,7 @@ function PublicProfile() {
   const fetchChatMessages = async (userId) => {
     try {
       const url = `${baseURL}messages/chat/${loggedId}/${userId}`;
+      
       console.log("fetchChatMessages: ", url);
 
       const response = await fetch(url, {
@@ -112,20 +113,21 @@ function PublicProfile() {
     }
   };
 
-  useEffect(() => {
-    // Call fetchChatMessages with appropriate userId
-    if (user.userId) {
-      fetchChatMessages(user.userId);
-    }
-  }, []);
+
   
   useEffect(() => {
+
+     // Call fetchChatMessages with appropriate userId
+     if (user.userId) {
+      fetchChatMessages(user.userId);
+    }
+    
     // Scroll to the bottom of the messages container
     if (messagesContainerRef.current) {
       messagesContainerRef.current.scrollTop =
         messagesContainerRef.current.scrollHeight;
     }
-  }, [chatMessages]);
+  }, []);
 
   // Function to handle sending message when Enter key is pressed
   const handleKeyPress = (event) => {
