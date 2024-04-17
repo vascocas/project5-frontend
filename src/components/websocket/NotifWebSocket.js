@@ -6,6 +6,7 @@ import { fetchNotifications } from "../../pages/Home.js";
 
 function NotifWebSocket() {
   const { token } = userStore();
+  const { updateNotifications, setUnreadCount } = websocketStore();
   
   // Declare a ref to store the WebSocket instance
   const websocketRef = useRef(null);
@@ -15,7 +16,7 @@ function NotifWebSocket() {
     if (!websocketRef.current) {
       websocketRef.current = new WebSocket(`${baseWS}notification/${token}`);
       websocketRef.current.onopen = () => {
-        console.log("The websocket connection is open");
+        console.log("Notification websocket is open");
       };
 
       websocketRef.current.onmessage = (event) => {
@@ -24,8 +25,8 @@ function NotifWebSocket() {
         // Check the type of action received
         if (message === "NotificationUpdate") {
         console.log("a new notification is received!");
-        // Increase the unread count by 1 unit
-        fetchNotifications()
+        // Updated the displayed notifications
+        fetchNotifications(token, updateNotifications, setUnreadCount);
       }
     };
   }
@@ -35,8 +36,11 @@ function NotifWebSocket() {
     if (websocketRef.current) {
       websocketRef.current.close();
       websocketRef.current = null;
+      console.log("Closing notification websocket");
     }
   };
+
+ 
 }, []);
 
 // Empty dependency array to ensure this effect runs only once on mount

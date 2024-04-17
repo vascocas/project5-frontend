@@ -16,18 +16,17 @@ function MessageWebSocket() {
     if (!websocketRef.current) {
       websocketRef.current = new WebSocket(`${baseWS}message/${token}`);
       websocketRef.current.onopen = () => {
-        console.log("The websocket connection is open");
+        console.log("Message websocket is open");
       };
 
-      websocketRef.current.onmessage = async (event) => {
+      websocketRef.current.onmessage = (event) => {
         const message = event.data;
-        console.log("a new action is received!", message);
 
         // Check the type of action received
         if (message === "MessagesChanged") {
           console.log("Fetching messages...");
 
-          await fetchChatMessages(loggedId, token, chatId, setChatMessages);
+          fetchChatMessages(loggedId, token, chatId, setChatMessages);
           console.log("Messages fetched");
         }
       };
@@ -38,6 +37,7 @@ function MessageWebSocket() {
       if (websocketRef.current) {
         websocketRef.current.close();
         websocketRef.current = null;
+        console.log("Closing message websocket");
       }
     };
   }, []);
