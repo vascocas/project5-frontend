@@ -57,7 +57,7 @@ const UserRecycle = () => {
       );
       const message = await response.text();
       if (response.ok) {
-        console.log("Sucesso: ", message);
+        console.log("Success: ", message);
         userStore.getState().removeDeletedUser(userId); // Update userStore
       } else {
         console.log(message);

@@ -14,6 +14,7 @@ const RecycleBin = () => {
   const navigate = useNavigate();
   const mediatype = userStore((state) => state.mediatype);
 
+  // Call MediaType component to handle media type detection
   MediaType();
 
   return (
@@ -21,22 +22,34 @@ const RecycleBin = () => {
       <Header />
       <Sidebar />
       <div className="content-container">
-      {mediatype.isTabletOrMobile && <br />}
         <h1 className="page-title">Recycle Bin</h1>
         <div className="recycle-content">
-          <div className="recycle-column">
-          {mediatype.isDesktopOrLaptop && <br />}
-            <h2>Deleted Tasks</h2>
-            <div className="taskRecycle-container">
-              <TaskRecycle />
+          {(mediatype.isBigScreen || mediatype.isSmallScreen) && (
+            <>
+              <div className="recycle-column">
+                <h2>Deleted Tasks</h2>
+                <div className="taskRecycle-container">
+                  <TaskRecycle />
+                </div>
+              </div>
+              {role === "PRODUCT_OWNER" && (
+                <div className="recycle-column">
+                  <h2>Deleted Users</h2>
+                  <div className="userRecycle-container">
+                    <UserRecycle />
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+          {mediatype.isMobile && (
+            <div className="recycle-column">
+              <h2>Deleted Tasks</h2>
+              <div className="taskRecycle-container">
+                <TaskRecycle />
+              </div>
             </div>
-          </div>
-          {role === "PRODUCT_OWNER" && (<div className="recycle-column">
-            <h2>Deleted Users</h2>
-            <div className="userRecycle-container">
-              <UserRecycle />
-            </div>
-          </div>)}
+          )}
         </div>
         <div className="homeMenu-button-container">
           <button className="recycle-home-button" onClick={() => navigate("/Home")}>
