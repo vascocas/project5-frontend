@@ -17,9 +17,9 @@ export const websocketStore = create(
       setUnreadCount: (count) => set({ unreadCount: count }), // Function to update unread count
 
       // New state variables and functions for chat messages
-      chatMessages: [], // state variable to keep all chat messages
-      newMessage: "", // state variable to store new message
-      chatId: "", // state variable to store chatId
+      chatMessages: [],
+      newMessage: "",
+      chatId: "",
 
       // Function to add a new message to the list of chat messages
       addMessage: (message) =>
