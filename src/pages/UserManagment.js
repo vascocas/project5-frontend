@@ -113,7 +113,7 @@ const UserManagement = () => {
   useEffect(() => {
     fetchUsers();
     showTokenTimer(); // Fetch token timer when the component mounts
-  }, [token, pageSize, currentPage, filterValue, orderValue]);
+  }, [pageSize, currentPage, filterValue, orderValue]);
 
   const handleRoleFilter = (e) => {
     setFilterValue(e.target.value); // Update the filter value when role selection changes
@@ -159,6 +159,7 @@ const UserManagement = () => {
         setUsers(users.filter((user) => user.id !== userId));
         // Update usernames list
         setUsernames(usernames.filter((username) => username.id !== userId));
+        fetchUsers();
       } else {
         // Handle error
         alert("Failed to remove user.");
