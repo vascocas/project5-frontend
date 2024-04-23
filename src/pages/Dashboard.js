@@ -234,11 +234,20 @@ const Dashboard = () => {
         <h1 className="page-title">Dashboard</h1>
         <div className="dashboard-container">
           <div className="metrics-container">
-            <div className="users-count">
-              <h2>Users Count</h2>
-              <p>Total Users: {totalUsers}</p>
-              <p>Validated Users: {validatedUsers}</p>
-              <p>Non-Validated Users: {nonValidatedUsers}</p>
+            <div className="user-container">
+              <h2 className="user-heading">Users Count</h2>
+              <div className="user-count-container">
+              <div className="labels">
+                <p>Total Users:</p>
+                <p>Validated Users:</p>
+                <p>Non-Validated Users:</p>
+              </div>
+              <div className="values">
+                <p className="user-count">{totalUsers}</p>
+                <p className="user-count">{validatedUsers}</p>
+                <p className="user-count">{nonValidatedUsers}</p>
+              </div>
+              </div>
             </div>
             <div className="tasks-metrics">
               <h2>Tasks Metrics</h2>
@@ -285,8 +294,8 @@ const Dashboard = () => {
               <h2>Tasks Completed Over Time</h2>
               <div>
                 <LineChart
-                  width={500}
-                  height={500}
+                  width={450}
+                  height={300}
                   data={tasksCompletedOverTime}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
@@ -294,27 +303,30 @@ const Dashboard = () => {
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Line type="monotone" dataKey="value" stroke="#8884d8" />
+                  <Line type="monotone" dataKey="value" stroke="#4e58ee" />
                 </LineChart>
               </div>
             </div>
             <div>
               <h2>User Registrations Over Time</h2>
               <div>
-                <LineChart width={500} height={500} data={userRegistrations}>
+                <LineChart width={450} height={300} data={userRegistrations}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="date" />
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Line type="monotone" dataKey="value" stroke="#8884d8" />
+                  <Line type="monotone" dataKey="value" stroke="#4e58ee" />
                 </LineChart>
               </div>
             </div>
           </div>
         </div>
         <div className="homeMenu-button-container">
-          <button className="recycle-home-button" onClick={() => navigate("/Home")}>
+          <button
+            className="recycle-home-button"
+            onClick={() => navigate("/Home")}
+          >
             Back to Scrum Board
           </button>
         </div>

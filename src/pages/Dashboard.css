@@ -39,7 +39,7 @@
     color: #333;
   }
   
-  .users-count p,
+  .metrics-container p,
   .tasks-metrics p {
     margin: 5px 0;
     color: #666;
@@ -55,5 +55,22 @@
   
   h2 {
     margin-bottom: 20px;
+  }
+  
+  .user-count-container p {
+    margin-bottom: 5px; /* Add some spacing between paragraphs */
+  }
+  
+  .user-count-container .user-count {
+    color: #4e58ee;
+  }
+
+  .user-count-container {
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .labels, .values {
+    margin-left: 20px; /* Add some spacing between labels and values */
   }
   
