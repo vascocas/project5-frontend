@@ -2,12 +2,19 @@ import React, { useEffect } from "react";
 import { taskStore } from "../../stores/TaskStore";
 import { userStore } from "../../stores/UserStore";
 import { baseURL } from "../../pages/Requests";
+import MediaType from "../media/MediaType";
 import "../../pages/RecycleBin.css";
 
 const TaskRecycle = () => {
   const { deletedTasks, setDeletedTasks } = taskStore();
   const { token } = userStore();
   const { role } = userStore(state => state);
+
+  const mediatype = userStore((state) => state.mediatype);
+
+  // Call MediaType component to handle media type detection
+  MediaType();
+  console.log("Task Recycle Media Type: ", mediatype);
 
   useEffect(() => {
     const fetchDeletedTasks = async () => {
@@ -101,19 +108,37 @@ const TaskRecycle = () => {
       <thead className="table-header-recycle">
         <tr>
           <th className="table-header-recycle">Id</th>
-          <th className="table-header-recycle">Title</th>
-          {(role === "PRODUCT_OWNER" && <th className="table-header-recycle">Actions</th>)}
+          {(mediatype.isBigScreen || mediatype.isSmallScreen) && (
+            <th className="table-header-recycle">Title</th>
+          )}
+          {role === "PRODUCT_OWNER" && (
+            <th className="table-header-recycle">Actions</th>
+          )}
         </tr>
       </thead>
       <tbody>
         {deletedTasks.map((task) => (
           <tr key={task.id}>
             <td className="table-row-recycle">{task.id}</td>
-            <td className="table-row-recycle">{task.title}</td>
-            {(role === "PRODUCT_OWNER" && <td>
-              <button className="recycle-button" onClick={() => restoreTask(task.id)}>Restore Task</button>
-              <button className="recycle-button" onClick={() => removeTask(task.id)}>Remove Task</button>
-            </td>)}
+            {(mediatype.isBigScreen || mediatype.isSmallScreen) && (
+              <td className="table-row-recycle">{task.title}</td>
+            )}
+            {role === "PRODUCT_OWNER" && (
+              <td>
+                <button
+                  className="recycle-button"
+                  onClick={() => restoreTask(task.id)}
+                >
+                  Restore Task
+                </button>
+                <button
+                  className="recycle-button"
+                  onClick={() => removeTask(task.id)}
+                >
+                  Remove Task
+                </button>
+              </td>
+            )}
           </tr>
         ))}
       </tbody>

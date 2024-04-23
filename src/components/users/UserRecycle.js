@@ -1,26 +1,29 @@
 import React, { useEffect } from "react";
 import { userStore } from "../../stores/UserStore";
 import { baseURL } from "../../pages/Requests";
+import MediaType from "../media/MediaType";
 import "../../pages/RecycleBin.css";
 
 const UserRecycle = () => {
   const { deletedUsers, setDeletedUsers } = userStore();
+  const mediatype = userStore((state) => state.mediatype);
   const { token } = userStore();
+
+  // Call MediaType component to handle media type detection
+  MediaType();
+  console.log("User Recycle Media Type: ", mediatype);
 
   useEffect(() => {
     const fetchDeletedUsers = async () => {
       try {
-        const response = await fetch(
-          `${baseURL}users/deletedUsers`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "*/*",
-              token: token,
-            },
-          }
-        );
+        const response = await fetch(`${baseURL}users/deletedUsers`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "*/*",
+            token: token,
+          },
+        });
         if (response.ok) {
           const arrayDeleted = await response.json();
           setDeletedUsers(arrayDeleted);
@@ -36,7 +39,6 @@ const UserRecycle = () => {
 
     fetchDeletedUsers();
   }, [token, setDeletedUsers]);
-
 
   const removeUser = async (userId) => {
     const confirmation = window.confirm("Confirm delete user permanantly?");
@@ -72,7 +74,9 @@ const UserRecycle = () => {
       <thead className="table-header-recycle">
         <tr>
           <th className="table-header-recycle">Id</th>
-          <th className="table-header-recycle">Username</th>
+          {(mediatype.isBigScreen || mediatype.isSmallScreen) && (
+            <th className="table-header-recycle">Username</th>
+          )}
           <th className="table-header-recycle">Actions</th>
         </tr>
       </thead>
@@ -80,9 +84,16 @@ const UserRecycle = () => {
         {deletedUsers.map((user) => (
           <tr key={user.id}>
             <td className="table-row-recycle">{user.id}</td>
-            <td className="table-row-recycle">{user.username}</td>
+            {(mediatype.isBigScreen || mediatype.isSmallScreen) && (
+              <td className="table-row-recycle">{user.username}</td>
+            )}
             <td>
-              <button className="recycle-button" onClick={() => removeUser(user.id)}>Remove User</button>
+              <button
+                className="recycle-button"
+                onClick={() => removeUser(user.id)}
+              >
+                Remove User
+              </button>
             </td>
           </tr>
         ))}

@@ -11,6 +11,7 @@ import "../index.css";
 import "./Home.css";
 import { baseURL } from "./Requests";
 import NotifWebSocket from "../components/websocket/NotifWebSocket";
+import MediaType from "../components/media/MediaType";
 
 export const fetchNotifications = async (token, updateNotifications, setUnreadCount) => {
   try {
@@ -45,6 +46,12 @@ function Home() {
   const updateLocale = userStore((state) => state.updateLocale);
   const { updateNotifications, unreadCount, setUnreadCount } =
   websocketStore();
+  const mediatype = userStore((state) => state.mediatype);
+
+    // Call MediaType component to handle media type detection
+    MediaType();
+
+    console.log("media Type: ", mediatype);
 
   NotifWebSocket();
   

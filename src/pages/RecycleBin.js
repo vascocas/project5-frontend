@@ -5,17 +5,13 @@ import { useNavigate } from "react-router-dom";
 import { userStore } from "../stores/UserStore";
 import TaskRecycle from "../components/tasks/TaskRecycle";
 import UserRecycle from "../components/users/UserRecycle";
-import MediaType from "../components/media/MediaType";
 import "../index.css";
 import "./RecycleBin.css";
 
 const RecycleBin = () => {
   const { role } = userStore(state => state);
   const navigate = useNavigate();
-  const mediatype = userStore((state) => state.mediatype);
-
-  // Call MediaType component to handle media type detection
-  MediaType();
+ 
 
   return (
     <div className="page-container">
@@ -24,29 +20,17 @@ const RecycleBin = () => {
       <div className="content-container">
         <h1 className="page-title">Recycle Bin</h1>
         <div className="recycle-content">
-          {(mediatype.isBigScreen || mediatype.isSmallScreen) && (
-            <>
-              <div className="recycle-column">
-                <h2>Deleted Tasks</h2>
-                <div className="taskRecycle-container">
-                  <TaskRecycle />
-                </div>
-              </div>
-              {role === "PRODUCT_OWNER" && (
-                <div className="recycle-column">
-                  <h2>Deleted Users</h2>
-                  <div className="userRecycle-container">
-                    <UserRecycle />
-                  </div>
-                </div>
-              )}
-            </>
-          )}
-          {mediatype.isMobile && (
+          <div className="recycle-column">
+            <h2>Deleted Tasks</h2>
+            <div className="taskRecycle-container">
+              <TaskRecycle />
+            </div>
+          </div>
+          {role === "PRODUCT_OWNER" && (
             <div className="recycle-column">
-              <h2>Deleted Tasks</h2>
-              <div className="taskRecycle-container">
-                <TaskRecycle />
+              <h2>Deleted Users</h2>
+              <div className="userRecycle-container">
+                <UserRecycle />
               </div>
             </div>
           )}
