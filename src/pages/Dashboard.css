@@ -1,0 +1,59 @@
+.page-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  
+  .content-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .dashboard-container {
+    width: 80%;
+    margin-top: 20px;
+  }
+  
+  .metrics-container,
+  .bar-chart-container,
+  .line-chart-container {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px;
+  }
+ 
+  .users-count,
+  .tasks-metrics {
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .users-count h2,
+  .tasks-metrics h2 {
+    margin-bottom: 10px;
+    color: #333;
+  }
+  
+  .users-count p,
+  .tasks-metrics p {
+    margin: 5px 0;
+    color: #666;
+  }
+  
+  .chart {
+    margin: 20px;
+  }
+  
+  h1 {
+    text-align: center;
+  }
+  
+  h2 {
+    margin-bottom: 20px;
+  }
+  

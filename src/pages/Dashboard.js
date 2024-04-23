@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Sidebar from "../components/navbar/Sidebar";
 import { baseURL } from "./Requests";
 import { userStore } from "../stores/UserStore";
 import "./Dashboard.css";
 import {
-  ScatterChart,
-  Scatter,
+  BarChart,
+  Bar,
   LineChart,
   Line,
   XAxis,
@@ -17,6 +18,7 @@ import {
 } from "recharts";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const { token } = userStore();
   const [totalUsers, setTotalUsers] = useState(0);
   const [validatedUsers, setValidatedUsers] = useState(0);
@@ -225,53 +227,96 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="Dashboard" id="dashboard-outer-container">
+    <div className="page-container">
       <Header />
-      <Sidebar
-        pageWrapId={"dashboard-page-wrap"}
-        outerContainerId={"dashboard-outer-container"}
-      />
-      <div className="dashboard-container">
-        <h1>Dashboard</h1>
-        <div>
-          <p>Total Users: {totalUsers}</p>
-          <p>Validated Users: {validatedUsers}</p>
-          <p>Non-Validated Users: {nonValidatedUsers}</p>
-          <p>Average Tasks per User: {averageTasksPerUser}</p>
-          
-          <div>
-            <h2>User Registrations Over Time</h2>
-            <div>
-              <LineChart width={600} height={300} data={userRegistrations}>
+      <Sidebar />
+      <div className="content-container">
+        <h1 className="page-title">Dashboard</h1>
+        <div className="dashboard-container">
+          <div className="metrics-container">
+            <div className="users-count">
+              <h2>Users Count</h2>
+              <p>Total Users: {totalUsers}</p>
+              <p>Validated Users: {validatedUsers}</p>
+              <p>Non-Validated Users: {nonValidatedUsers}</p>
+            </div>
+            <div className="tasks-metrics">
+              <h2>Tasks Metrics</h2>
+              <p>Average Tasks per User: {averageTasksPerUser}</p>
+              <p>Average Task Conclusion Duration: {averageTasksDuration}</p>
+            </div>
+          </div>
+          <div className="bar-chart-container">
+            <div className="chart">
+              <h2>Tasks per Status</h2>
+              <BarChart
+                width={500}
+                height={300}
+                data={tasksPerStatus}
+                margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
+              >
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" />
+                <XAxis dataKey="field" />
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Line type="monotone" dataKey="value" stroke="#8884d8" />
-              </LineChart>
+                <Bar dataKey="sum" name="Tasks Count" fill="#4e58ee" />
+              </BarChart>
             </div>
-          </div>
-          <div>
-            <h2>Tasks Completed Over Time</h2>
-            <div>
-              <ScatterChart
-                width={400}
-                height={400}
+            <div className="chart">
+              <h2>Categories Frequency</h2>
+              <BarChart
+                width={500}
+                height={300}
+                data={categoriesFrequency}
                 margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
               >
-                <CartesianGrid />
-                <XAxis type="number" dataKey="date" name="Date" />
-                <YAxis type="number" dataKey="value" name="Value" />
-                <Tooltip cursor={{ strokeDasharray: "3 3" }} />
-                <Scatter
-                  name="Tasks Completed"
-                  data={tasksCompletedOverTime}
-                  fill="#8884d8"
-                />
-              </ScatterChart>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="field" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="sum" name="Frequency" fill="#4e58ee" />
+              </BarChart>
             </div>
           </div>
+          <div className="line-chart-container">
+            <div>
+              <h2>Tasks Completed Over Time</h2>
+              <div>
+                <LineChart
+                  width={500}
+                  height={500}
+                  data={tasksCompletedOverTime}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="date" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Line type="monotone" dataKey="value" stroke="#8884d8" />
+                </LineChart>
+              </div>
+            </div>
+            <div>
+              <h2>User Registrations Over Time</h2>
+              <div>
+                <LineChart width={500} height={500} data={userRegistrations}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="date" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Line type="monotone" dataKey="value" stroke="#8884d8" />
+                </LineChart>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="homeMenu-button-container">
+          <button className="recycle-home-button" onClick={() => navigate("/Home")}>
+            Back to Scrum Board
+          </button>
         </div>
       </div>
     </div>
