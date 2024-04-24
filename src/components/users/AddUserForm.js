@@ -8,8 +8,6 @@ function AddUserForm() {
   const [message, setMessage] = useState("");
   const [inputs, setInputs] = useState({
     username: "",
-    password: "",
-    confirmPassword: "",
     email: "",
     firstName: "",
     lastName: "",
@@ -33,7 +31,6 @@ function AddUserForm() {
       // Validate form fields
       if (
         !inputs.username ||
-        !inputs.password ||
         !inputs.email ||
         !inputs.firstName ||
         !inputs.lastName ||
@@ -42,35 +39,13 @@ function AddUserForm() {
         setMessage("All fields are required");
         return;
       }
-
-      // Check password length and strong password using regular expression
-      const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{4,}$/;
-      if (
-        inputs.password.length < 4 ||
-        !strongPasswordRegex.test(inputs.password)
-      ) {
-        if (inputs.password.length < 4) {
-          alert("Password must be at least 4 characters long");
-        } else {
-          alert(
-            "Password must contain at least one uppercase letter, one lowercase letter and one number"
-          );
-        }
-        return;
-      }
-
-      // Check if passwords match
-      if (inputs.password !== inputs.confirmPassword) {
-        setMessage("Passwords do not match");
-        return;
-      }
+     
       // Check if role is empty
       if (!inputs.role) {
         setMessage("No role selected");
       }
       const requestBody = JSON.stringify({
         username: inputs.username,
-        password: inputs.password,
         email: inputs.email,
         firstName: inputs.firstName,
         lastName: inputs.lastName,
@@ -97,8 +72,6 @@ function AddUserForm() {
         // Clear input fields after successful addition
         setInputs({
           username: "",
-          password: "",
-          confirmPassword: "",
           email: "",
           firstName: "",
           lastName: "",
@@ -123,20 +96,6 @@ function AddUserForm() {
         placeholder="Username"
         name="username"
         value={inputs.username}
-        onChange={handleChange}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        name="password"
-        value={inputs.password}
-        onChange={handleChange}
-      />
-      <input
-        type="password"
-        placeholder="Confirm Password"
-        name="confirmPassword"
-        value={inputs.confirmPassword}
         onChange={handleChange}
       />
       <input

@@ -54,16 +54,6 @@
     background-color: #0056b3; /* Darker blue on hover */
   }
   
-  .help-tip {
-    display: none;
-    color: #999;
-  }
-  
-  label:hover .help-tip,
-  input:focus + .help-tip {
-    display: inline-block;
-  }
-  
   /* Login page specific styles */
   .Login .page-wrap {
     max-width: 300px; /* Make the form narrower */

@@ -10,8 +10,6 @@ function Register() {
   const { setIsLoginPage } = userStore();
   const [inputs, setInputs] = useState({
     username: "",
-    password: "",
-    confirmPassword: "",
     email: "",
     firstName: "",
     lastName: "",
@@ -30,8 +28,6 @@ function Register() {
     event.preventDefault();
     const {
       username,
-      password,
-      confirmPassword,
       email,
       firstName,
       lastName,
@@ -40,27 +36,8 @@ function Register() {
     } = inputs;
 
     // Check for empty inputs
-    if (!username || !password || !email || !firstName || !lastName || !phone) {
+    if (!username || !email || !firstName || !lastName || !phone) {
       alert("All fields are required");
-      return;
-    }
-
-    // Check password length and strong password using regular expression
-    const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{4,}$/;
-    if (password.length < 4 || !strongPasswordRegex.test(password)) {
-      if (password.length < 4) {
-        alert("Password must be at least 4 characters long");
-      } else {
-        alert(
-          "Password must contain at least one uppercase letter, one lowercase letter and one number"
-        );
-      }
-      return;
-    }
-
-    // Check if passwords match
-    if (password !== confirmPassword) {
-      alert("Passwords do not match");
       return;
     }
 
@@ -77,7 +54,6 @@ function Register() {
           },
           body: JSON.stringify({
             username,
-            password,
             email,
             firstName,
             lastName,
@@ -117,28 +93,6 @@ function Register() {
             />
           </label>
           <label>
-            Enter your password:
-            <input
-              type="password"
-              name="password"
-              value={inputs.password}
-              onChange={handleChange}
-            />
-            <span className="help-tip">
-              Password must be at least 4 characters long and contain at least
-              one uppercase letter, one lowercase letter, one number
-            </span>
-          </label>
-          <label>
-            Confirm your password:
-            <input
-              type="password"
-              name="confirmPassword"
-              value={inputs.confirmPassword}
-              onChange={handleChange}
-            />
-          </label>
-          <label>
             Enter your email:
             <input
               type="email"
@@ -146,9 +100,6 @@ function Register() {
               value={inputs.email}
               onChange={handleChange}
             />
-            <span className="help-tip">
-              We'll send your registration confirmation here
-            </span>
           </label>
           <label>
             Enter your first name:
@@ -186,7 +137,6 @@ function Register() {
                 }
               }}
             />
-            <span className="help-tip">Format: XXXXXXXXX</span>
           </label>
           <label>
             Enter your photo URL:
@@ -196,9 +146,6 @@ function Register() {
               value={inputs.photo}
               onChange={handleChange}
             />
-            <span className="help-tip">
-              Provide a URL to your profile picture
-            </span>
           </label>
           <input type="submit" value="Register" />
         </form>
