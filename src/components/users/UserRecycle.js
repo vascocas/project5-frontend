@@ -74,7 +74,7 @@ const UserRecycle = () => {
       <thead className="table-header-recycle">
         <tr>
           <th className="table-header-recycle">Id</th>
-          {(mediatype.isBigScreen || mediatype.isSmallScreen) && (
+          {mediatype.isBigScreen && (
             <th className="table-header-recycle">Username</th>
           )}
           <th className="table-header-recycle">Actions</th>
@@ -84,7 +84,7 @@ const UserRecycle = () => {
         {deletedUsers.map((user) => (
           <tr key={user.id}>
             <td className="table-row-recycle">{user.id}</td>
-            {(mediatype.isBigScreen || mediatype.isSmallScreen) && (
+            {mediatype.isBigScreen && (
               <td className="table-row-recycle">{user.username}</td>
             )}
             <td>

@@ -1,5 +1,3 @@
-/* RecycleBin.css */
-
 .page-container {
   display: flex;
   flex-direction: column;
@@ -21,19 +19,6 @@
 
 .table-row-recycle {
   text-align: center;
-}
-
-@media (min-width: 750px) {
-  .recycle-content {
-    display: flex;
-    justify-content: center;
-  }
-}
-
-@media (max-width: 750px) {
-  .recycle-content {
-    display:contents;
-  }
 }
 
 .recycle-column {
@@ -76,4 +61,16 @@
     flex-direction: row;
     align-items: center;
   }
+
+  .recycle-content {
+    display: flex;
+    justify-content: center;
+  }
 }
+
+@media (max-width: 750px) {
+  .recycle-content {
+    display:contents;
+  }
+}
+

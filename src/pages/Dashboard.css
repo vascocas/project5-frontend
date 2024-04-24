@@ -59,7 +59,7 @@ h2 {
 }
 
 .user-count-container p {
-  margin-bottom: 5px; /* Add some spacing between paragraphs */
+  margin-bottom: 5px;
 }
 
 .user-count-container .user-count,
@@ -72,4 +72,20 @@ h2 {
   display: flex;
   flex-direction: row;
   align-items: center;
+}
+
+/* Media query for screens with maximum width of 1000px */
+@media (max-width: 1000px) {
+  .metrics-container,
+  .bar-chart-container,
+  .line-chart-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .metrics-container > div,
+  .bar-chart-container > div,
+  .line-chart-container > div {
+    margin-bottom: 20px;
+  }
 }

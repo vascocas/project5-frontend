@@ -12,8 +12,8 @@ function MediaType() {
 
   const handleResize = () => {
     setMediaType({
-      isBigScreen: window.matchMedia("(min-width: 1224px)").matches,
-      isSmallScreen: window.matchMedia("(min-width: 750px)").matches && window.matchMedia("(max-width: 1224px)").matches,
+      isBigScreen: window.matchMedia("(min-width: 1024px)").matches,
+      isSmallScreen: window.matchMedia("(min-width: 750px)").matches && window.matchMedia("(max-width: 1024px)").matches,
       isMobile: window.matchMedia("(max-width: 750px)").matches,
       isPortrait: window.matchMedia("(orientation: portrait)").matches,
     });

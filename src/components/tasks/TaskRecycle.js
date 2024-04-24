@@ -108,7 +108,7 @@ const TaskRecycle = () => {
       <thead className="table-header-recycle">
         <tr>
           <th className="table-header-recycle">Id</th>
-          {(mediatype.isBigScreen || mediatype.isSmallScreen) && (
+          {mediatype.isBigScreen && (
             <th className="table-header-recycle">Title</th>
           )}
           {role === "PRODUCT_OWNER" && (
@@ -120,7 +120,7 @@ const TaskRecycle = () => {
         {deletedTasks.map((task) => (
           <tr key={task.id}>
             <td className="table-row-recycle">{task.id}</td>
-            {(mediatype.isBigScreen || mediatype.isSmallScreen) && (
+            {mediatype.isBigScreen && (
               <td className="table-row-recycle">{task.title}</td>
             )}
             {role === "PRODUCT_OWNER" && (
