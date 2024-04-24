@@ -1,76 +1,75 @@
 .page-container {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-  }
-  
-  .content-container {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .dashboard-container {
-    width: 80%;
-    margin-top: 20px;
-  }
-  
-  .metrics-container,
-  .bar-chart-container,
-  .line-chart-container {
-    display: flex;
-    justify-content: space-around;
-    margin: 20px;
-  }
- 
-  .users-count,
-  .tasks-metrics {
-    background-color: #f0f0f0;
-    border-radius: 8px;
-    padding: 20px;
-    margin: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .users-count h2,
-  .tasks-metrics h2 {
-    margin-bottom: 10px;
-    color: #333;
-  }
-  
-  .metrics-container p,
-  .tasks-metrics p {
-    margin: 5px 0;
-    color: #666;
-  }
-  
-  .chart {
-    margin: 20px;
-  }
-  
-  h1 {
-    text-align: center;
-  }
-  
-  h2 {
-    margin-bottom: 20px;
-  }
-  
-  .user-count-container p {
-    margin-bottom: 5px; /* Add some spacing between paragraphs */
-  }
-  
-  .user-count-container .user-count {
-    color: #4e58ee;
-  }
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
 
-  .user-count-container {
-    display: flex;
-    flex-direction: row;
-  }
-  
-  .labels, .values {
-    margin-left: 20px; /* Add some spacing between labels and values */
-  }
-  
+.content-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dashboard-container {
+  width: 80%;
+  margin-top: 20px;
+}
+
+.metrics-container,
+.bar-chart-container,
+.line-chart-container {
+  display: flex;
+  justify-content: space-around;
+  margin: 20px;
+}
+
+.users-count,
+.tasks-metrics {
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.users-count h2,
+.tasks-metrics h2 {
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.users-count p,
+.metrics-container p,
+.tasks-metrics p {
+  margin: 5px;
+  color: #666;
+}
+
+.chart {
+  margin: 20px;
+}
+
+h1 {
+  text-align: center;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+.user-count-container p {
+  margin-bottom: 5px; /* Add some spacing between paragraphs */
+}
+
+.user-count-container .user-count,
+.tasks-metrics-container .tasks-count {
+  color: #4e58ee;
+}
+
+.user-count-container,
+.tasks-metrics-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}

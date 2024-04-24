@@ -237,22 +237,30 @@ const Dashboard = () => {
             <div className="user-container">
               <h2 className="user-heading">Users Count</h2>
               <div className="user-count-container">
-              <div className="labels">
-                <p>Total Users:</p>
-                <p>Validated Users:</p>
-                <p>Non-Validated Users:</p>
-              </div>
-              <div className="values">
-                <p className="user-count">{totalUsers}</p>
-                <p className="user-count">{validatedUsers}</p>
-                <p className="user-count">{nonValidatedUsers}</p>
-              </div>
+                <div className="labels">
+                  <p>Total Users:</p>
+                  <p>Validated Users:</p>
+                  <p>Non-Validated Users:</p>
+                </div>
+                <div className="values">
+                  <p className="user-count">{totalUsers}</p>
+                  <p className="user-count">{validatedUsers}</p>
+                  <p className="user-count">{nonValidatedUsers}</p>
+                </div>
               </div>
             </div>
-            <div className="tasks-metrics">
-              <h2>Tasks Metrics</h2>
-              <p>Average Tasks per User: {averageTasksPerUser}</p>
-              <p>Average Task Conclusion Duration: {averageTasksDuration}</p>
+            <div className="tasks-container">
+              <h2 className="task-heading">Tasks Metrics</h2>
+              <div className="tasks-metrics-container">
+                <div className="labels">
+                  <p>Average Tasks per User:</p>
+                  <p>Average Task Conclusion Duration:</p>
+                </div>
+                <div className="values">
+                  <p className="tasks-count">{averageTasksPerUser}</p>
+                  <p className="tasks-count">{averageTasksDuration}</p>
+                </div>
+              </div>
             </div>
           </div>
           <div className="bar-chart-container">
