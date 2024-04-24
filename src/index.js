@@ -6,6 +6,7 @@ import { Route, Routes } from 'react-router-dom';
 import App from './App';
 import Login from './pages/Login'
 import Register from './pages/Register'
+import ValidateUser from './pages/ValidateUser'
 import Home from './pages/Home'
 import Task from './pages/Task'
 import Profile from './pages/Profile'
@@ -25,6 +26,7 @@ root.render(
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/home" element={<Authorization> <Home /> </Authorization>} />
+      <Route path="/validate" element={<ValidateUser />} />
       <Route path="/task" element={<Authorization> <Task /> </Authorization>} />
       <Route path="/profile" element={<Authorization> <Profile /> </Authorization>} />
       <Route path="/profile/:usernameParam" element={<Authorization> <PublicProfile /> </Authorization>} />

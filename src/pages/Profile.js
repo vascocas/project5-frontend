@@ -64,7 +64,7 @@ function Profile() {
       };
       const requestBody = JSON.stringify(userData);
       const response = await fetch(
-        `http://localhost:8080/project5-backend/rest/users/profile`,
+        `${baseURL}users/profile`,
         {
           method: "PUT",
           headers: {
