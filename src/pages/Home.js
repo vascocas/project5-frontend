@@ -13,17 +13,19 @@ import { baseURL } from "./Requests";
 import NotifWebSocket from "../components/websocket/NotifWebSocket";
 import MediaType from "../components/media/MediaType";
 
-export const fetchNotifications = async (token, updateNotifications, setUnreadCount) => {
+export const fetchNotifications = async (
+  token,
+  updateNotifications,
+  setUnreadCount
+) => {
   try {
-    const response = await fetch(`${baseURL}notifications`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          token: token,
-        },
-      }
-    );
+    const response = await fetch(`${baseURL}notifications`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        token: token,
+      },
+    });
 
     if (response.ok) {
       const data = await response.json();
@@ -44,20 +46,15 @@ function Home() {
   const { token } = userStore();
   const locale = userStore((state) => state.locale);
   const updateLocale = userStore((state) => state.updateLocale);
-  const { updateNotifications, unreadCount, setUnreadCount } =
-  websocketStore();
-  const mediatype = userStore((state) => state.mediatype);
+  const { updateNotifications, unreadCount, setUnreadCount } = websocketStore();
 
-    // Call MediaType component to handle media type detection
-    MediaType();
-
-    console.log("media Type: ", mediatype);
+  // Call MediaType component to handle media type detection
+  MediaType();
 
   NotifWebSocket();
-  
+
   // Function to fetch user notifications
   useEffect(() => {
-
     fetchNotifications(token, updateNotifications, setUnreadCount);
   }, [updateNotifications, setUnreadCount]);
 
@@ -65,8 +62,6 @@ function Home() {
     console.log(event.target.value);
     updateLocale(event.target.value);
   };
-
-
 
   return (
     <div className="Home" id="home-outer-container">
