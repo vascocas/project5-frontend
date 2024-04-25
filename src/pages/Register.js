@@ -40,9 +40,8 @@ function Register() {
       alert("All fields are required");
       return;
     }
-
+    
     let message;
-
     try {
       const response = await fetch(
         `${baseURL}users/register`,

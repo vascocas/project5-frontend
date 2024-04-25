@@ -5,7 +5,13 @@ import { baseURL } from "./Requests";
 import "./Login_Register.css";
 
 function Login() {
-  const { updateLoggedId, updateUsername, updateToken, updateRole, updatePhoto } = userStore();
+  const {
+    updateLoggedId,
+    updateUsername,
+    updateToken,
+    updateRole,
+    updatePhoto,
+  } = userStore();
   const [inputs, setInputs] = useState({ username: "", password: "" });
   const navigate = useNavigate();
 
@@ -27,17 +33,14 @@ function Login() {
     let message;
 
     try {
-      const response = await fetch(
-        `${baseURL}users/login`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            username: username,
-            password: password,
-          },
-        }
-      );
+      const response = await fetch(`${baseURL}users/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          username: username,
+          password: password,
+        },
+      });
 
       if (response.ok) {
         const loginDto = await response.json();
@@ -57,6 +60,43 @@ function Login() {
     } catch (error) {
       console.error("Error logging in:", error);
       alert(message);
+    }
+  };
+
+  const handleResetPassword = async (event) => {
+    event.preventDefault();
+    const { username } = inputs;
+
+    // Input validations
+    if (!username.trim()) {
+      alert("Username cannot be empty.");
+      return;
+    }
+    const userData = {
+      username: username,
+    };
+
+      // Log the request body before sending
+      console.log("Request Body:", userData);
+
+    const requestBody = JSON.stringify(userData);
+    try {
+      const response = await fetch(`${baseURL}users/reset/email`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: requestBody,
+      });
+      if (response.ok) {
+        // Password email recovery sent successfully
+        alert("Please check your email inbox!");
+      } else {
+        // Handle error
+        console.log("Failed to send recovery password email.");
+      }
+    } catch (error) {
+      console.error("Error sending email:", error);
     }
   };
 
@@ -87,6 +127,14 @@ function Login() {
           </div>
           <div className="register-button">
             <input type="submit" value="Login" />
+          </div>
+          <div className="forgot-password">
+            <br></br>
+            <label htmlFor="resetPassword">Forgot your password?</label>
+            <br></br>
+            <button id="resetPasswordButton" onClick={handleResetPassword}>
+              Reset Password
+            </button>
           </div>
           <br />
           <br />
