@@ -1,11 +1,15 @@
 {
     "addTask-title" : "Adicionar Tarefa",
     "title":"Título",
+    "title-placeholder": "Insira o título",
     "description":"Descrição",
+    "description-placeholder" : "Insira a descrição",
     "start-date":"Data de início",
     "end-date" : "Data de fim",
     "priority" : "Prioridade",
+    "select-priority-placeholder" : "Selecione a prioridade",        
     "category-select" : "Categoria",
+    "select-category-placeholder" : "Selecione a categoria",
     "addTask-label" : "Adicionar",
     "my-profile" : "Meu Perfil",
     "label-username" : "Nome de utilizador",
@@ -17,4 +21,5 @@
     "button-update" : "Atualizar Perfil",
     "modal-password" : "Mudar Password",
     "button-home" : "Menu Principal"
+    
     }

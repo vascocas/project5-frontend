@@ -124,7 +124,7 @@ function AddTaskForm() {
           <input
             type="text"
             id="taskName"
-            placeholder="Insert title"
+            placeholder={<FormattedMessage id="title-placeholder" />}
             maxLength="20"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
@@ -134,7 +134,7 @@ function AddTaskForm() {
           </label>
           <textarea
             id="taskDescription"
-            placeholder="Insert description"
+            placeholder={<FormattedMessage id="description-placeholder" />}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           ></textarea>
@@ -165,7 +165,9 @@ function AddTaskForm() {
               value={priority}
               onChange={handlePriorityChange}
             >
-              <option value="">Select priority</option>
+              <option value="">
+              <FormattedMessage id="select-priority-placeholder" />
+              </option>
               <option value="LOW_PRIORITY">Low</option>
               <option value="MEDIUM_PRIORITY">Medium</option>
               <option value="HIGH_PRIORITY">High</option>
@@ -184,7 +186,9 @@ function AddTaskForm() {
               value={category}
               onChange={(e) => setCategory(e.target.value)}
             >
-              <option value="">Select category</option>
+              <option value="">
+              <FormattedMessage id="select-category-placeholder" />
+              </option>
               {categories.map((category) => (
                 <option key={category.id} value={category.name}>
                   {category.name}
