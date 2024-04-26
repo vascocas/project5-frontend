@@ -38,7 +38,7 @@ const UserRecycle = () => {
     };
 
     fetchDeletedUsers();
-  }, [token, setDeletedUsers]);
+  }, []);
 
   const removeUser = async (userId) => {
     const confirmation = window.confirm("Confirm delete user permanantly?");

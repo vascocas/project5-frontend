@@ -27,7 +27,6 @@ export const fetchTasks = async (
     } else if (filteredCategoryId) {
       url += `/category/?categoryId=${filteredCategoryId}`;
     }
-    console.log("url: ", url);
     const response = await fetch(url, {
       method: "GET",
       headers: {
