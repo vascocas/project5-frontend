@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { userStore } from "../../stores/UserStore";
 import { baseURL } from "../../pages/Requests";
 import { useNavigate } from "react-router-dom";
-import "../../pages/Profile.css";
+import "../../pages/UserManagement.css";
 import "../../index.css";
 
 function UsersProfile() {

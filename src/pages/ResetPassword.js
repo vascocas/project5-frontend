@@ -82,7 +82,7 @@ function ResetPassword() {
         navigate("/");
       } else {
         // Display an error message if request fails
-        alert("Something went wrong");
+        alert("Expired token.");
       }
     } catch (error) {
       console.error("Error validating user:", error);

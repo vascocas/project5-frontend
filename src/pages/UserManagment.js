@@ -4,7 +4,6 @@ import Sidebar from "../components/navbar/Sidebar";
 import AddUserForm from "../components/users/AddUserForm";
 import UpdateRoleModal from "../components/users/UpdateRoleModal";
 import UsersProfile from "../components/users/UsersProfile";
-import ChangePasswordModal from "../components/users/ChangePasswordModal";
 import { userStore } from "../stores/UserStore";
 import { useNavigate } from "react-router-dom";
 import { useTable, usePagination } from "react-table";
@@ -17,7 +16,6 @@ const UserManagement = () => {
   const navigate = useNavigate();
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
   const [tokenTimer, setTokenTimer] = useState(0);
   const [filterValue, setFilterValue] = useState("");
   const [orderValue, setOrderValue] = useState("ASC"); // Default order value
@@ -39,12 +37,6 @@ const UserManagement = () => {
               onClick={() => handleUpdateRole(row.original.id)}
             >
               Update Role
-            </button>
-            <button
-              className="users-table-button1"
-              onClick={() => handleChangePassword(row.original.id)}
-            >
-              Change Password
             </button>
             <button
               className="users-table-button"
@@ -207,46 +199,6 @@ const UserManagement = () => {
     }
   };
 
-  const handleChangePassword = async (userId) => {
-    setSelectedUserId(userId);
-    setShowChangePasswordModal(true);
-  };
-
-  const handleConfirmChangePassword = async (
-    selectedUserId,
-    actualPassword,
-    newPassword,
-    confirmNewPassword
-  ) => {
-    try {
-      const userData = {
-        id: selectedUserId,
-        password: actualPassword,
-        newPass: newPassword,
-        confirmPass: confirmNewPassword,
-      };
-      const requestBody = JSON.stringify(userData);
-      const response = await fetch(`${baseURL}users/othersPassword`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "*/*",
-          token: token,
-        },
-        body: requestBody,
-      });
-      if (response.ok) {
-        // Password updated successfully
-        alert("Password updated successfully!");
-      } else {
-        // Handle error
-        alert("Failed to update password.");
-      }
-    } catch (error) {
-      console.error("Error updating password:", error);
-    }
-  };
-
   const showTokenTimer = async () => {
     try {
       const response = await fetch(`${baseURL}users/tokenTimer`, {
@@ -406,13 +358,6 @@ const UserManagement = () => {
                 show={showModal}
                 onClose={() => setShowModal(false)}
                 onConfirm={handleConfirmUpdateRole}
-              />
-              <ChangePasswordModal
-                isOpen={showChangePasswordModal}
-                onRequestClose={() => setShowChangePasswordModal(false)}
-                onSubmit={handleConfirmChangePassword}
-                selectedUserId={selectedUserId}
-                title="Change Password"
               />
               <div className="homeMenu-button-container">
                 <button

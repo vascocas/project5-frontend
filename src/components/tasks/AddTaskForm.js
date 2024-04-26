@@ -23,16 +23,13 @@ function AddTaskForm() {
       // Get all categories to populate categories dropdown menu
       const fetchCategories = async () => {
         try {
-          const response = await fetch(
-            `${baseURL}tasks/categories`,
-            {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-                token: token,
-              },
-            }
-          );
+          const response = await fetch(`${baseURL}tasks/categories`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              token: token,
+            },
+          });
           if (response.ok) {
             const data = await response.json();
             // Set categories in Task Store
@@ -77,17 +74,14 @@ function AddTaskForm() {
         category: category,
       });
 
-      const response = await fetch(
-        `${baseURL}tasks/`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            token: token,
-          },
-          body: requestBody,
-        }
-      );
+      const response = await fetch(`${baseURL}tasks/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          token: token,
+        },
+        body: requestBody,
+      });
 
       if (response.ok) {
         const newTask = await response.json();
@@ -110,99 +104,107 @@ function AddTaskForm() {
     }
   };
 
+ // Placeholders text for title and description input field
+const titlePlaceholder = languages[locale]["title-placeholder"];
+const descriptionPlaceholder = languages[locale]["description-placeholder"];
+
+
   return (
     <aside className="add-task-sidebar">
       <IntlProvider locale={locale} messages={languages[locale]}>
-      <div className="add-task-container">
-        <h3 id="addTask-h3">
-        <FormattedMessage id="addTask-title"/>
-        </h3>
-        <div className="input-fields-container">
-          <label className="labels-task-name" htmlFor="taskName">
-          <FormattedMessage id="title"/>
-          </label>
-          <input
-            type="text"
-            id="taskName"
-            placeholder={<FormattedMessage id="title-placeholder" />}
-            maxLength="20"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-          <label className="labels-task-description" htmlFor="taskDescription">
-          <FormattedMessage id="description"/>
-          </label>
-          <textarea
-            id="taskDescription"
-            placeholder={<FormattedMessage id="description-placeholder" />}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          ></textarea>
-          <label className="labels-task-dates" htmlFor="startDate">
-          <FormattedMessage id="start-date"/>
-          </label>
-          <input
-            type="date"
-            id="startDate"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-          />
-          <label className="labels-task-dates" htmlFor="endDate">
-          <FormattedMessage id="end-date"/>
-          </label>
-          <input
-            type="date"
-            id="endDate"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-          />
-          <label className="labels-task-priority" htmlFor="priority">
-            <FormattedMessage id="priority"/>
-          </label>
-          <div className="dropdown-priority">
-            <select
-              id="dropdown-task-priority"
-              value={priority}
-              onChange={handlePriorityChange}
-            >
-              <option value="">
-              <FormattedMessage id="select-priority-placeholder" />
-              </option>
-              <option value="LOW_PRIORITY">Low</option>
-              <option value="MEDIUM_PRIORITY">Medium</option>
-              <option value="HIGH_PRIORITY">High</option>
-            </select>
-          </div>
-          <div className="dropdown-category">
-            <label
-              className="labels-task-category"
-              htmlFor="dropdown-task-categories"
-            >
-              <FormattedMessage id="category-select"/>
+        <div className="add-task-container">
+          <h3 id="addTask-h3">
+            <FormattedMessage id="addTask-title" />
+          </h3>
+          <div className="input-fields-container">
+            <label className="labels-task-name" htmlFor="taskName">
+              <FormattedMessage id="title" />
             </label>
-            <select
-              name="task-categories"
-              id="dropdown-task-categories"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
+            <input
+              type="text"
+              id="taskName"
+              placeholder={titlePlaceholder}
+              maxLength="20"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+            <label
+              className="labels-task-description"
+              htmlFor="taskDescription"
             >
-              <option value="">
-              <FormattedMessage id="select-category-placeholder" />
-              </option>
-              {categories.map((category) => (
-                <option key={category.id} value={category.name}>
-                  {category.name}
+              <FormattedMessage id="description" />
+            </label>
+            <textarea
+              id="taskDescription"
+              placeholder={descriptionPlaceholder}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            ></textarea>
+            <label className="labels-task-dates" htmlFor="startDate">
+              <FormattedMessage id="start-date" />
+            </label>
+            <input
+              type="date"
+              id="startDate"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+            />
+            <label className="labels-task-dates" htmlFor="endDate">
+              <FormattedMessage id="end-date" />
+            </label>
+            <input
+              type="date"
+              id="endDate"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+            />
+            <label className="labels-task-priority" htmlFor="priority">
+              <FormattedMessage id="priority" />
+            </label>
+            <div className="dropdown-priority">
+              <select
+                id="dropdown-task-priority"
+                value={priority}
+                onChange={handlePriorityChange}
+              >
+                <option value="">
+                  <FormattedMessage id="select-priority-placeholder" />
                 </option>
-              ))}
-            </select>
-            <div className="add-button"></div>
-            <button id="addTask" onClick={handleAddTask}>
-            <FormattedMessage id="addTask-label"/>
-            </button>
-            <p id="warningMessage">{message}</p>
+                <option value="LOW_PRIORITY">Low</option>
+                <option value="MEDIUM_PRIORITY">Medium</option>
+                <option value="HIGH_PRIORITY">High</option>
+              </select>
+            </div>
+            <div className="dropdown-category">
+              <label
+                className="labels-task-category"
+                htmlFor="dropdown-task-categories"
+              >
+                <FormattedMessage id="category-select" />
+              </label>
+              <select
+                name="task-categories"
+                id="dropdown-task-categories"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+              >
+                <option value="">
+                  <FormattedMessage id="select-category-placeholder" />
+                </option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.name}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+              <div className="add-button"></div>
+              <button id="addTask" onClick={handleAddTask}>
+                <FormattedMessage id="addTask-label" />
+              </button>
+              <p id="warningMessage">{message}</p>
+            </div>
           </div>
         </div>
-      </div>
       </IntlProvider>
     </aside>
   );

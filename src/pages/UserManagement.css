@@ -143,7 +143,10 @@
 .add-user-form input,
 .add-user-form select {
   width: 100%;
-  margin-bottom: 10px;
+  margin-left: 0px;
+  margin-right: 10px;
+  margin-top: 10px;
+  margin-bottom: 15px;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -251,11 +254,16 @@
 }
 
 #addUserTitle{
-  margin-bottom: 85px;
+  margin-top: 60px;
+  margin-bottom: 100px;
+}
+
+#usersProfileTitle{
+  margin-top: 55px;
 }
 
 #otherUserProfile{
-  margin-bottom: 23px;
+  margin: none;
 }
 
 #otherUserButton{

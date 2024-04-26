@@ -41,7 +41,7 @@ function ValidateUser() {
         alert("User validated successfully!");
       } else {
         // Display an error message if request fails
-        alert("Unable to validate the user");
+        alert("Unable to validate the user. Expired token.");
       }
     } catch (error) {
       console.error("Error validating user:", error);
