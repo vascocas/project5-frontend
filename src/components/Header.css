@@ -1,44 +1,71 @@
 header {
     display: flex;
-    justify-content: flex-end; /* Align items to the end of the container (right side) */
-    align-items: center; /* Align items vertically at the center */
+    justify-content: flex-end;
+    align-items: center;
     padding: 10px;
   }
   
   .header-right {
     display: flex;
-    align-items: center; /* Align items vertically at the center */
+    align-items: center;
   }
   
   .welcome-message {
-    font-size: 20px; /* Adjust font size for the welcome message */
-    font-weight: bold; /* Make the welcome message bold */
-    margin-right: 20px; /* Add some space between the welcome message and logout button */
+    font-size: 20px; 
+    font-weight: bold; 
+    margin-right: 20px; 
     cursor: pointer;
     text-decoration: none;
     color: black;
   }
   
   .user-name {
-    color: #013d7c; /* Change the color of the username for better visibility */
+    color: #013d7c;
   }
   
   .logout-button {
-    font-size: 18px; /* Adjust font size for the logout button */
-    padding: 10px 20px; /* Add padding to make the button bigger */
-    background-color: #007bff; /* Change the background color of the button */
-    color: #ffffff; /* Change the text color of the button */
-    border: none; /* Remove button border */
-    border-radius: 5px; /* Add border radius for a rounded button appearance */
-    cursor: pointer; /* Change cursor to pointer on hover */
+    font-size: 18px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
   }
   
   .logout-button:hover {
-    background-color: #0056b3; /* Change background color on hover for better visual feedback */
+    background-color: #0056b3;
   }
   
   .user-photo {
-    max-width: 100px;
-    max-height: 100px;
+    max-width: 90px;
+    max-height: 90px;
+    margin-right: 10px;
   }
   
+  @media (max-width: 750px) {
+    .user-photo {
+      max-width: 50px;
+      max-height: 50px;
+    }
+
+    .welcome-message {
+      font-size: 12px; 
+      font-weight: bold; 
+      margin-right: 10px; 
+      cursor: pointer;
+      text-decoration: none;
+      color: black;
+    }
+
+    .logout-button {
+      font-size: 10px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #ffffff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+  }

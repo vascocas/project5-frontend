@@ -82,10 +82,28 @@ h2 {
     flex-direction: column;
     align-items: center;
   }
-  
+
   .metrics-container > div,
   .bar-chart-container > div,
   .line-chart-container > div {
     margin-bottom: 20px;
   }
+}
+
+/* Media query for screens with maximum width of 550px */
+@media (max-width: 550px) {
+  .content-container h1 {
+    font-size: 1.5rem;
+  }
+
+  .content-container h1,
+  .page-container .content-container h2 {
+    font-size: 1.2rem;
+  }
+}
+
+
+/* Media query for screens with maximum width of 1280px */
+@media (max-width: 1280px) {
+
 }

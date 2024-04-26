@@ -13,7 +13,7 @@ import Task from './pages/Task'
 import Profile from './pages/Profile'
 import PublicProfile from './pages/PublicProfile'
 import Notifications from './pages/Notifications'
-import UserManagment from './pages/UserManagment'
+import UserManagement from './pages/UserManagement'
 import TaskCategories from './pages/TaskCategories'
 import RecycleBin from './pages/RecycleBin'
 import Dashboard from './pages/Dashboard'
@@ -33,7 +33,7 @@ root.render(
       <Route path="/profile" element={<Authorization> <Profile /> </Authorization>} />
       <Route path="/profile/:usernameParam" element={<Authorization> <PublicProfile /> </Authorization>} />
       <Route path="/notifications" element={<Authorization> <Notifications /> </Authorization>} />
-      <Route path="/user" element={<Authorization> <UserManagment /> </Authorization>} />
+      <Route path="/user" element={<Authorization> <UserManagement /> </Authorization>} />
       <Route path="/categories" element={<Authorization> <TaskCategories /> </Authorization>} />
       <Route path="/recycle" element={<Authorization> <RecycleBin /> </Authorization>} />
       <Route path="/dashboard" element={<Authorization> <Dashboard /> </Authorization>} />

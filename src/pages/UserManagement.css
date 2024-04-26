@@ -1,19 +1,17 @@
-/* UserManagement.css */
-
 .user-managment-page {
   display: flex;
   flex-direction: column;
-  height: 100%; /* Ensure the page takes up the full height of the viewport */
+  height: 100%; 
 }
 
 .content {
   flex: 1; /* Allow content to take up remaining space */
-  padding: 20px; /* Add padding for styling */
+  padding: 20px;
 }
 
 .content-title {
-  text-align: center; /* Center align the title */
-  margin-bottom: 20px; /* Add margin at the bottom to separate from other content */
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 
@@ -32,24 +30,23 @@
 }
 
 .add-user-column {
-  margin-right: 20px; /* Add margin between columns */
+  margin-right: 20px;
 }
 
 .users-board h3 {
-  text-align: center; /* Center align the heading */
+  text-align: center;
 }
 
 .users-board {
   flex: 2;
 }
 .add-user-column {
-  margin-right: 20px; /* Add margin for spacing */
+  margin-right: 20px;
 }
 
 .add-user-column h3 {
   text-align: center;
 }
-
 
 .users-table {
   width: 90%;
@@ -198,11 +195,11 @@
 
 .profile-details {
   width: 300px;
-  margin: 0 auto; /* Center the profile details */
+  margin: 0 auto;
   text-align: center;
-  padding: 20px; /* Add padding for styling */
-  border: 1px solid #ccc; /* Add border for styling */
-  border-radius: 5px; /* Add border radius for styling */
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
 .profile-details h3 {
@@ -231,8 +228,8 @@
   border: 1px solid white;
   border-radius: 4px;
   cursor: pointer;
-  background-color: #007bff; /* Primary button color */
-  color: #fff; /* Text color */
+  background-color: #007bff; 
+  color: #fff;
 }
 
 .profile-details button:hover {
@@ -244,7 +241,7 @@
 }
 
 .button-container {
-  display: inline-block; /* Ensure the container only takes up as much width as its contents */
+  display: inline-block;
 }
 
 #usersProfileTitle,
@@ -268,4 +265,58 @@
 
 #otherUserButton{
   width: 60%;
+}
+
+/* Media query for screens with maximum width of 1280px */
+@media (max-width: 1280px) {
+  .user-columns {
+    flex-direction: column; /* Change flex direction to column */
+  }
+
+  .add-user-column,
+  .users-board,
+  .edit-user-column {
+    flex: none; /* Remove flex property to stack elements vertically */
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  #addUserTitle,
+  #usersProfileTitle{
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+}
+
+/* Media query for screens with maximum width of 560px */
+@media (max-width: 560px) {
+  .page-title,
+  .users-board h1,
+  .add-user-column h3,
+  .users-board h3,
+  .edit-user-column h3 {
+    font-size: 14px; 
+  }
+
+  .add-user-form input,
+  .add-user-form select,
+  .add-user-form button,
+  .profile-details input,
+  .profile-details button {
+    font-size: 12px;
+  }
+
+  .users-table th,
+  .users-table td {
+    font-size: 12px;
+  }
+
+  .users-table-button,
+  #usersBackButton {
+    font-size: 12px;
+  }
+
+  .homeMenu-button-container {
+    margin-top: 8px;
+  }
 }

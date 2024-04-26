@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Sidebar from "../components/navbar/Sidebar";
 import DashWebSocket from "../components/websocket/DashWebSocket";
+import MediaType from "../components/media/MediaType";
 import { baseURL } from "./Requests";
 import { userStore } from "../stores/UserStore";
 import { dashboardStore } from "../stores/DashboardStore";
@@ -213,6 +214,7 @@ export const fetchTasksCompletedData = async (
 const Dashboard = () => {
   const navigate = useNavigate();
   const { token } = userStore();
+  const mediatype = userStore((state) => state.mediatype);
   const {
     totalUsers,
     validatedUsers,
@@ -235,6 +237,11 @@ const Dashboard = () => {
   } = dashboardStore();
 
   DashWebSocket();
+
+   // Initialize MediaType component to handle media type detection
+   MediaType();
+    console.log("Dashboard Media Type: ", mediatype);
+   
 
   useEffect(() => {
     fetchUsersCount(
@@ -291,35 +298,39 @@ const Dashboard = () => {
           <div className="bar-chart-container">
             <div className="chart">
               <h2>Tasks per Status</h2>
-              <BarChart
-                width={500}
-                height={300}
-                data={tasksPerStatus}
-                margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="field" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="sum" name="Tasks Count" fill="#4e58ee" />
-              </BarChart>
+              <div className="chart-wrapper">
+                <BarChart
+                  width={mediatype.isMobile ? 320 : 500}
+                  height={mediatype.isMobile ? 220 : 300}
+                  data={tasksPerStatus}
+                  margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="field" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="sum" name="Tasks Count" fill="#4e58ee" />
+                </BarChart>
+              </div>
             </div>
             <div className="chart">
               <h2>Categories Frequency</h2>
-              <BarChart
-                width={500}
-                height={300}
-                data={categoriesFrequency}
-                margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="field" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="sum" name="Frequency" fill="#4e58ee" />
-              </BarChart>
+              <div className="chart-wrapper">
+                <BarChart
+                 width={mediatype.isMobile ? 320 : 500}
+                 height={mediatype.isMobile ? 220 : 300}
+                  data={categoriesFrequency}
+                  margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="field" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="sum" name="Frequency" fill="#4e58ee" />
+                </BarChart>
+              </div>
             </div>
           </div>
           <div className="line-chart-container">
@@ -327,8 +338,8 @@ const Dashboard = () => {
               <h2>Tasks Completed Over Time</h2>
               <div>
                 <LineChart
-                  width={450}
-                  height={300}
+                width={mediatype.isMobile ? 320 : 450}
+                height={mediatype.isMobile ? 220 : 300}
                   data={tasksCompletedOverTime}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
@@ -343,7 +354,10 @@ const Dashboard = () => {
             <div>
               <h2>User Registrations Over Time</h2>
               <div>
-                <LineChart width={450} height={300} data={userRegistrations}>
+                <LineChart
+                 width={mediatype.isMobile ? 320 : 450}
+                 height={mediatype.isMobile ? 220 : 300}
+                 data={userRegistrations}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="date" />
                   <YAxis />

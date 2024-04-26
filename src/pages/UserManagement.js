@@ -4,6 +4,7 @@ import Sidebar from "../components/navbar/Sidebar";
 import AddUserForm from "../components/users/AddUserForm";
 import UpdateRoleModal from "../components/users/UpdateRoleModal";
 import UsersProfile from "../components/users/UsersProfile";
+import MediaType from "../components/media/MediaType";
 import { userStore } from "../stores/UserStore";
 import { useNavigate } from "react-router-dom";
 import { useTable, usePagination } from "react-table";
@@ -13,6 +14,7 @@ import "./UserManagement.css";
 
 const UserManagement = () => {
   const { token, users, setUsers, usernames, setUsernames, role } = userStore();
+  const mediatype = userStore((state) => state.mediatype);
   const navigate = useNavigate();
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -22,11 +24,18 @@ const UserManagement = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
 
+  // Call MediaType component to handle media type detection
+  MediaType();
+  console.log("User Management Media Type: ", mediatype);
+
   const columns = React.useMemo(
     () => [
-      { Header: "Id", accessor: "id" },
+      ...(mediatype.isMobile
+        ? []:[{ Header: "Id", accessor: "id" }]),
       { Header: "Username", accessor: "username" },
-      { Header: "Email", accessor: "email" },
+      ...(mediatype.isMobile
+        ? []
+        : [{ Header: "Email", accessor: "email" }]),
       { Header: "Role", accessor: "role" },
       {
         Header: "Actions",
@@ -48,7 +57,7 @@ const UserManagement = () => {
         ),
       },
     ],
-    []
+    [mediatype.isMobile]
   );
 
   const roleOptions = ["DEVELOPER", "SCRUM_MASTER", "PRODUCT_OWNER"]; // Options for select dropdown
@@ -292,7 +301,7 @@ const UserManagement = () => {
                   <option value="DESC">Descending</option>
                 </select>
               </div>
-              <table {...getTableProps()}>
+              <table className="users-table" {...getTableProps()}>
                 <thead>
                   {headerGroups.map((headerGroup) => (
                     <tr {...headerGroup.getHeaderGroupProps()}>

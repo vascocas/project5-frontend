@@ -12,7 +12,7 @@ const Sidebar = () => {
         <Menu>
             <Link className="menu-item" to="/home">Home</Link>
             <Link className="menu-item" to={"/profile"}>Profile</Link>
-            {(role === "PRODUCT_OWNER" || role === "SCRUM_MASTER") && (<Link className="menu-item" to="/user">User Managment</Link>)}
+            {(role === "PRODUCT_OWNER" || role === "SCRUM_MASTER") && (<Link className="menu-item" to="/user">User Management</Link>)}
             {role === "PRODUCT_OWNER" && ( <Link className="menu-item" to="/categories">Task Categories</Link>)}
             {(role === "PRODUCT_OWNER" || role === "SCRUM_MASTER") && (<Link className="menu-item" to="/recycle">Recicle Bin</Link>)}
             {role === "PRODUCT_OWNER" && ( <Link className="menu-item" to="/dashboard">Dashboard</Link>)}
