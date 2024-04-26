@@ -17,25 +17,22 @@ function Profile() {
   const [user, setUser] = useState(null);
   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
   const navigate = useNavigate();
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const response = await fetch(
-          `${baseURL}users/logged`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              token: token,
-            },
-          }
-        );
+        const response = await fetch(`${baseURL}users/logged`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            token: token,
+          },
+        });
         if (response.ok) {
           const user = await response.json();
           // Update state with the response data
           setUser(user);
-      
         } else {
           console.error("Failed to fetch user profile:", response.statusText);
         }
@@ -50,10 +47,28 @@ function Profile() {
 
   // Function to handle updating user profile
   const handleUpdateProfile = async () => {
+    // Clear previous error message
+    setMessage("");
+
     if (!user.email || !user.firstName || !user.lastName || !user.phone) {
-      console.error("All fields are required");
+      setMessage("All fields are required");
       return;
     }
+
+    // Regular expression for email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(user.email)) {
+      setMessage("Please enter valid email format");
+      return;
+    }
+
+    // Phone number validation
+    const phoneRegex = /^\d+$/;
+    if (!phoneRegex.test(user.phone)) {
+      setMessage("Please enter only numeric characters for the phone number");
+      return;
+    }
+
     try {
       const userData = {
         email: user.email,
@@ -63,17 +78,14 @@ function Profile() {
         photo: user.photo,
       };
       const requestBody = JSON.stringify(userData);
-      const response = await fetch(
-        `${baseURL}users/profile`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            token: token,
-          },
-          body: requestBody,
-        }
-      );
+      const response = await fetch(`${baseURL}users/profile`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          token: token,
+        },
+        body: requestBody,
+      });
       if (response.ok) {
         // Display a success message
         console.log("Profile updated successfully!");
@@ -101,18 +113,15 @@ function Profile() {
         confirmPass: confirmNewPassword,
       };
       const requestBody = JSON.stringify(userData);
-      const response = await fetch(
-        `${baseURL}users/password`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "*/*",
-            token: token,
-          },
-          body: requestBody,
-        }
-      );
+      const response = await fetch(`${baseURL}users/password`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "*/*",
+          token: token,
+        },
+        body: requestBody,
+      });
       if (response.ok) {
         // Password updated successfully
         alert("Password updated successfully!");
@@ -138,62 +147,64 @@ function Profile() {
       <Header />
       <Sidebar />
       <div className="contents">
-      <IntlProvider locale={locale} messages={languages[locale]}>
-      <div className="left-page-wrap"></div>
-      <div className="profile-details">
-        <h2><FormattedMessage id="my-profile"/></h2>
-        <label htmlFor="username">
-        <FormattedMessage id="label-username"/>
-        </label>
-        <input type="text" id="username" value={user.username} readOnly />
-        <label htmlFor="email">
-        <FormattedMessage id="label-email"/>
-        </label>
-        <input
-          type="email"
-          id="email"
-          value={user.email}
-          onChange={(e) => setUser({ ...user, email: e.target.value })}
-        />
-        <label htmlFor="firstName">
-        <FormattedMessage id="label-firstName"/>
-        </label>
-        <input
-          type="text"
-          id="firstName"
-          value={user.firstName}
-          onChange={(e) => setUser({ ...user, firstName: e.target.value })}
-        />
-        <label htmlFor="lastName">
-        <FormattedMessage id="label-lastName"/>
-        </label>
-        <input
-          type="text"
-          id="lastName"
-          value={user.lastName}
-          onChange={(e) => setUser({ ...user, lastName: e.target.value })}
-        />
-        <label htmlFor="phone">
-        <FormattedMessage id="label-phone"/>
-        </label>
-        <input
-          type="tel"
-          id="phone"
-          value={user.phone}
-          onChange={(e) => setUser({ ...user, phone: e.target.value })}
-        />
-        <label htmlFor="photo">
-        <FormattedMessage id="label-photo"/>
-        </label>
-        <input
-          type="text"
-          id="photo"
-          value={user.photo}
-          onChange={(e) => setUser({ ...user, photo: e.target.value })}
-        />
-            {" "}
+        <IntlProvider locale={locale} messages={languages[locale]}>
+          <div className="left-page-wrap"></div>
+          <div className="profile-details">
+            <h2>
+              <FormattedMessage id="my-profile" />
+            </h2>
+            <label htmlFor="username">
+              <FormattedMessage id="label-username" />
+            </label>
+            <input type="text" id="username" value={user.username} readOnly />
+            <label htmlFor="email">
+              <FormattedMessage id="label-email" />
+            </label>
+            <input
+              type="email"
+              id="email"
+              value={user.email}
+              onChange={(e) => setUser({ ...user, email: e.target.value })}
+            />
+            <label htmlFor="firstName">
+              <FormattedMessage id="label-firstName" />
+            </label>
+            <input
+              type="text"
+              id="firstName"
+              value={user.firstName}
+              onChange={(e) => setUser({ ...user, firstName: e.target.value })}
+            />
+            <label htmlFor="lastName">
+              <FormattedMessage id="label-lastName" />
+            </label>
+            <input
+              type="text"
+              id="lastName"
+              value={user.lastName}
+              onChange={(e) => setUser({ ...user, lastName: e.target.value })}
+            />
+            <label htmlFor="phone">
+              <FormattedMessage id="label-phone" />
+            </label>
+            <input
+              type="tel"
+              id="phone"
+              value={user.phone}
+              onChange={(e) => setUser({ ...user, phone: e.target.value })}
+            />
+            <label htmlFor="photo">
+              <FormattedMessage id="label-photo" />
+            </label>
+            <input
+              type="text"
+              id="photo"
+              value={user.photo}
+              onChange={(e) => setUser({ ...user, photo: e.target.value })}
+            />
+            <p id="warningMessage">{message}</p>{" "}
             <button onClick={handleUpdateProfile}>
-            <FormattedMessage id="button-update"/>
+              <FormattedMessage id="button-update" />
             </button>
             <ChangePasswordModal
               isOpen={showChangePasswordModal}
@@ -202,15 +213,14 @@ function Profile() {
               title="Change Password"
             />
             <button onClick={() => handleOpenChangePasswordModal(user.id)}>
-            <FormattedMessage id="modal-password"/>
+              <FormattedMessage id="modal-password" />
             </button>{" "}
-        <button onClick={() => navigate("/Home")}>
-          <FormattedMessage id="button-home"/>
-          </button>
-      </div>
-      <div className="right-page-wrap">
-      </div>
-      </IntlProvider>
+            <button onClick={() => navigate("/Home")}>
+              <FormattedMessage id="button-home" />
+            </button>
+          </div>
+          <div className="right-page-wrap"></div>
+        </IntlProvider>
       </div>
     </div>
   );

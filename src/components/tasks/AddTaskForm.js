@@ -64,6 +64,10 @@ function AddTaskForm() {
       if (!priority) {
         throw new Error("No priority selected");
       }
+      // Check if category is empty
+      if (!category) {
+        throw new Error("No category selected");
+      }
       // Creates taskDto
       const requestBody = JSON.stringify({
         title: title,
@@ -104,10 +108,9 @@ function AddTaskForm() {
     }
   };
 
- // Placeholders text for title and description input field
-const titlePlaceholder = languages[locale]["title-placeholder"];
-const descriptionPlaceholder = languages[locale]["description-placeholder"];
-
+  // Placeholders text for title and description input field
+  const titlePlaceholder = languages[locale]["title-placeholder"];
+  const descriptionPlaceholder = languages[locale]["description-placeholder"];
 
   return (
     <aside className="add-task-sidebar">
@@ -197,10 +200,13 @@ const descriptionPlaceholder = languages[locale]["description-placeholder"];
                   </option>
                 ))}
               </select>
-              <div className="add-button"></div>
+            </div>
+            <div className="add-button">
               <button id="addTask" onClick={handleAddTask}>
                 <FormattedMessage id="addTask-label" />
               </button>
+            </div>
+            <div>
               <p id="warningMessage">{message}</p>
             </div>
           </div>
