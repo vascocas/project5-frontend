@@ -34,16 +34,27 @@ function AddUserForm() {
         !inputs.email ||
         !inputs.firstName ||
         !inputs.lastName ||
-        !inputs.phone
+        !inputs.phone ||
+        !inputs.role
       ) {
         setMessage("All fields are required");
         return;
       }
-     
-      // Check if role is empty
-      if (!inputs.role) {
-        setMessage("No role selected");
+
+      // Regular expression for email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(inputs.email)) {
+        setMessage("Please enter valid email format");
+        return;
       }
+
+      // Phone number validation
+      const phoneRegex = /^\d+$/;
+      if (!phoneRegex.test(inputs.phone)) {
+        setMessage("Please enter only numeric characters for the phone number");
+        return;
+      }
+
       const requestBody = JSON.stringify({
         username: inputs.username,
         email: inputs.email,
@@ -54,17 +65,14 @@ function AddUserForm() {
         role: inputs.role,
       });
 
-      const response = await fetch(
-        `${baseURL}users/createUser`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            token: token,
-          },
-          body: requestBody,
-        }
-      );
+      const response = await fetch(`${baseURL}users/createUser`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          token: token,
+        },
+        body: requestBody,
+      });
       if (response.ok) {
         const newUser = await response.json();
         setUsers([...users, newUser]);
@@ -81,11 +89,12 @@ function AddUserForm() {
         });
       } else {
         // Handle error response
-        const errorMessage = await response.text();
-        console.error(errorMessage);
+        const errorMessage = "Unauthorized or invalid input fields";
+        setMessage(errorMessage);
+        console.log(errorMessage);
       }
     } catch (error) {
-      setMessage(error.message); // Set error message
+      console.log(error.message); // Set error message
     }
   };
 
@@ -150,8 +159,10 @@ function AddUserForm() {
         <option value="PRODUCT_OWNER">Product Owner</option>
       </select>
       <div className="add-button-warning">
-      <button id="addUserButton" onClick={handleAddUser}>Add User</button>
-      <p id="warningMessage1">{message}</p>
+        <button id="addUserButton" onClick={handleAddUser}>
+          Add User
+        </button>
+        <p id="warningMessage1">{message}</p>
       </div>
     </div>
   );

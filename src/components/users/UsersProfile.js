@@ -8,7 +8,8 @@ import "../../index.css";
 function UsersProfile() {
   const navigate = useNavigate();
   const { token, usernames } = userStore();
-  const { role } = userStore(state => state);
+  const { role } = userStore((state) => state);
+  const [message, setMessage] = useState("");
   const [selectedUser, setSelectedUser] = useState({
     username: "",
     email: "",
@@ -57,9 +58,24 @@ function UsersProfile() {
       !selectedUser.lastName ||
       !selectedUser.phone
     ) {
-      console.error("All fields are required");
+      setMessage("All fields are required");
       return;
     }
+
+    // Regular expression for email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(selectedUser.email)) {
+      setMessage("Please enter valid email format");
+      return;
+    }
+
+    // Phone number validation
+    const phoneRegex = /^\d+$/;
+    if (!phoneRegex.test(selectedUser.phone)) {
+      setMessage("Please enter only numeric characters for the phone number");
+      return;
+    }
+
     try {
       const userData = {
         id: selectedUser.id,
@@ -70,17 +86,14 @@ function UsersProfile() {
         photo: selectedUser.photo,
       };
       const requestBody = JSON.stringify(userData);
-      const response = await fetch(
-        `${baseURL}users/othersProfile`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            token: token,
-          },
-          body: requestBody,
-        }
-      );
+      const response = await fetch(`${baseURL}users/othersProfile`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          token: token,
+        },
+        body: requestBody,
+      });
       if (response.ok) {
         // Display a success message
         alert("Profile updated successfully!");
@@ -106,11 +119,10 @@ function UsersProfile() {
       firstName: "",
       lastName: "",
       phone: "",
-      photo: ""
+      photo: "",
     });
     setSelectedUserId("");
   };
-  
 
   if (!selectedUser) {
     return <div>Trouble while loading information...</div>;
@@ -122,7 +134,11 @@ function UsersProfile() {
         <div>
           <label htmlFor="user">Choose user:</label>
           <br />
-          <select id="otherUserProfile" onChange={handleSelect} value={selectedUserId}>
+          <select
+            id="otherUserProfile"
+            onChange={handleSelect}
+            value={selectedUserId}
+          >
             <option value="">Select Username</option>
             {usernames.map((username) => (
               <option key={username.id} value={username.id}>
@@ -185,8 +201,15 @@ function UsersProfile() {
             setSelectedUser({ ...selectedUser, photo: e.target.value })
           }
         />
-        {(role === "PRODUCT_OWNER" && <button id="otherUserButton" onClick={handleUpdateOthersProfile}>Update Profile</button>)}
-        <button id="otherUserButton" onClick={handleCancel}>Cancel</button>
+        <p id="warningMessage">{message}</p>{" "}
+        {role === "PRODUCT_OWNER" && (
+          <button id="otherUserButton" onClick={handleUpdateOthersProfile}>
+            Update Profile
+          </button>
+        )}
+        <button id="otherUserButton" onClick={handleCancel}>
+          Cancel
+        </button>
       </div>
     </div>
   );
