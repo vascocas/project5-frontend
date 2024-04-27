@@ -4,6 +4,7 @@ import { userStore } from "../../stores/UserStore";
 function MediaType() {
   const updateMediatype = userStore((state) => state.updateMediatype);
   const [mediaType, setMediaType] = useState({
+    isLargeScreen: false,
     isBigScreen: false,
     isSmallScreen: false,
     isMobile: false,
@@ -12,6 +13,7 @@ function MediaType() {
 
   const handleResize = () => {
     setMediaType({
+      isLargeScreen: window.matchMedia("(min-width: 1280px)").matches,
       isBigScreen: window.matchMedia("(min-width: 1024px)").matches,
       isSmallScreen: window.matchMedia("(min-width: 750px)").matches && window.matchMedia("(max-width: 1024px)").matches,
       isMobile: window.matchMedia("(max-width: 750px)").matches,

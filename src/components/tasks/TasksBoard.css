@@ -121,3 +121,8 @@
   margin-right: 10px;
 }
 
+@media (max-width: 560px) {
+  #filtersTitle {
+    font-size: 14px;
+  }
+}

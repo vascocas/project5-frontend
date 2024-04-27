@@ -11,7 +11,6 @@ const UserRecycle = () => {
 
   // Call MediaType component to handle media type detection
   MediaType();
-  console.log("User Recycle Media Type: ", mediatype);
 
   useEffect(() => {
     const fetchDeletedUsers = async () => {

@@ -240,7 +240,6 @@ const Dashboard = () => {
 
    // Initialize MediaType component to handle media type detection
    MediaType();
-    console.log("Dashboard Media Type: ", mediatype);
    
 
   useEffect(() => {
@@ -306,7 +305,8 @@ const Dashboard = () => {
                   margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="field" />
+                  <XAxis dataKey="field"
+                    domain={['TODO', 'DOING', 'DONE']} />
                   <YAxis />
                   <Tooltip />
                   <Legend />

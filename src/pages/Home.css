@@ -40,9 +40,9 @@
 .tasks-board {
   flex: 1;
   margin-right: 20px;
-  border: 1px solid #ccc; /* Add border around the columns */
-  border-radius: 5px; /* Add border radius for rounded corners */
-  padding: 10px; /* Add padding inside the columns */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
   height: 85vh;
   background-color: #f1efef;
 }
@@ -60,11 +60,11 @@
 /* Style for notifications alert */
 .notifications-alert {
   flex: 1; /* Ensure it takes up remaining space */
-  margin-left: 20px; /* Add margin */
-  border: 1px solid #ccc; /* Add border */
-  border-radius: 5px; /* Add border radius */
-  padding: 10px; /* Add padding */
-  background-color: #f1efef; /* Background color */
+  margin-left: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: #f1efef;
 }
 
 .notifications-link{
@@ -75,4 +75,27 @@
 #notifications-h3 {
   text-align: center;
   margin: 5px;
+}
+
+@media (max-width: 900px) {
+  .content-wrapper {
+    flex-direction: column; /* Change flex direction to column */
+    align-items: center;
+  }
+
+  .add-task-form {
+    width: 80%;
+    margin-right: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .tasks-board {
+    width: 95%;
+    margin-right: 10px;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 560px) {
+ 
 }

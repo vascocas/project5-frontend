@@ -14,7 +14,6 @@ const TaskRecycle = () => {
 
   // Call MediaType component to handle media type detection
   MediaType();
-  console.log("Task Recycle Media Type: ", mediatype);
 
   useEffect(() => {
     const fetchDeletedTasks = async () => {
@@ -43,7 +42,7 @@ const TaskRecycle = () => {
     };
 
     fetchDeletedTasks();
-  }, [token, setDeletedTasks]);
+  }, []);
 
   const restoreTask = async (taskId) => {
     const confirmation = window.confirm("Confirm restore task?");

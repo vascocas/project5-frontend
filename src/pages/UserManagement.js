@@ -26,14 +26,13 @@ const UserManagement = () => {
 
   // Call MediaType component to handle media type detection
   MediaType();
-  console.log("User Management Media Type: ", mediatype);
 
   const columns = React.useMemo(
     () => [
-      ...(mediatype.isMobile
+      ...(mediatype.isMobile || mediatype.isLargeScreen
         ? []:[{ Header: "Id", accessor: "id" }]),
       { Header: "Username", accessor: "username" },
-      ...(mediatype.isMobile
+      ...(mediatype.isMobile || mediatype.isLargeScreen
         ? []
         : [{ Header: "Email", accessor: "email" }]),
       { Header: "Role", accessor: "role" },
@@ -57,7 +56,7 @@ const UserManagement = () => {
         ),
       },
     ],
-    [mediatype.isMobile]
+    [mediatype.isMobile, mediatype.isLargeScreen]
   );
 
   const roleOptions = ["DEVELOPER", "SCRUM_MASTER", "PRODUCT_OWNER"]; // Options for select dropdown

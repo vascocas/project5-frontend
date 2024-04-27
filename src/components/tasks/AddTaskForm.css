@@ -70,3 +70,17 @@
 #warningMessage {
   color: red;
 }
+
+@media (max-width: 560px) {
+  #addTask-h3 {
+    font-size: 14px;
+  }
+
+  .labels-task-name,
+  .labels-task-description,
+  .labels-task-dates,
+  .labels-task-priority,
+  .labels-task-category {
+    font-size: 12px;
+  }
+}
