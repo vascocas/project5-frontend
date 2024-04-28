@@ -23,8 +23,8 @@ function NotifWebSocket() {
         console.log(event.data);
         const message = event.data;
         // Check the type of action received
+        console.log("a new action is received!", message);
         if (message === "NotificationUpdate") {
-        console.log("a new notification is received!");
         // Updated the displayed notifications
         fetchNotifications(token, updateNotifications, setUnreadCount);
       }

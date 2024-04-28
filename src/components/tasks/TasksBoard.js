@@ -37,7 +37,6 @@ export const fetchTasks = async (
 
     if (response.ok) {
       let tasks = await response.json();
-      console.log("HTTP request to fetch tasks successful");
       tasks = sortTasks(tasks); // Sort tasks before setting state
       setTasks(tasks);
     } else {

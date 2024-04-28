@@ -321,13 +321,13 @@ const UserManagement = () => {
                           <td
                             {...cell.getCellProps()}
                             onClick={() => {
-                              // Check if the index is less than 4 (Only for columns: Id, Username, Email, and Role)
-                              if (index < 4) {
+                              // Check if the index is less than 4 (Only for columns: Id and Username)
+                              if (index < 2) {
                                 handleRowClick(row.original.username);
                               }
                             }}
                             style={{
-                              cursor: index < 4 ? "pointer" : "default",
+                              cursor: index < 2 ? "pointer" : "default",
                             }}
                           >
                             {cell.render("Cell")}

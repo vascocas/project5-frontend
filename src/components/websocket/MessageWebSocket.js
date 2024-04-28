@@ -5,8 +5,8 @@ import { baseWS } from "../../pages/Requests.js";
 import { fetchChatMessages } from "../../pages/PublicProfile.js";
 
 function MessageWebSocket() {
-  const { token, loggedId } = userStore();
-  const { setChatMessages, chatId } = websocketStore();
+  const { token } = userStore();
+  const { setChatMessages } = websocketStore();
 
   // Declare a ref to store the WebSocket instance
   const websocketRef = useRef(null);
@@ -20,15 +20,12 @@ function MessageWebSocket() {
       };
 
       websocketRef.current.onmessage = (event) => {
-        const message = event.data;
+        const message = JSON.parse(event.data); // Parse the JSON string
+        console.log("A new action is received!", message);
 
-        // Check the type of action received
-        if (message === "MessagesChanged") {
-          console.log("Fetching messages...");
-
-          fetchChatMessages(loggedId, token, chatId, setChatMessages);
-          console.log("Messages fetched");
-        }
+        const senderId = message.senderId;
+        const receiverId = message.receiverId;
+        fetchChatMessages(senderId, token, receiverId, setChatMessages);
       };
     }
 

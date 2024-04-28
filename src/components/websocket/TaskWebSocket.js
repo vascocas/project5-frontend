@@ -1,12 +1,13 @@
 import { useEffect, useRef } from "react";
 import { userStore } from "../../stores/UserStore";
-import { taskStore } from "../../stores/TaskStore.js";
+import { taskStore } from "../../stores/TaskStore";
 import { baseWS } from "../../pages/Requests.js";
 import { fetchTasks } from "../tasks/TasksBoard";
+import { fetchDeletedTasks } from "../tasks/TaskRecycle";
 
 function TaskWebSocket() {
   const { token } = userStore();
-  const { setTasks } = taskStore();
+  const { setTasks, setDeletedTasks } = taskStore();
 
   // Declare a ref to store the WebSocket instance
   const websocketRef = useRef(null);
@@ -24,9 +25,14 @@ function TaskWebSocket() {
         console.log("a new action is received!", message);
 
         // Check the type of action received
-        if (message === "TasksChanged") {
-          console.log("Fetching tasks...");
-          fetchTasks(token, "", "", setTasks); // Call fetchTasks with appropriate parameters
+        if (message === "TasksRestored") {
+          fetchTasks(token, "", "", setTasks);
+          fetchDeletedTasks(token, setDeletedTasks);
+        } else if (message === "TasksChanged") {
+          fetchDeletedTasks(token, setDeletedTasks);
+        } else if (message === "TasksDeleted") {
+          fetchTasks(token, "", "", setTasks);
+          fetchDeletedTasks(token, setDeletedTasks);
         }
       };
     }

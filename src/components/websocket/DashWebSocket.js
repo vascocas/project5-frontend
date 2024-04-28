@@ -33,11 +33,9 @@ function DashWebSocket() {
 
         // Check the type of action received
         if (message === "DashboardUserUpdate") {
-          console.log("Updating user dashboard...");
           fetchUsersCount(token, setTotalUsers, setValidatedUsers, setNonValidatedUsers);
           fetchUserRegistrationsData(token, setUserRegistrations);
         } else if (message === "DashboardTaskUpdate") {
-          console.log("Updating task dashboard...");
           fetchAverageTasks(token, setAverageTasksPerUser);
           fetchAverageDuration(token, setAverageTasksDuration);
           fetchTasksState(token, setTasksPerStatus);

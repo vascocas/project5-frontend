@@ -16,8 +16,8 @@ export const fetchChatMessages = async (
   setChatMessages
 ) => {
   try {
+    
     const url = `${baseURL}messages/chat/${loggedId}/${userId}`;
-    console.log("fetchChatMessages: ", url);
     const response = await fetch(url, {
       method: "GET",
       headers: {
@@ -39,8 +39,9 @@ export const fetchChatMessages = async (
 function PublicProfile() {
   const { usernameParam } = useParams();
   const { token, loggedId } = userStore();
+
   // State for messages
-  const { setChatMessages, setChatId } = websocketStore();
+  const { setChatMessages, setReceiverId } = websocketStore();
   const chatMessages = websocketStore((state) => state.chatMessages);
   const [user, setUser] = useState({
     userId: "",
@@ -61,73 +62,6 @@ function PublicProfile() {
   // Ref for the messages container
   const messagesContainerRef = useRef(null);
 
-  MessageWebSocket();
-
-  // Update chatId state when user.userId changes
-  useEffect(() => {
-    setChatId(user.userId);
-  }, [user.userId]);
-
-  const sendMessage = async () => {
-    try {
-      // Check if newMessage is empty
-      if (!newMessage.trim()) {
-        console.error("Message cannot be empty.");
-        return; // Exit function early if message is empty
-      }
-      // Creates MessageDto
-      const requestBody = JSON.stringify({
-        senderId: loggedId,
-        receiverId: user.userId,
-        messageText: newMessage,
-      });
-
-      const response = await fetch(`${baseURL}messages/send`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          token: token,
-        },
-        body: requestBody,
-      });
-      if (response.ok) {
-        // Message sent successfully, fetch updated messages
-        fetchChatMessages(loggedId, token, user.userId, setChatMessages);
-        setNewMessage("");
-      } else {
-        console.error("Failed to send message:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error sending message:", error);
-    }
-  };
-
-  const markAsRead = async (messageId) => {
-    try {
-      const response = await fetch(`${baseURL}messages/read/${messageId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          token: token,
-        },
-      });
-      if (response.ok) {
-        // Message marked as read successfully, fetch updated messages
-        fetchChatMessages(loggedId, token, user.userId, setChatMessages);
-      } else {
-        console.error("Failed to mark message as read:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error marking message as read:", error);
-    }
-  };
-
-  // Function to handle sending message when Enter key is pressed
-  const handleKeyPress = (event) => {
-    if (event.key === "Enter") {
-      sendMessage();
-    }
-  };
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -164,6 +98,8 @@ function PublicProfile() {
           setTotalToDoTasks(totalToDoTasks);
           setTotalDoingTasks(totalDoingTasks);
           setTotalDoneTasks(totalDoneTasks);
+          setReceiverId(userId);
+          fetchChatMessages(loggedId, token, userId, setChatMessages);
         } else {
           console.error("Failed to fetch user profile:", response.statusText);
         }
@@ -173,17 +109,87 @@ function PublicProfile() {
     };
 
     fetchUserProfile();
-  }, []);
 
+  }, [usernameParam, token, loggedId]);
 
-   // Scroll to the bottom when chatMessages length changes
-useEffect(() => {
-  if (messagesContainerRef.current) {
-    messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
-  }
-}, [chatMessages.length]);
+  const sendMessage = async () => {
+    try {
+      // Check if newMessage is empty
+      if (!newMessage.trim()) {
+        console.error("Message cannot be empty.");
+        return; // Exit function early if message is empty
+      }
+      // Creates MessageDto
+      const requestBody = JSON.stringify({
+        senderId: loggedId,
+        receiverId: user.userId,
+        messageText: newMessage,
+      });
 
+      const response = await fetch(`${baseURL}messages/send`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          token: token,
+        },
+        body: requestBody,
+      });
+      if (response.ok) {
+        // Message sent successfully, fetch updated messages
+        fetchChatMessages(loggedId, token, user.userId, setChatMessages);
+        setNewMessage("");
+      } else {
+        console.error("Failed to send message:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
+  };
 
+  const markAsRead = async (message) => {
+    try {
+      // Creates MessageDto
+      const requestBody = JSON.stringify({
+        id: message.id,
+        senderId: message.senderId,
+        receiverId: message.receiverId,
+      });
+      const response = await fetch(`${baseURL}messages/read`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          token: token,
+        },
+        body: requestBody,
+      });
+      if (response.ok) {
+        // Message marked as read successfully, fetch updated messages
+        fetchChatMessages(loggedId, token, message.senderId, setChatMessages);
+      } else {
+        console.error("Failed to mark message as read:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error marking message as read:", error);
+    }
+  };
+
+  // Function to handle sending message when Enter key is pressed
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      sendMessage();
+    }
+  };
+
+   // Calls websocket connection
+   MessageWebSocket();
+
+  // Scroll to the bottom when chatMessages length changes
+  useEffect(() => {
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop =
+        messagesContainerRef.current.scrollHeight;
+    }
+  }, [chatMessages.length]);
 
   return (
     <div className="userProfile">
@@ -203,7 +209,7 @@ useEffect(() => {
                   <div className="message-content">
                     {message.messageText}{" "}
                     {message.senderId !== loggedId && (
-                      <button onClick={() => markAsRead(message.id)}>
+                      <button onClick={() => markAsRead(message)}>
                         {message.readStatus ? <FaCheckDouble /> : <FaCheck />}
                       </button>
                     )}

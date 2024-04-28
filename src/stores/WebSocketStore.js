@@ -19,7 +19,7 @@ export const websocketStore = create(
       // New state variables and functions for chat messages
       chatMessages: [],
       newMessage: "",
-      chatId: "",
+      receiverId: "",
 
       // Function to add a new message to the list of chat messages
       addMessage: (message) =>
@@ -30,8 +30,8 @@ export const websocketStore = create(
       // Function to set chat messages
       setChatMessages: (messages) => set({ chatMessages: messages }),
 
-      // Function to set chatId
-      setChatId: (chatId) => set({ chatId }),
+      // Function to set receiverId
+      setReceiverId: (receiverId) => set({ receiverId }),
     }),
 
     {

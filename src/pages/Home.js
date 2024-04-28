@@ -59,7 +59,6 @@ function Home() {
   }, [updateNotifications, setUnreadCount]);
 
   const handleSelect = (event) => {
-    console.log(event.target.value);
     updateLocale(event.target.value);
   };
 

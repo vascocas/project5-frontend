@@ -9,7 +9,7 @@ import "./Notifications.css";
 
 const Notifications = () => {
   const { token } = userStore();
-  const { notifications, setUnreadCount } = websocketStore();
+  const { notifications, setUnreadCount, setReceiverId } = websocketStore();
   const navigate = useNavigate();
 
   // Ref for the notifications container
@@ -53,6 +53,7 @@ const Notifications = () => {
   const handleNotificationClick = (notification) => {
     const content = notification.contentText;
     const username = content.replace("New message from: ", ""); // Remove the prefix
+    setReceiverId(notification.recipientId);
     navigate(`/profile/${username}`); // Navigate to sender's profile
   };
 

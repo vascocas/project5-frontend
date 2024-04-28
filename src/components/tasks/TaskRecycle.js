@@ -3,46 +3,47 @@ import { taskStore } from "../../stores/TaskStore";
 import { userStore } from "../../stores/UserStore";
 import { baseURL } from "../../pages/Requests";
 import MediaType from "../media/MediaType";
+import TaskWebSocket from "../websocket/TaskWebSocket";
 import "../../pages/RecycleBin.css";
+
+
+// Define fetchDeletedTasks function
+export const fetchDeletedTasks = async ( token, setDeletedTasks ) => {
+  
+  try {
+    const response = await fetch(`${baseURL}tasks/deletedTasks`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "*/*",
+        token: token,
+      },
+    });
+    if (response.ok) {
+      const tasks = await response.json();
+      setDeletedTasks(tasks);
+    } else {
+      console.log(`No deleted tasks found: ${await response.text()}`);
+    }
+  } catch (error) {
+    console.error("No deleted tasks found:", error);
+  }
+};
 
 const TaskRecycle = () => {
   const { deletedTasks, setDeletedTasks } = taskStore();
   const { token } = userStore();
   const { role } = userStore(state => state);
-
   const mediatype = userStore((state) => state.mediatype);
+
+  TaskWebSocket();
 
   // Call MediaType component to handle media type detection
   MediaType();
 
   useEffect(() => {
-    const fetchDeletedTasks = async () => {
-      try {
-        const response = await fetch(
-          `${baseURL}tasks/deletedTasks`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "*/*",
-              token: token,
-            },
-          }
-        );
-        if (response.ok) {
-          const tasks = await response.json();
-          setDeletedTasks(tasks);
-        } else {
-          console.log(`No deleted tasks found: ${await response.text()}`
-          );
-        }
-      } catch (error) {
-        console.error("No deleted tasks found:", error);
-      }
-    };
-
-    fetchDeletedTasks();
-  }, []);
+    fetchDeletedTasks(token, setDeletedTasks);
+  }, [setDeletedTasks]);
 
   const restoreTask = async (taskId) => {
     const confirmation = window.confirm("Confirm restore task?");
