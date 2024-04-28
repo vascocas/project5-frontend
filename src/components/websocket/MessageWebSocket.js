@@ -21,7 +21,7 @@ function MessageWebSocket() {
 
       websocketRef.current.onmessage = (event) => {
         const message = JSON.parse(event.data); // Parse the JSON string
-        console.log("A new action is received!", message);
+        console.log("A new action is received!");
 
         const senderId = message.senderId;
         const receiverId = message.receiverId;
